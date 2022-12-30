@@ -1,38 +1,30 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using Monolithic.Helpers;
-using System.Text;
 
 namespace Monolithic.Extensions;
 
-public static class AuthExtension
+public static class SwaggerExtension
 {
-    public static void ConfigureAuth(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureSwagger(this IServiceCollection services, IConfiguration configuration)
     {
-        services.ConfigureJWT(configuration);
-        services.ConfigureSwaggerForAuth();
+        services.AddEndpointsApiExplorer();
+        services.ConfigureSwaggerDoc(configuration);
+        services.ConfigureSwaggerAuth();
     }
 
-    private static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureSwaggerDoc(this IServiceCollection services, IConfiguration configuration)
     {
-        var tokenSection = configuration.GetSection("JwtSettings");
-        var tokenSettings = tokenSection.Get<JwtSettings>();
+        services.AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo
+                    {
+                        Title = "PLC API",
+                        Version = "v1",
+                    });
 
-        var publicKey = JwtOptions.GetPublicKey(tokenSettings);
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            options.RequireHttpsMetadata = false;
-            options.SaveToken = true;
-            options.TokenValidationParameters = JwtOptions.GetTokenParams(tokenSettings, publicKey);
-        });
+                });
     }
 
-    private static void ConfigureSwaggerForAuth(this IServiceCollection services)
+    private static void ConfigureSwaggerAuth(this IServiceCollection services)
     {
         services.AddSwaggerGen(c =>
         {

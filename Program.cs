@@ -4,39 +4,8 @@ using Monolithic.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Cors
-builder.Services.AddCors(c =>
-    c.AddDefaultPolicy(options =>
-    {
-        options.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    })
-);
-
-// Add services to the container.
-builder.Services.ConfigureDataContext(builder.Configuration);
-builder.Services.ConfigureModelSetting(builder.Configuration);
-builder.Services.ConfigureDI();
-builder.Services.ConfigureAuth(builder.Configuration);
-
-// CAP message queue
-builder.Services.ConfigureCapQueue();
-
-// Add Http client
-builder.Services.AddHttpClient();
-
-builder.Services.AddControllers();
-
-// generate lowercase URLs
-builder.Services.Configure<RouteOptions>(options =>
-{
-    options.LowercaseUrls = true;
-});
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Service collection
+builder.Services.ConfigureService(builder.Configuration);
 
 // Logging
 builder.Logging.ConfigureSerilog(builder.Configuration);
