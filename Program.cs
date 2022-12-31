@@ -1,6 +1,6 @@
 using Monolithic.Extensions.ServiceCollections;
+using Monolithic.Extensions.Pipelines;
 using Monolithic.Extensions.Builders;
-using Monolithic.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

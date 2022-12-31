@@ -3,7 +3,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using Monolithic.Models.Common;
 using Monolithic.Helpers;
-using System.Text;
 
 namespace Monolithic.Middlewares;
 

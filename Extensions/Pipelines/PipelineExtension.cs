@@ -1,7 +1,7 @@
 using Monolithic.Middlewares;
 using Monolithic.Helpers;
 
-namespace Monolithic.Extensions;
+namespace Monolithic.Extensions.Pipelines;
 
 public static class PipelineExtension
 {
@@ -9,22 +9,9 @@ public static class PipelineExtension
     {
         var logger = app.Services.GetRequiredService<ILoggerManager>();
 
-        app.UseCors(options => options
-                                .AllowAnyOrigin()
-                                .AllowAnyMethod()
-                                .AllowAnyHeader());
+        app.UseCorsPipeline();
 
-        // if (app.Environment.IsDevelopment())
-        // {
-        //     app.UseSwagger();
-        //     app.UseSwaggerUI();
-        // }
-
-        app.UseSwagger();
-        app.UseSwaggerUI();
-
-        app.ConfigureSuccessHandler(logger);
-        app.ConfigureErrorHandler(logger);
+        app.UseResponseHandlerPipeline(logger);
 
         app.UseCustomAuthResponse();
 
