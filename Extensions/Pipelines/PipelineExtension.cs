@@ -11,6 +11,8 @@ public static class PipelineExtension
 
         app.UseCorsPipeline();
 
+        app.UseSwaggerPipeline();
+
         app.UseResponseHandlerPipeline(logger);
 
         app.UseCustomAuthResponse();

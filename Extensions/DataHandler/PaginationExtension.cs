@@ -1,7 +1,7 @@
-using Monolithic.Models.Common;
 using Microsoft.EntityFrameworkCore;
+using Monolithic.Models.Common;
 
-namespace Monolithic.Extensions;
+namespace Monolithic.Extensions.DataHandler;
 
 public static class PaginationExtension
 {

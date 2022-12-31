@@ -10,7 +10,7 @@ public class SendMailHelper : ISendMailHelper
     private readonly MailSettings _mailSettings;
     private readonly ILogger<SendMailHelper> _logger;
 
-    public SendMailHelper(IOptions<MailSettings> mailSettings,ILogger<SendMailHelper> logger)
+    public SendMailHelper(IOptions<MailSettings> mailSettings, ILogger<SendMailHelper> logger)
     {
         _mailSettings = mailSettings.Value;
         _logger = logger;
@@ -25,6 +25,24 @@ public class SendMailHelper : ISendMailHelper
         email.Subject = mailContent.Subject;
 
         BodyBuilder builder = new BodyBuilder();
+
+        if (mailContent.Attachments != null)
+        {
+            byte[] fileBytes;
+            foreach (IFormFile file in mailContent.Attachments)
+            {
+                if (file.Length > 0)
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        file.CopyTo(ms);
+                        fileBytes = ms.ToArray();
+                    }
+                    builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
+                }
+            }
+        }
+
         builder.HtmlBody = mailContent.Body;
         email.Body = builder.ToMessageBody();
 
