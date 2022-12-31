@@ -1,4 +1,4 @@
-namespace Monolithic.Constants ;
+namespace Monolithic.Common.Constants;
 
 public class PaginationConfig
 {

@@ -1,6 +1,6 @@
 using Monolithic.Helpers;
 
-namespace Monolithic.Constants;
+namespace Monolithic.Common.Constants;
 
 public static class PermissionPolicy
 {

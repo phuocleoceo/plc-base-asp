@@ -1,5 +1,5 @@
+using Monolithic.Common.Constants;
 using Monolithic.Models.Common;
-using Monolithic.Constants;
 
 namespace Monolithic.Middlewares;
 

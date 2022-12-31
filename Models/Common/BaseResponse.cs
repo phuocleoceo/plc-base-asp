@@ -1,5 +1,5 @@
 using Newtonsoft.Json.Serialization;
-using Monolithic.Constants;
+using Monolithic.Common.Constants;
 using Newtonsoft.Json;
 
 namespace Monolithic.Models.Common;

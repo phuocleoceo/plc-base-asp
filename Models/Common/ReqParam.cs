@@ -1,4 +1,4 @@
-using Monolithic.Constants;
+using Monolithic.Common.Constants;
 
 namespace Monolithic.Models.Common;
 

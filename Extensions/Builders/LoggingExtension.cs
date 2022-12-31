@@ -1,4 +1,4 @@
-using Monolithic.Constants;
+using Monolithic.Common.Constants;
 using Serilog.Exceptions;
 using Monolithic.Helpers;
 using Serilog.Events;
