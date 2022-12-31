@@ -1,4 +1,4 @@
-namespace Monolithic.Extensions;
+namespace Monolithic.Extensions.ServiceCollections;
 
 public static class ServiceExtension
 {

@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 
-namespace Monolithic.Extensions;
+namespace Monolithic.Extensions.ServiceCollections;
 
 public static class SwaggerExtension
 {
@@ -14,14 +14,14 @@ public static class SwaggerExtension
     private static void ConfigureSwaggerDoc(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("v1", new OpenApiInfo
-                    {
-                        Title = "PLC API",
-                        Version = "v1",
-                    });
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "PLC API",
+                Version = "v1",
+            });
 
-                });
+        });
     }
 
     private static void ConfigureSwaggerAuth(this IServiceCollection services)

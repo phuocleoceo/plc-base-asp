@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Monolithic.Helpers;
 
-namespace Monolithic.Extensions;
+namespace Monolithic.Extensions.ServiceCollections;
 
 public static class AuthExtension
 {

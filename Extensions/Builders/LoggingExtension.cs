@@ -4,7 +4,7 @@ using Monolithic.Helpers;
 using Serilog.Events;
 using Serilog;
 
-namespace Monolithic.Extensions;
+namespace Monolithic.Extensions.Builders;
 
 public static class LoggingExtension
 {

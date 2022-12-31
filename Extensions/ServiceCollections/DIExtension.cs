@@ -1,7 +1,7 @@
 using Monolithic.Models.Mapper;
 using Monolithic.Helpers;
 
-namespace Monolithic.Extensions;
+namespace Monolithic.Extensions.ServiceCollections;
 
 public static class DIExtension
 {

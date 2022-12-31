@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Monolithic.Models.Context;
 
-namespace Monolithic.Extensions;
+namespace Monolithic.Extensions.ServiceCollections;
 
 public static class DatabaseExtension
 {
