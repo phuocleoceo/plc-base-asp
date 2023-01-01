@@ -31,6 +31,7 @@ public static class DIExtension
     private static void ConfigureHelperDI(this IServiceCollection services)
     {
         services.AddScoped<ISendMailHelper, SendMailHelper>();
+        services.AddScoped<IJwtHelper, JwtHelper>();
         services.AddSingleton<ILoggerManager, LoggerManager>();
         services.AddSingleton<IRedisHelper, RedisHelper>();
     }
