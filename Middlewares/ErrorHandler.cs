@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Diagnostics;
-using Monolithic.Extensions.Builders;
-using Monolithic.Models.Common;
-using Monolithic.Helpers;
+using PlcBase.Extensions.Builders;
+using PlcBase.Models.Common;
+using PlcBase.Helpers;
 using System.Net;
 
-namespace Monolithic.Middlewares;
+namespace PlcBase.Middlewares;
 
 public static class ErrorHandler
 {

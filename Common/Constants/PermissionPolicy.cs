@@ -1,6 +1,6 @@
-using Monolithic.Helpers;
+using PlcBase.Helpers;
 
-namespace Monolithic.Common.Constants;
+namespace PlcBase.Common.Constants;
 
 public static class PermissionPolicy
 {

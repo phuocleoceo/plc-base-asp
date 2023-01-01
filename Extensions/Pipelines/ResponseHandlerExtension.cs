@@ -1,7 +1,7 @@
-using Monolithic.Middlewares;
-using Monolithic.Helpers;
+using PlcBase.Middlewares;
+using PlcBase.Helpers;
 
-namespace Monolithic.Extensions.Pipelines;
+namespace PlcBase.Extensions.Pipelines;
 
 public static class ResponseHandlerExtension
 {

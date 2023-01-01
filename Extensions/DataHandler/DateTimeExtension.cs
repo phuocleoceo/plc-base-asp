@@ -1,4 +1,4 @@
-namespace Monolithic.Extensions.DataHandler;
+namespace PlcBase.Extensions.DataHandler;
 
 public static class DateTimeExtension
 {

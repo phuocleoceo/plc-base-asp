@@ -1,7 +1,7 @@
-using Monolithic.Extensions.Builders;
-using Monolithic.Helpers;
+using PlcBase.Extensions.Builders;
+using PlcBase.Helpers;
 
-namespace Monolithic.Middlewares;
+namespace PlcBase.Middlewares;
 
 public static class SuccessHandler
 {

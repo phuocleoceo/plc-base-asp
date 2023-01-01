@@ -1,6 +1,6 @@
 using AutoMapper;
 
-namespace Monolithic.Models.Mapper;
+namespace PlcBase.Models.Mapper;
 
 public class MappingConfig : Profile
 {

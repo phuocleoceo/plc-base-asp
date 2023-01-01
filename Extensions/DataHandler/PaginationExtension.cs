@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Monolithic.Models.Common;
+using PlcBase.Models.Common;
 
-namespace Monolithic.Extensions.DataHandler;
+namespace PlcBase.Extensions.DataHandler;
 
 public static class PaginationExtension
 {

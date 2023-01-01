@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace Monolithic.Helpers;
+namespace PlcBase.Helpers;
 
 public static class CodeSecure
 {

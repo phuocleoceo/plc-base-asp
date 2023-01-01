@@ -1,8 +1,8 @@
 using Newtonsoft.Json.Serialization;
-using Monolithic.Common.Constants;
+using PlcBase.Common.Constants;
 using Newtonsoft.Json;
 
-namespace Monolithic.Models.Common;
+namespace PlcBase.Models.Common;
 
 public class BaseResponse<T>
 {

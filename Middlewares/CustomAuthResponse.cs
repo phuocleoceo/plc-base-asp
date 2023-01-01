@@ -1,7 +1,7 @@
-using Monolithic.Common.Constants;
-using Monolithic.Models.Common;
+using PlcBase.Common.Constants;
+using PlcBase.Models.Common;
 
-namespace Monolithic.Middlewares;
+namespace PlcBase.Middlewares;
 
 public static class CustomAuthResponse
 {

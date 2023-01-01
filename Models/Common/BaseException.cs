@@ -1,4 +1,4 @@
-namespace Monolithic.Models.Common;
+namespace PlcBase.Models.Common;
 
 public class BaseException : Exception
 {

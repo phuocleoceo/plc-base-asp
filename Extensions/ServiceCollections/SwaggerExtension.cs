@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 
-namespace Monolithic.Extensions.ServiceCollections;
+namespace PlcBase.Extensions.ServiceCollections;
 
 public static class SwaggerExtension
 {

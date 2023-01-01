@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Monolithic.Helpers;
+namespace PlcBase.Helpers;
 
 public class LogContent
 {

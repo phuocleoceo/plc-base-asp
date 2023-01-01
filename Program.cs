@@ -1,6 +1,6 @@
-using Monolithic.Extensions.ServiceCollections;
-using Monolithic.Extensions.Pipelines;
-using Monolithic.Extensions.Builders;
+using PlcBase.Extensions.ServiceCollections;
+using PlcBase.Extensions.Pipelines;
+using PlcBase.Extensions.Builders;
 
 var builder = WebApplication.CreateBuilder(args);
 

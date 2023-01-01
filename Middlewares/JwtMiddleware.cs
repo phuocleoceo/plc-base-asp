@@ -1,10 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
-using Monolithic.Models.Common;
-using Monolithic.Helpers;
+using PlcBase.Models.Common;
+using PlcBase.Helpers;
 
-namespace Monolithic.Middlewares;
+namespace PlcBase.Middlewares;
 
 public class JwtMiddleware
 {

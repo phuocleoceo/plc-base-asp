@@ -1,4 +1,4 @@
-namespace Monolithic.Extensions.ServiceCollections;
+namespace PlcBase.Extensions.ServiceCollections;
 
 public static class CorsExtension
 {

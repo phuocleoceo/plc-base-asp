@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Monolithic.Models.Common;
+namespace PlcBase.Models.Common;
 
 public abstract class EntityBase
 {

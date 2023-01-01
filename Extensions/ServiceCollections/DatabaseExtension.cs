@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Monolithic.Models.Context;
+using PlcBase.Models.Context;
 
-namespace Monolithic.Extensions.ServiceCollections;
+namespace PlcBase.Extensions.ServiceCollections;
 
 public static class DatabaseExtension
 {

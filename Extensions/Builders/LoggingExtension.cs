@@ -1,10 +1,10 @@
-using Monolithic.Common.Constants;
+using PlcBase.Common.Constants;
 using Serilog.Exceptions;
-using Monolithic.Helpers;
+using PlcBase.Helpers;
 using Serilog.Events;
 using Serilog;
 
-namespace Monolithic.Extensions.Builders;
+namespace PlcBase.Extensions.Builders;
 
 public static class LoggingExtension
 {
@@ -16,7 +16,7 @@ public static class LoggingExtension
         {
             var log = new LoggerConfiguration()
                         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                        .MinimumLevel.Override("Monolithic", LogEventLevel.Information)
+                        .MinimumLevel.Override("PlcBase", LogEventLevel.Information)
                         .MinimumLevel.Override("Savorboard", LogEventLevel.Error)
                         .MinimumLevel.Override("DotNetCore.CAP", LogEventLevel.Error)
                         .Enrich.FromLogContext()

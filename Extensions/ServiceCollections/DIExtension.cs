@@ -1,7 +1,7 @@
-using Monolithic.Models.Mapper;
-using Monolithic.Helpers;
+using PlcBase.Models.Mapper;
+using PlcBase.Helpers;
 
-namespace Monolithic.Extensions.ServiceCollections;
+namespace PlcBase.Extensions.ServiceCollections;
 
 public static class DIExtension
 {

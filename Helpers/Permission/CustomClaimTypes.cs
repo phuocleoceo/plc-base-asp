@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace Monolithic.Helpers;
+namespace PlcBase.Helpers;
 
 public class CustomClaimTypes
 {

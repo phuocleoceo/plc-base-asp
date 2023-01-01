@@ -1,4 +1,4 @@
-namespace Monolithic.Extensions.Builders;
+namespace PlcBase.Extensions.Builders;
 
 public static class BuilderExtension
 {

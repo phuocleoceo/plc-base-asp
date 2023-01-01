@@ -1,6 +1,6 @@
 using Savorboard.CAP.InMemoryMessageQueue;
 
-namespace Monolithic.Extensions.ServiceCollections;
+namespace PlcBase.Extensions.ServiceCollections;
 
 public static class MessageQueueExtension
 {

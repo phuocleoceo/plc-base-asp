@@ -1,4 +1,4 @@
-namespace Monolithic.Extensions.Pipelines;
+namespace PlcBase.Extensions.Pipelines;
 
 public static class CorsExtension
 {

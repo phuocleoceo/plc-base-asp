@@ -3,7 +3,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 
-namespace Monolithic.Helpers;
+namespace PlcBase.Helpers;
 
 public class SendMailHelper : ISendMailHelper
 {

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
-using Monolithic.Models.Common;
+using PlcBase.Models.Common;
 
-namespace Monolithic.Models.Context;
+namespace PlcBase.Models.Context;
 
 public class DataContext : DbContext
 {

@@ -1,4 +1,4 @@
-namespace Monolithic.Common.Constants;
+namespace PlcBase.Common.Constants;
 
 public class HttpCode
 {

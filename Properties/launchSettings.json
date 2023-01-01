@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "monolithic": {
+    "plcbase": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

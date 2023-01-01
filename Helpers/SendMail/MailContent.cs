@@ -1,4 +1,4 @@
-namespace Monolithic.Helpers;
+namespace PlcBase.Helpers;
 
 public class MailContent
 {

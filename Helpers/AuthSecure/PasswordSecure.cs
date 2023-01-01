@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Monolithic.Helpers.Password;
+namespace PlcBase.Helpers.Password;
 
 public static class PasswordSecure
 {

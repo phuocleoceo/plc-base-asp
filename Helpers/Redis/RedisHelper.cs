@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 
-namespace Monolithic.Helpers;
+namespace PlcBase.Helpers;
 
 public class RedisHelper : IRedisHelper
 {

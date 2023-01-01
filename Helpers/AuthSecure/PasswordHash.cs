@@ -1,4 +1,4 @@
-namespace Monolithic.Helpers.Password;
+namespace PlcBase.Helpers.Password;
 
 public class PasswordHash
 {

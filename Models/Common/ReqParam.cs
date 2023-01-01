@@ -1,6 +1,6 @@
-using Monolithic.Common.Constants;
+using PlcBase.Common.Constants;
 
-namespace Monolithic.Models.Common;
+namespace PlcBase.Models.Common;
 
 public abstract class ReqParam
 {
