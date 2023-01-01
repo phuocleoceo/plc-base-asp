@@ -26,7 +26,5 @@ public static class PipelineExtension
         app.UseMiddleware<JwtMiddleware>();
 
         app.MapControllers();
-
-        app.Run();
     }
 }

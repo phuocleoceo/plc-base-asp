@@ -14,3 +14,6 @@ var app = builder.Build();
 
 // HTTP request pipeline
 app.ConfigurePipeline();
+
+// Run web app
+app.Run();
