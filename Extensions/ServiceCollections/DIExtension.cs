@@ -32,5 +32,6 @@ public static class DIExtension
     {
         services.AddScoped<ISendMailHelper, SendMailHelper>();
         services.AddSingleton<ILoggerManager, LoggerManager>();
+        services.AddSingleton<IRedisHelper, RedisHelper>();
     }
 }

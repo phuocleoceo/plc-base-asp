@@ -8,6 +8,8 @@ public static class ServiceExtension
         services.ConfigureCors(configuration);
         // Database
         services.ConfigureDataContext(configuration);
+        // Cache
+        services.ConfigureRedis(configuration);
         // Appsetting model
         services.ConfigureAppSetting(configuration);
         // Dependency Injection
@@ -20,7 +22,7 @@ public static class ServiceExtension
         services.AddHttpClient();
         // Controller mapper
         services.AddControllers();
-        // // generate lowercase URLs
+        // Generate lowercase URLs
         services.Configure<RouteOptions>(options =>
         {
             options.LowercaseUrls = true;
