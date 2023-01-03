@@ -1,5 +1,5 @@
 using PlcBase.Common.Constants;
-using PlcBase.Models.Common;
+using PlcBase.Base.Error;
 
 namespace PlcBase.Middlewares;
 

@@ -1,4 +1,4 @@
-namespace PlcBase.Models.Common;
+namespace PlcBase.Base.DTO;
 
 public class PagedList<T>
 {

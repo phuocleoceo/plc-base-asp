@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PlcBase.Models.Common;
+using PlcBase.Base.Controller;
+using PlcBase.Base.DTO;
 using PlcBase.Helpers;
 
 namespace PlcBase.Controllers;

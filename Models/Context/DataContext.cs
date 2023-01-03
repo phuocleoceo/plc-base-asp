@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
-using PlcBase.Models.Common;
+using PlcBase.Base.Entity;
 
 namespace PlcBase.Models.Context;
 
@@ -15,7 +15,7 @@ public class DataContext : DbContext
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (EntityEntry<EntityBase> entry in ChangeTracker.Entries<EntityBase>())
+        foreach (EntityEntry<BaseEntity> entry in ChangeTracker.Entries<BaseEntity>())
         {
             switch (entry.State)
             {

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using PlcBase.Extensions.Builders;
-using PlcBase.Models.Common;
+using PlcBase.Base.Error;
+using PlcBase.Base.DTO;
 using PlcBase.Helpers;
 using System.Net;
 

@@ -1,6 +1,6 @@
 using PlcBase.Common.Constants;
 
-namespace PlcBase.Models.Common;
+namespace PlcBase.Base.DomainModel;
 
 public abstract class ReqParam
 {

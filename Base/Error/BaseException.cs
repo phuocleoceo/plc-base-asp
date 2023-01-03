@@ -1,4 +1,4 @@
-namespace PlcBase.Models.Common;
+namespace PlcBase.Base.Error;
 
 public class BaseException : Exception
 {

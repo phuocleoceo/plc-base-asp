@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using PlcBase.Models.Common;
+using PlcBase.Base.DTO;
 
 namespace PlcBase.Extensions.DataHandler;
 

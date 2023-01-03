@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PlcBase.Models.Common;
+namespace PlcBase.Base.Entity;
 
-public abstract class EntityBase
+public abstract class BaseEntity
 {
 
     [Column("created_at")]

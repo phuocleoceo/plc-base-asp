@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
-using PlcBase.Models.Common;
+using PlcBase.Base.DomainModel;
 using PlcBase.Helpers;
 
 namespace PlcBase.Middlewares;

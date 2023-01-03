@@ -2,7 +2,7 @@ using Newtonsoft.Json.Serialization;
 using PlcBase.Common.Constants;
 using Newtonsoft.Json;
 
-namespace PlcBase.Models.Common;
+namespace PlcBase.Base.DTO;
 
 public class BaseResponse<T>
 {

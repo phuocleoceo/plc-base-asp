@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace PlcBase.Models.Common;
+namespace PlcBase.Base.DomainModel;
 
 public class ReqUser
 {
