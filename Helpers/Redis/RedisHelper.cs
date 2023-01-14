@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace PlcBase.Helpers;
@@ -6,15 +7,29 @@ namespace PlcBase.Helpers;
 public class RedisHelper : IRedisHelper
 {
     private readonly IDistributedCache _redisCache;
-    public RedisHelper(IDistributedCache redisCache)
+    private readonly CacheSettings _cacheSettings;
+
+    public RedisHelper(IDistributedCache redisCache,
+                       IOptions<CacheSettings> cacheSettings)
     {
         _redisCache = redisCache;
+        _cacheSettings = cacheSettings.Value;
     }
 
     public async Task Set<T>(string key, T obj)
     {
         string objStr = JsonConvert.SerializeObject(obj);
         await _redisCache.SetStringAsync(key, objStr);
+    }
+
+    public async Task SetWithTTL<T>(string key, T obj)
+    {
+        TimeSpan expires = TimeSpan.FromSeconds(_cacheSettings.Expires);
+        DistributedCacheEntryOptions options = new DistributedCacheEntryOptions()
+                            .SetSlidingExpiration(expires);
+
+        string objStr = JsonConvert.SerializeObject(obj);
+        await _redisCache.SetStringAsync(key, objStr, options);
     }
 
     public async Task<T> Get<T>(string key)
