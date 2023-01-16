@@ -17,7 +17,7 @@ public static class ServiceExtension
         // Authentication
         services.ConfigureAuth(configuration);
         // CAP message queue
-        services.ConfigureCapQueue();
+        services.ConfigureCapQueue(configuration);
         // Add Http client
         services.AddHttpClient();
         // Controller mapper
