@@ -34,5 +34,6 @@ public static class DIExtension
         services.AddScoped<IJwtHelper, JwtHelper>();
         services.AddSingleton<ILoggerManager, LoggerManager>();
         services.AddSingleton<IRedisHelper, RedisHelper>();
+        services.AddSingleton<IDateTimeHelper, DateTimeHelper>();
     }
 }
