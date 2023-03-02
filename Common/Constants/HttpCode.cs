@@ -1,6 +1,6 @@
 namespace PlcBase.Common.Constants;
 
-public class HttpCode
+public static class HttpCode
 {
     public const int OK = 200;
     public const int CREATED = 201;

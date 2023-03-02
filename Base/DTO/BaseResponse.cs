@@ -8,22 +8,18 @@ public class BaseResponse<T>
 {
     public T Data { get; set; }
 
-    public bool Success { get; set; }
-
     public int StatusCode { get; set; }
 
     public string Message { get; set; }
 
     public BaseResponse() { }
-    public BaseResponse(T Data,
+    public BaseResponse(T Data = default(T),
                         int StatusCode = HttpCode.OK,
-                        string Message = "",
-                        bool Success = true)
+                        string Message = null)
     {
-        this.Success = Success;
+        this.Data = Data;
         this.StatusCode = StatusCode;
         this.Message = Message;
-        this.Data = Data;
     }
 
     public override string ToString()

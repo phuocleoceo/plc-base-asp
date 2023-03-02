@@ -1,6 +1,6 @@
 namespace PlcBase.Common.Constants;
 
-public class PaginationConfig
+public static class PaginationConfig
 {
     public const int MinPageNumber = 1;
 

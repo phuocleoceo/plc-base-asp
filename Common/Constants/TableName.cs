@@ -1,6 +1,6 @@
 namespace PlcBase.Common.Constants;
 
-public class TableName
+public static class TableName
 {
     public const string EXAMPLE = "example";
 }

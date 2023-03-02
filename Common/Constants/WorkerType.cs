@@ -1,6 +1,6 @@
 namespace PlcBase.Common.Constants;
 
-public class WorkerType
+public static class WorkerType
 {
-    
+
 }

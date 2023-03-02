@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Diagnostics;
 using PlcBase.Extensions.Builders;
+using PlcBase.Common.Constants;
 using PlcBase.Base.Error;
 using PlcBase.Base.DTO;
 using PlcBase.Helpers;
-using System.Net;
 
 namespace PlcBase.Middlewares;
 
@@ -18,21 +18,23 @@ public static class ErrorHandler
                 var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
                 var exception = exceptionHandlerPathFeature.Error;
 
-                context.Response.StatusCode = (int)HttpStatusCode.OK;
+                context.Response.StatusCode = HttpCode.INTERNAL_SERVER_ERROR;
                 context.Response.ContentType = "application/json";
+
                 var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                 if (contextFeature != null)
                 {
                     var statusCode = exception.GetType() == typeof(BaseException) ?
                                             ((BaseException)exception).StatusCode :
-                                            (int)HttpStatusCode.InternalServerError;
+                                            HttpCode.INTERNAL_SERVER_ERROR;
 
                     var LogContent = context.GetLogContent(exception.Message, statusCode);
                     logger.LogError(LogContent);
 
-                    await context.Response.WriteAsync(new BaseResponse<int>()
+                    context.Response.StatusCode = statusCode;
+
+                    await context.Response.WriteAsync(new BaseResponse<string>()
                     {
-                        Success = false,
                         StatusCode = statusCode,
                         Message = exception.Message
                     }.ToString());
