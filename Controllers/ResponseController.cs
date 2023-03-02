@@ -14,7 +14,13 @@ public class ResponseController : BaseController
     [HttpGet("OK")]
     public BaseResponse<string> ResponseOK()
     {
-        return new BaseResponse<string>("OK");
+        return new BaseResponse<string>("ok", HttpCode.OK);
+    }
+
+    [HttpGet("Created")]
+    public BaseResponse<string> ResponseCreated()
+    {
+        return new BaseResponse<string>("created", HttpCode.CREATED);
     }
 
     [HttpGet("Internal-Server-Error")]

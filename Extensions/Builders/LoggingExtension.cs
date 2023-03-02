@@ -29,7 +29,7 @@ public static class LoggingExtension
     }
 
     public static string GetLogContent(this HttpContext context,
-                                       string message = "",
+                                       string message = null,
                                        int statusCode = HttpCode.OK)
     {
         LogContent content = new LogContent
