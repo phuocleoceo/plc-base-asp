@@ -10,7 +10,15 @@ public static class SuccessHandler
         app.Use(async (context, next) =>
         {
             await next();
-            logger.LogInformation(context.GetLogContent());
+
+            // If context item is null or false => isError = false
+            bool isError = Convert.ToBoolean(context.Items["isError"]);
+
+            if (!isError)
+            {
+                string logContent = context.GetLogContent();
+                logger.LogInformation(logContent);
+            }
         });
     }
 }

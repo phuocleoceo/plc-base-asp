@@ -26,7 +26,7 @@ public class ResponseController : BaseController
     [HttpGet("Internal-Server-Error")]
     public BaseResponse<string> ResponseInternalServerError()
     {
-        throw new BaseException(HttpCode.INTERNAL_SERVER_ERROR, "internal_server_error");
+        throw new BaseException(HttpCode.INTERNAL_SERVER_ERROR, ErrorMessage.SERVER_ERROR);
     }
 
     [HttpGet("Unauthorized")]

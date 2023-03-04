@@ -15,8 +15,6 @@ public static class PipelineExtension
 
         app.UseResponseHandlerPipeline(logger);
 
-        app.UseCustomAuthResponse();
-
         app.UseHttpsRedirection();
 
         app.UseAuthentication();
