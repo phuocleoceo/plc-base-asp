@@ -15,7 +15,7 @@ public class BaseResponse<T>
     public BaseResponse() { }
     public BaseResponse(T Data = default(T),
                         int StatusCode = HttpCode.OK,
-                        string Message = null)
+                        string Message = "")
     {
         this.Data = Data;
         this.StatusCode = StatusCode;
