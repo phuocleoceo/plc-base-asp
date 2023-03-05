@@ -1,4 +1,4 @@
-namespace PlcBase.Helpers.Permission;
+namespace PlcBase.Helpers;
 
 public class PermissionHelper : IPermissionHelper
 {
