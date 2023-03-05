@@ -3,10 +3,8 @@ on:
   push:
     branches:
       - main
-  pull_request_target:
-    branches:
-      - main
-    types: [closed]
+    types:
+      - closed
 
 jobs:
   build-and-deploy:
