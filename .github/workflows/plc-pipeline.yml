@@ -5,18 +5,14 @@ on:
       - main
   pull_request:
     types: [closed]
-    branches:
-      - main
+    pull_request:
+      merged: true
+      head:
+        type: squash
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    if: >
-      github.event_name == 'push' ||
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.merged == true &&
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      github.event.pull_request.base.ref == 'main'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
