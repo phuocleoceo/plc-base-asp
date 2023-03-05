@@ -1,4 +1,4 @@
-namespace PlcBase.Common.Constants;
+namespace PlcBase.Common.Configs;
 
 public static class PaginationConfig
 {

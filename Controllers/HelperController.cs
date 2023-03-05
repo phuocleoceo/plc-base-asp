@@ -17,7 +17,7 @@ public class HelperController : BaseController
     [HttpPost("Send-Mail")]
     public async Task<BaseResponse<string>> Send([FromForm] MailContent mailContent)
     {
-        await _sendMailHelper.SendEmailAsync(mailContent);
-        return new BaseResponse<string>($"Sent mail to {mailContent.ToEmail}");
+        string mailTo = await _sendMailHelper.SendEmailAsync(mailContent);
+        return HttpContext.Success(new BaseResponse<string>(mailTo));
     }
 }

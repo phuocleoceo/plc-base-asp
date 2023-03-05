@@ -1,4 +1,4 @@
-using PlcBase.Common.Constants;
+using PlcBase.Common.Configs;
 
 namespace PlcBase.Base.DomainModel;
 

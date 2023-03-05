@@ -1,3 +1,5 @@
+using PlcBase.Common.Constants;
+
 namespace PlcBase.Base.Error;
 
 public class BaseException : Exception
@@ -6,7 +8,7 @@ public class BaseException : Exception
 
     public BaseException() { }
 
-    public BaseException(int StatusCode,
+    public BaseException(int StatusCode = HttpCode.INTERNAL_SERVER_ERROR,
                          string Message = "") : base(Message)
     {
         this.StatusCode = StatusCode;

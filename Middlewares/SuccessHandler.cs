@@ -10,7 +10,18 @@ public static class SuccessHandler
         app.Use(async (context, next) =>
         {
             await next();
-            logger.LogInformation(context.GetLogContent());
+
+            // If context item is null or false => isError = false
+            bool isError = Convert.ToBoolean(context.Items["isError"]);
+
+            if (!isError)
+            {
+                int responseStatusCode = Convert.ToInt32(context.Items["responseStatusCode"]);
+                string responseMessage = Convert.ToString(context.Items["responseMessage"]);
+
+                string logContent = context.GetLogContent(responseMessage, responseStatusCode);
+                logger.LogInformation(logContent);
+            }
         });
     }
 }

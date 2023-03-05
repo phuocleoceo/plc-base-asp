@@ -1,4 +1,6 @@
 using Microsoft.Extensions.Options;
+using PlcBase.Common.Constants;
+using PlcBase.Base.Error;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
@@ -16,7 +18,7 @@ public class SendMailHelper : ISendMailHelper
         _logger = logger;
     }
 
-    public async Task SendEmailAsync(MailContent mailContent)
+    public async Task<string> SendEmailAsync(MailContent mailContent)
     {
         MimeMessage email = new MimeMessage();
         email.Sender = new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail);
@@ -53,14 +55,20 @@ public class SendMailHelper : ISendMailHelper
             smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
-            _logger.LogInformation("Send mail to " + mailContent.ToEmail);
+
+            return $"Send mail to {mailContent.ToEmail}";
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error when sending email to " + mailContent.ToEmail);
-            _logger.LogError(ex.Message);
+            throw new BaseException
+            (
+                HttpCode.BAD_REQUEST,
+                $"Error when sending email to {mailContent.ToEmail} with reason {ex.Message}"
+            );
         }
-
-        smtp.Disconnect(true);
+        finally
+        {
+            smtp.Disconnect(true);
+        }
     }
 }
