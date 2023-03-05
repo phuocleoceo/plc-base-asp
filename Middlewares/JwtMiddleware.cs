@@ -19,8 +19,10 @@ public class JwtMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        string token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+
         if (token != null) getDataFromTokenPayload(context, token);
+
         await _next(context);
     }
 
@@ -28,13 +30,17 @@ public class JwtMiddleware
     {
         try
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var publicKey = JwtOptions.GetPublicKey(_jwtSettings);
-            var tokenValidationParameters = JwtOptions.GetTokenParams(_jwtSettings, publicKey);
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            SecurityKey publicKey = JwtOptions.GetPublicKey(_jwtSettings);
+
+            TokenValidationParameters tokenValidationParameters =
+                                JwtOptions.GetTokenParams(_jwtSettings, publicKey);
+
             tokenHandler.ValidateToken(token,
                 tokenValidationParameters, out SecurityToken validatedToken);
 
-            var jwtToken = (JwtSecurityToken)validatedToken;
+            JwtSecurityToken jwtToken = (JwtSecurityToken)validatedToken;
+
             // Get data from payload
             context.Items["reqUser"] = new ReqUser()
             {

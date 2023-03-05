@@ -15,20 +15,23 @@ public static class ErrorHandler
         {
             appError.Run(async context =>
             {
-                var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-                var exception = exceptionHandlerPathFeature.Error;
+                IExceptionHandlerPathFeature exceptionHandlerPathFeature =
+                                    context.Features.Get<IExceptionHandlerPathFeature>();
+                Exception exception = exceptionHandlerPathFeature.Error;
 
                 context.Response.StatusCode = HttpCode.INTERNAL_SERVER_ERROR;
                 context.Response.ContentType = "application/json";
 
-                var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                IExceptionHandlerFeature contextFeature =
+                                    context.Features.Get<IExceptionHandlerFeature>();
+
                 if (contextFeature != null)
                 {
-                    var statusCode = exception.GetType() == typeof(BaseException) ?
+                    int statusCode = exception.GetType() == typeof(BaseException) ?
                                             ((BaseException)exception).StatusCode :
                                             HttpCode.INTERNAL_SERVER_ERROR;
 
-                    var LogContent = context.GetLogContent(exception.Message, statusCode);
+                    string LogContent = context.GetLogContent(exception.Message, statusCode);
                     logger.LogError(LogContent);
 
                     context.Response.StatusCode = statusCode;

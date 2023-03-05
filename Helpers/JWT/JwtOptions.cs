@@ -24,8 +24,8 @@ public static class JwtOptions
 
     public static SigningCredentials GetPrivateKey(JwtSettings jwtSettings)
     {
-        var dirPath = AppDomain.CurrentDomain.BaseDirectory;
-        var fileName = Path.Combine(dirPath, "Certificate", jwtSettings.PrivateKeyPath);
+        string dirPath = AppDomain.CurrentDomain.BaseDirectory;
+        string fileName = Path.Combine(dirPath, "Certificate", jwtSettings.PrivateKeyPath);
         string privateKeyPem = File.ReadAllText(fileName);
 
         privateKeyPem = privateKeyPem.Replace("-----BEGIN PRIVATE KEY-----", "");
@@ -33,18 +33,18 @@ public static class JwtOptions
 
         byte[] privateKeyRaw = Convert.FromBase64String(privateKeyPem);
 
-        var provider = new RSACryptoServiceProvider();
+        RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
         provider.ImportPkcs8PrivateKey(new ReadOnlySpan<byte>(privateKeyRaw), out _);
-        var rsaSecurityKey = new RsaSecurityKey(provider);
+        RsaSecurityKey rsaSecurityKey = new RsaSecurityKey(provider);
         return new SigningCredentials(rsaSecurityKey, SecurityAlgorithms.RsaSha256);
     }
 
     public static SecurityKey GetPublicKey(JwtSettings jwtSettings)
     {
-        var dirPath = AppDomain.CurrentDomain.BaseDirectory;
-        var fileName = Path.Combine(dirPath, "Certificate", jwtSettings.PublicKeyPath);
-        var cert = new X509Certificate2(fileName);
-        var rsaSecurityKey = new RsaSecurityKey(cert.GetRSAPublicKey());
+        string dirPath = AppDomain.CurrentDomain.BaseDirectory;
+        string fileName = Path.Combine(dirPath, "Certificate", jwtSettings.PublicKeyPath);
+        X509Certificate2 cert = new X509Certificate2(fileName);
+        RsaSecurityKey rsaSecurityKey = new RsaSecurityKey(cert.GetRSAPublicKey());
         return rsaSecurityKey;
     }
 }

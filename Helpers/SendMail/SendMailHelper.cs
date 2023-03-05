@@ -48,7 +48,7 @@ public class SendMailHelper : ISendMailHelper
         builder.HtmlBody = mailContent.Body;
         email.Body = builder.ToMessageBody();
 
-        using var smtp = new SmtpClient();
+        using SmtpClient smtp = new SmtpClient();
 
         try
         {

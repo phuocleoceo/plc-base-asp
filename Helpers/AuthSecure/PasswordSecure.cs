@@ -7,8 +7,8 @@ public static class PasswordSecure
 {
     public static PasswordHash GetPasswordHash(string password)
     {
-        using var hmac = new HMACSHA512();
-        var passwordByte = Encoding.UTF8.GetBytes(password);
+        using HMACSHA512 hmac = new HMACSHA512();
+        byte[] passwordByte = Encoding.UTF8.GetBytes(password);
         return new PasswordHash()
         {
             PasswordHashed = hmac.ComputeHash(passwordByte),
@@ -18,9 +18,9 @@ public static class PasswordSecure
 
     public static bool IsValidPasswod(string password, PasswordHash passwordHash)
     {
-        using var hmac = new HMACSHA512(passwordHash.PasswordSalt);
-        var passwordByte = Encoding.UTF8.GetBytes(password);
-        var computedHash = hmac.ComputeHash(passwordByte);
+        using HMACSHA512 hmac = new HMACSHA512(passwordHash.PasswordSalt);
+        byte[] passwordByte = Encoding.UTF8.GetBytes(password);
+        byte[] computedHash = hmac.ComputeHash(passwordByte);
         return computedHash.SequenceEqual(passwordHash.PasswordHashed);
     }
 }
