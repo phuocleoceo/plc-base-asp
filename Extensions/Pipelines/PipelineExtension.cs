@@ -7,7 +7,7 @@ public static class PipelineExtension
 {
     public static void ConfigurePipeline(this WebApplication app)
     {
-        var logger = app.Services.GetRequiredService<ILoggerManager>();
+        ILoggerManager logger = app.Services.GetRequiredService<ILoggerManager>();
 
         app.UseCorsPipeline();
 

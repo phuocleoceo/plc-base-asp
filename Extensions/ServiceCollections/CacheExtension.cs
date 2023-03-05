@@ -6,7 +6,7 @@ public static class CacheExtension
 {
     public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
     {
-        var cacheSettings = configuration.GetSection("CacheSettings").Get<CacheSettings>();
+        CacheSettings cacheSettings = configuration.GetSection("CacheSettings").Get<CacheSettings>();
 
         if (cacheSettings.Enable)
         {

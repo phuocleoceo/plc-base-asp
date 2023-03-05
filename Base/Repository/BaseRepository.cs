@@ -29,7 +29,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
         if (includes != null)
         {
-            foreach (var includeProp in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string includeProp in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProp);
             }
@@ -61,7 +61,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
         if (includes != null)
         {
-            foreach (var includeProp in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string includeProp in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProp);
             }

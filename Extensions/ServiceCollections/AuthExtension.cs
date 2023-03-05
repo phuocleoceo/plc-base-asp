@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using PlcBase.Helpers;
 
 namespace PlcBase.Extensions.ServiceCollections;
@@ -7,9 +8,9 @@ public static class AuthExtension
 {
     public static void ConfigureAuth(this IServiceCollection services, IConfiguration configuration)
     {
-        var tokenSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
+        JwtSettings tokenSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
-        var publicKey = JwtOptions.GetPublicKey(tokenSettings);
+        SecurityKey publicKey = JwtOptions.GetPublicKey(tokenSettings);
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

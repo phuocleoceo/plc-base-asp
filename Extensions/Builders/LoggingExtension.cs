@@ -2,6 +2,7 @@ using PlcBase.Common.Constants;
 using Serilog.Exceptions;
 using PlcBase.Helpers;
 using Serilog.Events;
+using Serilog.Core;
 using Serilog;
 
 namespace PlcBase.Extensions.Builders;
@@ -10,11 +11,11 @@ public static class LoggingExtension
 {
     public static void ConfigureSerilog(this ILoggingBuilder loggingBuilder, IConfiguration configuration)
     {
-        var logSettings = configuration.GetSection("LogSettings").Get<LogSettings>();
+        LogSettings logSettings = configuration.GetSection("LogSettings").Get<LogSettings>();
 
         if (logSettings.Enable)
         {
-            var log = new LoggerConfiguration()
+            Logger log = new LoggerConfiguration()
                         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                         .MinimumLevel.Override("PlcBase", LogEventLevel.Information)
                         .MinimumLevel.Override("Savorboard", LogEventLevel.Error)
