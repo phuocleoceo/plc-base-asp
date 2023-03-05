@@ -16,7 +16,10 @@ public static class SuccessHandler
 
             if (!isError)
             {
-                string logContent = context.GetLogContent();
+                int responseStatusCode = Convert.ToInt32(context.Items["responseStatusCode"]);
+                string responseMessage = Convert.ToString(context.Items["responseMessage"]);
+
+                string logContent = context.GetLogContent(responseMessage, responseStatusCode);
                 logger.LogInformation(logContent);
             }
         });

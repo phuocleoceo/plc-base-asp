@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlcBase.Common.Constants;
 using PlcBase.Base.Controller;
-using PlcBase.Base.Error;
 using PlcBase.Base.DTO;
 
 namespace PlcBase.Controllers;
@@ -14,31 +13,31 @@ public class ResponseController : BaseController
     [HttpGet("OK")]
     public BaseResponse<string> ResponseOK()
     {
-        return new BaseResponse<string>("ok", HttpCode.OK);
+        return HttpContext.Success(new BaseResponse<string>("ok", HttpCode.OK));
     }
 
     [HttpGet("Created")]
     public BaseResponse<string> ResponseCreated()
     {
-        return new BaseResponse<string>("created", HttpCode.CREATED);
+        return HttpContext.Success(new BaseResponse<string>("created", HttpCode.CREATED));
     }
 
     [HttpGet("Internal-Server-Error")]
     public BaseResponse<string> ResponseInternalServerError()
     {
-        throw new BaseException(HttpCode.INTERNAL_SERVER_ERROR, ErrorMessage.SERVER_ERROR);
+        return HttpContext.Failure(HttpCode.INTERNAL_SERVER_ERROR, ErrorMessage.SERVER_ERROR);
     }
 
     [HttpGet("Unauthorized")]
     [Authorize]
     public BaseResponse<string> ResponseUnauthorized()
     {
-        throw new BaseException(HttpCode.UNAUTHORIZED, ErrorMessage.UNAUTHORIZED_USER);
+        return HttpContext.Failure(HttpCode.UNAUTHORIZED, ErrorMessage.UNAUTHORIZED_USER);
     }
 
     [HttpGet("Forbidden")]
     public BaseResponse<string> ResponseForbidden()
     {
-        throw new BaseException(HttpCode.FORBIDDEN, ErrorMessage.FORBIDDEN_RESOURCE);
+        return HttpContext.Failure(HttpCode.FORBIDDEN, ErrorMessage.FORBIDDEN_RESOURCE);
     }
 }
