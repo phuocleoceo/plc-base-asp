@@ -4,18 +4,20 @@ using PlcBase.Base.DTO;
 
 namespace PlcBase.Base.Controller;
 
-public static class ContextExtension
+public static class ContextResponse
 {
     public static BaseResponse<T> Success<T>(
             this HttpContext context,
-            BaseResponse<T> responseData)
+            T Data = default(T),
+            int StatusCode = HttpCode.OK,
+            string Message = "")
     {
-        context.Response.StatusCode = responseData.StatusCode;
+        context.Response.StatusCode = StatusCode;
 
-        context.Items["responseStatusCode"] = responseData.StatusCode;
-        context.Items["responseMessage"] = responseData.Message;
+        context.Items["responseStatusCode"] = StatusCode;
+        context.Items["responseMessage"] = Message;
 
-        return responseData;
+        return new BaseResponse<T>(Data, StatusCode, Message);
     }
 
     public static dynamic Failure(

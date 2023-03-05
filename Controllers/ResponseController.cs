@@ -13,13 +13,13 @@ public class ResponseController : BaseController
     [HttpGet("OK")]
     public BaseResponse<string> ResponseOK()
     {
-        return HttpContext.Success(new BaseResponse<string>("ok", HttpCode.OK));
+        return HttpContext.Success("ok", HttpCode.OK);
     }
 
     [HttpGet("Created")]
     public BaseResponse<string> ResponseCreated()
     {
-        return HttpContext.Success(new BaseResponse<string>("created", HttpCode.CREATED));
+        return HttpContext.Success("created", HttpCode.CREATED, "create_successfully");
     }
 
     [HttpGet("Internal-Server-Error")]

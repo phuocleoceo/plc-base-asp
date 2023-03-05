@@ -18,6 +18,6 @@ public class HelperController : BaseController
     public async Task<BaseResponse<string>> Send([FromForm] MailContent mailContent)
     {
         string mailTo = await _sendMailHelper.SendEmailAsync(mailContent);
-        return HttpContext.Success(new BaseResponse<string>(mailTo));
+        return HttpContext.Success(mailTo);
     }
 }
