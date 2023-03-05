@@ -31,8 +31,8 @@ public static class ErrorHandler
                                             ((BaseException)exception).StatusCode :
                                             HttpCode.INTERNAL_SERVER_ERROR;
 
-                    string LogContent = context.GetLogContent(exception.Message, statusCode);
-                    logger.LogError(LogContent);
+                    string logContent = context.GetLogContent(exception.Message, statusCode);
+                    logger.LogError(logContent);
 
                     context.Response.StatusCode = statusCode;
                     context.Items["isError"] = true;

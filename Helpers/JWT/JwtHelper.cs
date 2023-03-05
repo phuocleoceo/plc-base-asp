@@ -8,6 +8,7 @@ namespace PlcBase.Helpers;
 public class JwtHelper : IJwtHelper
 {
     private readonly JwtSettings _jwtSettings;
+
     public JwtHelper(IOptions<JwtSettings> jwtSettings)
     {
         _jwtSettings = jwtSettings.Value;

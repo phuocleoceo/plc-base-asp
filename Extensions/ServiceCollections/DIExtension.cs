@@ -32,8 +32,10 @@ public static class DIExtension
     {
         services.AddScoped<ISendMailHelper, SendMailHelper>();
         services.AddScoped<IJwtHelper, JwtHelper>();
+        services.AddScoped<IPermissionHelper, PermissionHelper>();
         services.AddSingleton<ILoggerManager, LoggerManager>();
         services.AddSingleton<IRedisHelper, RedisHelper>();
         services.AddSingleton<IDateTimeHelper, DateTimeHelper>();
+        services.AddScoped<IS3Helper, S3Helper>();
     }
 }

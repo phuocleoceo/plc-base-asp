@@ -29,5 +29,7 @@ public static class ServiceExtension
         });
         // Swagger
         services.ConfigureSwagger(configuration);
+        // AWS
+        services.ConfigureAWS(configuration);
     }
 }
