@@ -1,7 +1,5 @@
 using PlcBase.Common.Constants;
-using Serilog.Exceptions;
 using PlcBase.Helpers;
-using Serilog.Events;
 using Serilog.Core;
 using Serilog;
 
