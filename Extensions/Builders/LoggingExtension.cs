@@ -16,13 +16,7 @@ public static class LoggingExtension
         if (logSettings.Enable)
         {
             Logger log = new LoggerConfiguration()
-                        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                        .MinimumLevel.Override("PlcBase", LogEventLevel.Information)
-                        .MinimumLevel.Override("Savorboard", LogEventLevel.Error)
-                        .MinimumLevel.Override("DotNetCore.CAP", LogEventLevel.Error)
-                        .Enrich.FromLogContext()
-                        .Enrich.WithExceptionDetails()
-                        .WriteTo.Console()
+                        .ReadFrom.Configuration(configuration)
                         .CreateLogger();
 
             loggingBuilder.AddSerilog(log);
@@ -41,11 +35,13 @@ public static class LoggingExtension
             Message = message,
             StatusCode = statusCode,
         };
+
         QueryString queryString = context.Request.QueryString;
         if (queryString.HasValue)
         {
             content.Params = queryString.Value;
         }
+
         return content.ToString();
     }
 }
