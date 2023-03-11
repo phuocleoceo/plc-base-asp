@@ -13,8 +13,6 @@ public static class ContextResponse
             string Message = "")
     {
         context.Response.StatusCode = StatusCode;
-
-        context.Items["responseStatusCode"] = StatusCode;
         context.Items["responseMessage"] = Message;
 
         return new BaseResponse<T>(Data, StatusCode, Message);
