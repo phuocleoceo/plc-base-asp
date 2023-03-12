@@ -13,17 +13,17 @@ public class VNPController : BaseController
         _vnpHelper = vnpHelper;
     }
 
-    [HttpPost("Create")]
-    public BaseResponse<string> CreatePaymentUrl(PaymentInformationModel model)
-    {
-        string url = _vnpHelper.CreatePaymentUrl(model, HttpContext);
-        return HttpContext.Success(url);
-    }
+    // [HttpPost("Create")]
+    // public BaseResponse<string> CreatePaymentUrl(PaymentInformationModel model)
+    // {
+    //     string url = _vnpHelper.CreatePaymentUrl(model, HttpContext);
+    //     return HttpContext.Success(url);
+    // }
 
-    [HttpGet("Callback")]
-    public BaseResponse<PaymentResponseModel> PaymentCallback()
-    {
-        PaymentResponseModel result = _vnpHelper.PaymentExecute(Request.Query);
-        return HttpContext.Success(result);
-    }
+    // [HttpGet("Callback")]
+    // public BaseResponse<PaymentResponseModel> PaymentCallback()
+    // {
+    //     PaymentResponseModel result = _vnpHelper.PaymentExecute(Request.Query);
+    //     return HttpContext.Success(result);
+    // }
 }

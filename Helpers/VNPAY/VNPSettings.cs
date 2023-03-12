@@ -2,7 +2,7 @@ namespace PlcBase.Helpers;
 
 public class VNPSettings
 {
-    public string GatewayUrl { get; set; }
+    public string BaseUrl { get; set; }
 
     public string TmnCode { get; set; }
 
@@ -10,13 +10,11 @@ public class VNPSettings
 
     public string Command { get; set; }
 
-    public string MyProperty { get; set; }
-
     public string CurrCode { get; set; }
 
     public string Version { get; set; }
 
     public string Locale { get; set; }
 
-    public string CallbackUrl { get; set; }
+    public string ReturnUrl { get; set; }
 }

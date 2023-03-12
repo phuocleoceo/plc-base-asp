@@ -14,35 +14,35 @@ public class VNPHelper : IVNPHelper
         _vnpSettings = vnpSettings.Value;
     }
 
-    public string CreatePaymentUrl(PaymentInformationModel paymentModel, HttpContext context)
+    public Tuple<string, VNPHistory> CreatePayment(VNPPaymentInformation paymentInfo)
     {
-        VnPayLibrary pay = new VnPayLibrary();
+        VNPHistory vnpHistory = new VNPHistory();
+        vnpHistory.vnp_TxnRef = DateTime.UtcNow.Ticks;
+        vnpHistory.vnp_IpAddr = paymentInfo.CustomerIpAddress;
+        vnpHistory.vnp_OrderType = paymentInfo.OrderType;
+        vnpHistory.vnp_OrderInfo = "#" + $"{vnpHistory.vnp_TxnRef} | {paymentInfo.OrderDescription}";
+        vnpHistory.vnp_Amount = paymentInfo.Amount;
+        vnpHistory.vnp_BankCode = paymentInfo.BankCode;
+        vnpHistory.vnp_CreateDate = _dateTimeHelper.Now().ToString("yyyyMMddHHmmss");
 
-        DateTime timeNow = _dateTimeHelper.Now();
-        string tick = DateTime.Now.Ticks.ToString();
-        string orderInfo = $"{paymentModel.Name} {paymentModel.OrderDescription} {paymentModel.Amount}";
+        VNPLibrary pay = new VNPLibrary();
 
         pay.AddRequestData("vnp_Version", _vnpSettings.Version);
         pay.AddRequestData("vnp_Command", _vnpSettings.Command);
         pay.AddRequestData("vnp_TmnCode", _vnpSettings.TmnCode);
-        pay.AddRequestData("vnp_Amount", ((int)paymentModel.Amount * 100).ToString());
-        pay.AddRequestData("vnp_CreateDate", timeNow.ToString("yyyyMMddHHmmss"));
         pay.AddRequestData("vnp_CurrCode", _vnpSettings.CurrCode);
-        pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
         pay.AddRequestData("vnp_Locale", _vnpSettings.Locale);
-        pay.AddRequestData("vnp_OrderInfo", orderInfo);
-        pay.AddRequestData("vnp_OrderType", paymentModel.OrderType);
-        pay.AddRequestData("vnp_ReturnUrl", _vnpSettings.CallbackUrl);
-        pay.AddRequestData("vnp_TxnRef", tick);
+        pay.AddRequestData("vnp_ReturnUrl", _vnpSettings.ReturnUrl);
+        pay.AddRequestData("vnp_IpAddr", vnpHistory.vnp_IpAddr);
+        pay.AddRequestData("vnp_Amount", (vnpHistory.vnp_Amount * 100).ToString());
+        pay.AddRequestData("vnp_BankCode", vnpHistory.vnp_BankCode);
+        pay.AddRequestData("vnp_CreateDate", vnpHistory.vnp_CreateDate);
+        pay.AddRequestData("vnp_OrderInfo", vnpHistory.vnp_OrderInfo);
+        pay.AddRequestData("vnp_OrderType", vnpHistory.vnp_OrderType);
+        pay.AddRequestData("vnp_TxnRef", vnpHistory.vnp_TxnRef.ToString());
 
-        string paymentUrl = pay.CreateRequestUrl(_vnpSettings.GatewayUrl, _vnpSettings.HashSecret);
+        string paymentUrl = pay.CreateRequestUrl(_vnpSettings.BaseUrl, _vnpSettings.HashSecret);
 
-        return paymentUrl;
-    }
-
-    public PaymentResponseModel PaymentExecute(IQueryCollection collections)
-    {
-        VnPayLibrary pay = new VnPayLibrary();
-        return pay.GetFullResponseData(collections, _vnpSettings.HashSecret);
+        return new Tuple<string, VNPHistory>(paymentUrl, vnpHistory);
     }
 }
