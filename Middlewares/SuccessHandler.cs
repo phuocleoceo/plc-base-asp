@@ -11,15 +11,20 @@ public static class SuccessHandler
         {
             await next();
 
-            // If context item is null or false => isError = false
-            bool isError = Convert.ToBoolean(context.Items["isError"]);
-
-            if (!isError)
-            {
-                string responseMessage = Convert.ToString(context.Items["responseMessage"]);
-                string logContent = context.GetLogContent(responseMessage, context.Response.StatusCode);
-                logger.LogInformation(logContent);
-            }
+            logger.LogSuccessResponse(context);
         });
+    }
+
+    private static void LogSuccessResponse(this ILoggerManager logger, HttpContext context)
+    {
+        // If context item is null or false => isError = false
+        bool isError = Convert.ToBoolean(context.Items["isError"]);
+
+        if (!isError)
+        {
+            string responseMessage = Convert.ToString(context.Items["responseMessage"]);
+            string logContent = context.GetLogContent(responseMessage, context.Response.StatusCode);
+            logger.LogInformation(logContent);
+        }
     }
 }

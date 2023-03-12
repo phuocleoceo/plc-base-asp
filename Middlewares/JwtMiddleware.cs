@@ -1,7 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
+using PlcBase.Common.Constants;
 using PlcBase.Base.DomainModel;
+using PlcBase.Base.Error;
 using PlcBase.Helpers;
 
 namespace PlcBase.Middlewares;
@@ -48,6 +50,9 @@ public class JwtMiddleware
                 Email = jwtToken.Claims.First(x => x.Type == CustomClaimTypes.Email).Value,
             };
         }
-        catch { }
+        catch
+        {
+            throw new BaseException(HttpCode.BAD_REQUEST, ErrorMessage.INVALID_TOKEN);
+        }
     }
 }
