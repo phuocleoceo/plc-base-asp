@@ -25,23 +25,23 @@ public class VNPHelper : IVNPHelper
         vnpHistory.vnp_BankCode = paymentInfo.BankCode;
         vnpHistory.vnp_CreateDate = _dateTimeHelper.Now().ToString("yyyyMMddHHmmss");
 
-        VNPLibrary pay = new VNPLibrary();
+        VNPLibrary vnpay = new VNPLibrary();
 
-        pay.AddRequestData("vnp_Version", _vnpSettings.Version);
-        pay.AddRequestData("vnp_Command", _vnpSettings.Command);
-        pay.AddRequestData("vnp_TmnCode", _vnpSettings.TmnCode);
-        pay.AddRequestData("vnp_CurrCode", _vnpSettings.CurrCode);
-        pay.AddRequestData("vnp_Locale", _vnpSettings.Locale);
-        pay.AddRequestData("vnp_ReturnUrl", _vnpSettings.ReturnUrl);
-        pay.AddRequestData("vnp_IpAddr", vnpHistory.vnp_IpAddr);
-        pay.AddRequestData("vnp_Amount", (vnpHistory.vnp_Amount * 100).ToString());
-        pay.AddRequestData("vnp_BankCode", vnpHistory.vnp_BankCode);
-        pay.AddRequestData("vnp_CreateDate", vnpHistory.vnp_CreateDate);
-        pay.AddRequestData("vnp_OrderInfo", vnpHistory.vnp_OrderInfo);
-        pay.AddRequestData("vnp_OrderType", vnpHistory.vnp_OrderType);
-        pay.AddRequestData("vnp_TxnRef", vnpHistory.vnp_TxnRef.ToString());
+        vnpay.AddRequestData("vnp_Version", _vnpSettings.Version);
+        vnpay.AddRequestData("vnp_Command", _vnpSettings.Command);
+        vnpay.AddRequestData("vnp_TmnCode", _vnpSettings.TmnCode);
+        vnpay.AddRequestData("vnp_CurrCode", _vnpSettings.CurrCode);
+        vnpay.AddRequestData("vnp_Locale", _vnpSettings.Locale);
+        vnpay.AddRequestData("vnp_ReturnUrl", _vnpSettings.ReturnUrl);
+        vnpay.AddRequestData("vnp_IpAddr", vnpHistory.vnp_IpAddr);
+        vnpay.AddRequestData("vnp_Amount", (vnpHistory.vnp_Amount * 100).ToString());
+        vnpay.AddRequestData("vnp_BankCode", vnpHistory.vnp_BankCode);
+        vnpay.AddRequestData("vnp_CreateDate", vnpHistory.vnp_CreateDate);
+        vnpay.AddRequestData("vnp_OrderInfo", vnpHistory.vnp_OrderInfo);
+        vnpay.AddRequestData("vnp_OrderType", vnpHistory.vnp_OrderType);
+        vnpay.AddRequestData("vnp_TxnRef", vnpHistory.vnp_TxnRef.ToString());
 
-        string paymentUrl = pay.CreateRequestUrl(_vnpSettings.BaseUrl, _vnpSettings.HashSecret);
+        string paymentUrl = vnpay.CreateRequestUrl(_vnpSettings.BaseUrl, _vnpSettings.HashSecret);
 
         return new Tuple<string, VNPHistory>(paymentUrl, vnpHistory);
     }

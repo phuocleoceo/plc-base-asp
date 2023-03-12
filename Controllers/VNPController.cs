@@ -1,4 +1,6 @@
+using PlcBase.Extensions.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using PlcBase.Common.Constants;
 using PlcBase.Base.Controller;
 using PlcBase.Base.DTO;
 using PlcBase.Helpers;
@@ -13,17 +15,11 @@ public class VNPController : BaseController
         _vnpHelper = vnpHelper;
     }
 
-    // [HttpPost("Create")]
-    // public BaseResponse<string> CreatePaymentUrl(PaymentInformationModel model)
-    // {
-    //     string url = _vnpHelper.CreatePaymentUrl(model, HttpContext);
-    //     return HttpContext.Success(url);
-    // }
-
-    // [HttpGet("Callback")]
-    // public BaseResponse<PaymentResponseModel> PaymentCallback()
-    // {
-    //     PaymentResponseModel result = _vnpHelper.PaymentExecute(Request.Query);
-    //     return HttpContext.Success(result);
-    // }
+    [HttpPost("Create")]
+    public BaseResponse<VNPHistory> CreatePayment(VNPPaymentInformation payment)
+    {
+        payment.CustomerIpAddress = HttpContext.GetIpAddress();
+        Tuple<string, VNPHistory> result = _vnpHelper.CreatePayment(payment);
+        return HttpContext.Success(result.Item2, HttpCode.OK, result.Item1);
+    }
 }

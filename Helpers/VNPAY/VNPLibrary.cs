@@ -57,7 +57,6 @@ public class VNPLibrary
         String signData = queryString;
         if (signData.Length > 0)
         {
-
             signData = signData.Remove(data.Length - 1, 1);
         }
         string vnp_SecureHash = VNPayUtils.HmacSHA512(vnp_HashSecret, signData);
