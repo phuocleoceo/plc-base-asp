@@ -9,6 +9,7 @@ public static class AppSettingExtension
         services.Configure<DateTimeSettings>(configuration.GetSection("DateTimeSettings"));
         services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+        services.Configure<VNPSettings>(configuration.GetSection("VNPSettings"));
         services.Configure<S3Settings>(configuration.GetSection("AWSSettings:S3"));
     }
 }

@@ -37,5 +37,6 @@ public static class DIExtension
         services.AddSingleton<IRedisHelper, RedisHelper>();
         services.AddSingleton<IDateTimeHelper, DateTimeHelper>();
         services.AddScoped<IS3Helper, S3Helper>();
+        services.AddScoped<IVNPHelper, VNPHelper>();
     }
 }
