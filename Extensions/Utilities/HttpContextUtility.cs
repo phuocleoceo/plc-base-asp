@@ -1,3 +1,4 @@
+using PlcBase.Base.DomainModel;
 using System.Net.Sockets;
 using System.Net;
 
@@ -5,6 +6,11 @@ namespace PlcBase.Extensions.Utilities;
 
 public static class HttpContextUtility
 {
+    public static ReqUser GetRequestUser(this HttpContext context)
+    {
+        return context.Items["reqUser"] as ReqUser;
+    }
+
     public static string GetIpAddress(this HttpContext context)
     {
         string ipAddress = string.Empty;

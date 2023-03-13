@@ -1,4 +1,5 @@
 using PlcBase.Extensions.DataHandler;
+using PlcBase.Extensions.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using PlcBase.Base.Controller;
 using PlcBase.Base.DTO;
@@ -16,6 +17,13 @@ public class HelperController : BaseController
     {
         _sendMailHelper = sendMailHelper;
         _s3Helper = s3Helper;
+    }
+
+    [HttpGet("Ip-Address")]
+    public BaseResponse<string> GetIpAddress()
+    {
+        string ipAddress = HttpContext.GetIpAddress();
+        return HttpContext.Success(ipAddress);
     }
 
     [HttpPost("Send-Mail")]
