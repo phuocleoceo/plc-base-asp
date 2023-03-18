@@ -5,6 +5,7 @@ using PlcBase.Common.Constants;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Error;
 using PlcBase.Helpers;
+using Newtonsoft.Json;
 
 namespace PlcBase.Middlewares;
 
@@ -48,6 +49,7 @@ public class JwtMiddleware
             {
                 Id = Convert.ToInt32(jwtToken.Claims.First(x => x.Type == CustomClaimTypes.UserId).Value),
                 Email = jwtToken.Claims.First(x => x.Type == CustomClaimTypes.Email).Value,
+                Permissions = JsonConvert.DeserializeObject<int[]>(jwtToken.Claims.First(x => x.Type == CustomClaimTypes.Permission).Value)
             };
         }
         catch
