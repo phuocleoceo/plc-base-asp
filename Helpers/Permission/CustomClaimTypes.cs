@@ -1,5 +1,3 @@
-using System.Security.Claims;
-
 namespace PlcBase.Helpers;
 
 public class CustomClaimTypes

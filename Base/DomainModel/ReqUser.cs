@@ -8,8 +8,6 @@ public class ReqUser
 
     public string Email { get; set; }
 
-    public int[] Permissions { get; set; }
-
     public ReqUser() { }
 
     public override string ToString()

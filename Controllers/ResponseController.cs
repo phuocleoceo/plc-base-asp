@@ -1,3 +1,4 @@
+using static PlcBase.Common.Enums.PermissionPolicy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlcBase.Common.Constants;
@@ -37,7 +38,7 @@ public class ResponseController : BaseController
     }
 
     [HttpGet("Forbidden")]
-    [PermissionAuthorize("PLC")]
+    [PermissionAuthorize(CommonPermission.Basic)]
     public BaseResponse<string> ResponseForbidden()
     {
         return HttpContext.Failure(HttpCode.FORBIDDEN, ErrorMessage.FORBIDDEN_RESOURCE);
