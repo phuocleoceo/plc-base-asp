@@ -1,3 +1,5 @@
+using static PlcBase.Common.Enums.PermissionPolicy;
+
 namespace PlcBase.Helpers;
 
 public class PermissionHelper : IPermissionHelper
@@ -6,7 +8,7 @@ public class PermissionHelper : IPermissionHelper
     {
         return new List<PermissionContent>()
         {
-
+            new PermissionContent(CommonPermission.Basic, "Basic Permisison"),
         };
     }
 }
