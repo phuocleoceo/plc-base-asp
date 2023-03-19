@@ -8,7 +8,7 @@ public class PermissionHelper : IPermissionHelper
     {
         return new List<PermissionContent>()
         {
-            new PermissionContent(CommonPermission.Basic, "Basic permisison"),
+            new PermissionContent(CommonPermission.Basic, "Basic Permisison"),
         };
     }
 }
