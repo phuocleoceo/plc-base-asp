@@ -7,11 +7,15 @@ public static class DatabaseExtension
 {
     public static void ConfigureDataContext(this IServiceCollection services, IConfiguration configuration)
     {
-        string currentDatabaseConfig = configuration.GetSection("CurrentDatabaseConfig").Value;
-        string cns = configuration.GetConnectionString(currentDatabaseConfig);
+        string selectedDatabase = configuration.GetSection("SelectedDatabase").Value;
+        string connectionString = configuration.GetConnectionString(selectedDatabase);
+
         services.AddDbContext<DataContext>(options =>
         {
-            options.UseMySql(cns, ServerVersion.AutoDetect(cns));
+            options.UseMySql(
+                connectionString,
+                ServerVersion.AutoDetect(connectionString)
+            );
         });
     }
 }

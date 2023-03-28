@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using PlcBase.Common.Enums;
+using PlcBase.Base.Entity;
 
 namespace PlcBase.Models.Entities;
 
 [Table(TableName.ADDRESS_WARD)]
-public class AddressWardEntity
+public class AddressWardEntity : BaseEntity
 {
     [Key]
     [Column("id")]

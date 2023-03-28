@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using PlcBase.Common.Enums;
+using PlcBase.Base.Entity;
 
 namespace PlcBase.Models.Entities;
 
 [Table(TableName.ROLE)]
-public class RoleEntity
+public class RoleEntity : BaseEntity
 {
     [Key]
     [Column("id")]
