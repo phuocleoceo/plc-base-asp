@@ -2,9 +2,9 @@ using AutoMapper;
 
 namespace PlcBase.Models.Mapper;
 
-public class MappingConfig : Profile
+public class AddressMapping : Profile
 {
-    public MappingConfig()
+    public AddressMapping()
     {
 
     }

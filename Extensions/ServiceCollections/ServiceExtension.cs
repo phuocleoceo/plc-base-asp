@@ -12,6 +12,8 @@ public static class ServiceExtension
         services.ConfigureRedis(configuration);
         // Appsetting model
         services.ConfigureAppSetting(configuration);
+        // Auto Mapper
+        services.ConfigureAutoMapper();
         // Dependency Injection
         services.ConfigureDI();
         // Authentication

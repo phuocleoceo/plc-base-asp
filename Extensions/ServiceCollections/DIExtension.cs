@@ -15,7 +15,7 @@ public static class DIExtension
 
     private static void ConfigureLibraryDI(this IServiceCollection services)
     {
-        services.AddAutoMapper(typeof(MappingConfig));
+
     }
 
     private static void ConfigureRepositoryDI(this IServiceCollection services)
