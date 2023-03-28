@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using PlcBase.Models.Context.Configuration;
 using Microsoft.EntityFrameworkCore;
 using PlcBase.Base.Entity;
 
@@ -10,6 +11,7 @@ public class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyEntityConfigurations();
         base.OnModelCreating(modelBuilder);
     }
 
