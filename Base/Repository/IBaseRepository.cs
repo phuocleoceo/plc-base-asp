@@ -5,10 +5,10 @@ namespace PlcBase.Base.Repository;
 public interface IBaseRepository<T> where T : class
 {
 
-    Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
-                                     Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-                                     string includes = null,
-                                     bool tracking = true);
+    IQueryable<T> GetQuery(Expression<Func<T, bool>> filter = null,
+                           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+                           string includes = null,
+                           bool tracking = true);
 
     Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null,
                                    string includes = null,
@@ -16,15 +16,15 @@ public interface IBaseRepository<T> where T : class
 
     Task<T> FindByIdAsync(int id);
 
-    Task AddAsync(T entity);
+    void Add(T entity);
 
-    Task UpdateAsync(T entity);
+    void AddRange(IEnumerable<T> entities);
 
-    Task RemoveAsync(int id);
+    void Update(T entity);
 
-    Task RemoveAsync(T entity);
+    void Remove(T entity);
 
-    Task RemoveRangeAsync(IEnumerable<T> entity);
+    void RemoveRange(IEnumerable<T> entities);
 
-    Task<int> Save();
+    Task RemoveById(int id);
 }

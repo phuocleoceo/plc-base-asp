@@ -3,7 +3,7 @@ using PlcBase.Models.Entities;
 
 namespace PlcBase.Repositories.Interface;
 
-public interface IUserProfileRepository : IBaseRepository<UserProfileEntity>
+public interface IAddressDistrictRepository : IBaseRepository<AddressDistrictEntity>
 {
 
 }

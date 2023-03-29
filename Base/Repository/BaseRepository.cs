@@ -14,13 +14,11 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         _dbSet = _db.Set<T>();
     }
 
-    public async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
-                                                 Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-                                                 string includes = null,
-                                                 bool tracking = true)
+    public IQueryable<T> GetQuery(Expression<Func<T, bool>> filter = null,
+                                 Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+                                 string includes = null,
+                                 bool tracking = true)
     {
-        await Task.CompletedTask;
-
         IQueryable<T> query = _dbSet;
 
         if (!tracking)
@@ -81,29 +79,24 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return await _dbSet.FindAsync(id);
     }
 
-    public async Task AddAsync(T entity)
+    public void Add(T entity)
     {
-        await _dbSet.AddAsync(entity);
+        _dbSet.Add(entity);
     }
 
-    public async Task UpdateAsync(T entity)
+    public void AddRange(IEnumerable<T> entities)
     {
-        await Task.CompletedTask;
+        _dbSet.AddRange(entities);
+    }
 
+    public void Update(T entity)
+    {
         _dbSet.Attach(entity);
         _db.Entry(entity).State = EntityState.Modified;
     }
 
-    public async Task RemoveAsync(int id)
+    public void Remove(T entity)
     {
-        T entity = await _dbSet.FindAsync(id);
-        await RemoveAsync(entity);
-    }
-
-    public async Task RemoveAsync(T entity)
-    {
-        await Task.CompletedTask;
-
         if (_db.Entry(entity).State == EntityState.Detached)
         {
             _dbSet.Attach(entity);
@@ -111,15 +104,14 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         _dbSet.Remove(entity);
     }
 
-    public async Task RemoveRangeAsync(IEnumerable<T> entity)
+    public void RemoveRange(IEnumerable<T> entities)
     {
-        await Task.CompletedTask;
-
-        _dbSet.RemoveRange(entity);
+        _dbSet.RemoveRange(entities);
     }
 
-    public async Task<int> Save()
+    public async Task RemoveById(int id)
     {
-        return await _db.SaveChangesAsync();
+        T entity = await _dbSet.FindAsync(id);
+        Remove(entity);
     }
 }

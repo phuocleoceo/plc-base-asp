@@ -1,6 +1,9 @@
+using PlcBase.Base.Repository;
+using PlcBase.Models.Entities;
+
 namespace PlcBase.Repositories.Interface;
 
-public interface IPermisisonRepository
+public interface IPermisisonRepository : IBaseRepository<PermissionEntity>
 {
 
 }
