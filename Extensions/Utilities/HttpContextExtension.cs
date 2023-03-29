@@ -4,7 +4,7 @@ using System.Net;
 
 namespace PlcBase.Extensions.Utilities;
 
-public static class HttpContextUtility
+public static class HttpContextExtension
 {
     public static ReqUser GetRequestUser(this HttpContext context)
     {
@@ -15,7 +15,7 @@ public static class HttpContextUtility
     {
         string ipAddress = string.Empty;
 
-        var remoteIpAddress = context.Connection.RemoteIpAddress;
+        IPAddress remoteIpAddress = context.Connection.RemoteIpAddress;
 
         if (remoteIpAddress != null)
         {

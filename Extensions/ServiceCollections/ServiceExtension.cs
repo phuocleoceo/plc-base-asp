@@ -10,10 +10,8 @@ public static class ServiceExtension
         services.ConfigureDataContext(configuration);
         // Cache
         services.ConfigureRedis(configuration);
-        // Appsetting model
-        services.ConfigureAppSetting(configuration);
-        // Dependency Injection
-        services.ConfigureDI();
+        // Internal Data Factory
+        services.ConfigureDataFactory(configuration);
         // Authentication
         services.ConfigureAuth(configuration);
         // CAP message queue

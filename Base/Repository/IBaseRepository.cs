@@ -1,28 +1,27 @@
-using System.Linq.Expressions;
+using PlcBase.Base.DomainModel;
+using PlcBase.Base.DTO;
 
 namespace PlcBase.Base.Repository;
 
 public interface IBaseRepository<T> where T : class
 {
+    Task<List<U>> GetManyAsync<U>(QueryModel<T> queryModel = null);
 
-    Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
-                                     Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-                                     string includes = null,
-                                     bool tracking = true);
+    Task<PagedList<U>> GetPagedAsync<U>(QueryModel<T> queryModel = null);
 
-    Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null,
-                                   string includes = null,
-                                   bool tracking = true);
+    Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null);
 
     Task<T> FindByIdAsync(int id);
 
-    Task<bool> AddAsync(T entity);
+    void Add(T entity);
 
-    Task<bool> UpdateAsync(T entity);
+    void AddRange(IEnumerable<T> entities);
 
-    Task<bool> RemoveAsync(int id);
+    void Update(T entity);
 
-    Task<bool> RemoveAsync(T entity);
+    void Remove(T entity);
 
-    Task<bool> RemoveRangeAsync(IEnumerable<T> entity);
+    void RemoveRange(IEnumerable<T> entities);
+
+    Task RemoveById(int id);
 }

@@ -1,6 +1,4 @@
-using PlcBase.Helpers;
-
-namespace PlcBase.Extensions.ServiceCollections;
+namespace PlcBase.Helpers;
 
 public static class AppSettingExtension
 {

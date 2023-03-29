@@ -1,78 +1,79 @@
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using PlcBase.Base.DomainModel;
 using System.Linq.Expressions;
 using PlcBase.Models.Context;
+using PlcBase.Base.DTO;
+using AutoMapper;
 
 namespace PlcBase.Base.Repository;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
     private readonly DataContext _db;
+    private readonly IMapper _mapper;
     internal DbSet<T> _dbSet;
-    public BaseRepository(DataContext db)
+
+    public BaseRepository(DataContext db, IMapper mapper)
     {
         _db = db;
+        _mapper = mapper;
         _dbSet = _db.Set<T>();
     }
 
-    public async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
-                                                 Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-                                                 string includes = null,
-                                                 bool tracking = true)
+    public async Task<List<U>> GetManyAsync<U>(QueryModel<T> queryModel = null)
     {
-        await Task.CompletedTask;
+        IQueryable<T> query = GetQuery(queryModel);
+        return await query.ProjectTo<U>(_mapper.ConfigurationProvider).ToListAsync();
+    }
+
+    public async Task<PagedList<U>> GetPagedAsync<U>(QueryModel<T> queryModel = null)
+    {
+        IQueryable<T> query = GetQuery(queryModel);
+
+        int count = query.Count();
+
+        List<U> items = await query.Skip((queryModel.PageNumber - 1) * queryModel.PageSize)
+                                   .Take(queryModel.PageSize)
+                                   .ProjectTo<U>(_mapper.ConfigurationProvider)
+                                   .ToListAsync();
+
+        return new PagedList<U>(items, count);
+    }
+
+    public async Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null)
+    {
+        IQueryable<T> query = GetQuery(queryModel);
+        return await query.ProjectTo<U>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+    }
+
+    protected IQueryable<T> GetQuery(QueryModel<T> queryModel)
+    {
         IQueryable<T> query = _dbSet;
 
-        if (!tracking)
+        if (queryModel == null) return query;
+
+        if (!queryModel.Tracking)
         {
             query = query.AsNoTracking();
         }
 
-        if (includes != null)
+        foreach (Expression<Func<T, object>> includeProp in queryModel.Includes)
         {
-            foreach (string includeProp in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProp);
-            }
+            query = query.Include(includeProp);
         }
 
-        if (filter != null)
+        foreach (Expression<Func<T, bool>> filterCondition in queryModel.Filters)
         {
-            query = query.Where(filter);
+            query = query.Where(filterCondition);
         }
 
-        if (orderBy != null)
+        if (queryModel.OrderBy != null)
         {
-            query = orderBy(query);
+            query = queryModel.OrderBy(query);
         }
 
         return query;
-    }
-
-    public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null,
-                                                string includes = null,
-                                                bool tracking = true)
-    {
-        IQueryable<T> query = _dbSet;
-
-        if (!tracking)
-        {
-            query = query.AsNoTracking();
-        }
-
-        if (includes != null)
-        {
-            foreach (string includeProp in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProp);
-            }
-        }
-
-        if (filter != null)
-        {
-            query = query.Where(filter);
-        }
-
-        return await query.FirstOrDefaultAsync();
     }
 
     public async Task<T> FindByIdAsync(int id)
@@ -80,44 +81,39 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return await _dbSet.FindAsync(id);
     }
 
-    public async Task<bool> AddAsync(T entity)
+    public void Add(T entity)
     {
-        await _dbSet.AddAsync(entity);
-        return await Save() > 0;
+        _dbSet.Add(entity);
     }
 
-    public async Task<bool> UpdateAsync(T entity)
+    public void AddRange(IEnumerable<T> entities)
+    {
+        _dbSet.AddRange(entities);
+    }
+
+    public void Update(T entity)
     {
         _dbSet.Attach(entity);
         _db.Entry(entity).State = EntityState.Modified;
-        return await Save() > 0;
     }
 
-    public async Task<bool> RemoveAsync(int id)
-    {
-        T entity = await _dbSet.FindAsync(id);
-        await RemoveAsync(entity);
-        return await Save() > 0;
-    }
-
-    public async Task<bool> RemoveAsync(T entity)
+    public void Remove(T entity)
     {
         if (_db.Entry(entity).State == EntityState.Detached)
         {
             _dbSet.Attach(entity);
         }
         _dbSet.Remove(entity);
-        return await Save() > 0;
     }
 
-    public async Task<bool> RemoveRangeAsync(IEnumerable<T> entity)
+    public void RemoveRange(IEnumerable<T> entities)
     {
-        _dbSet.RemoveRange(entity);
-        return await Save() > 0;
+        _dbSet.RemoveRange(entities);
     }
 
-    private async Task<int> Save()
+    public async Task RemoveById(int id)
     {
-        return await _db.SaveChangesAsync();
+        T entity = await _dbSet.FindAsync(id);
+        Remove(entity);
     }
 }

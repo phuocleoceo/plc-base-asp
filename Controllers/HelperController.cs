@@ -1,4 +1,3 @@
-using PlcBase.Extensions.DataHandler;
 using PlcBase.Extensions.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using PlcBase.Base.Controller;
