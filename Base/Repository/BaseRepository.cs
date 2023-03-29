@@ -22,19 +22,21 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public async Task<List<U>> GetAllAsync<U>(QueryModel<T> queryModel = null)
     {
-        IQueryable<T> query = queryModel != null ? GetQuery(queryModel) : _dbSet;
+        IQueryable<T> query = GetQuery(queryModel);
         return await query.ProjectTo<U>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
     public async Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null)
     {
-        IQueryable<T> query = queryModel != null ? GetQuery(queryModel) : _dbSet;
+        IQueryable<T> query = GetQuery(queryModel);
         return await query.ProjectTo<U>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
     }
 
     protected IQueryable<T> GetQuery(QueryModel<T> queryModel)
     {
         IQueryable<T> query = _dbSet;
+
+        if (queryModel == null) return query;
 
         if (!queryModel.Tracking)
         {
