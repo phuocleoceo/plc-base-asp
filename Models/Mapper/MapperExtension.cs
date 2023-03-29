@@ -1,6 +1,4 @@
-using PlcBase.Models.Mapper;
-
-namespace PlcBase.Extensions.ServiceCollections;
+namespace PlcBase.Models.Mapper;
 
 public static class MapperExtension
 {

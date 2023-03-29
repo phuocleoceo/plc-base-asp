@@ -20,6 +20,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
                                                  bool tracking = true)
     {
         await Task.CompletedTask;
+
         IQueryable<T> query = _dbSet;
 
         if (!tracking)
@@ -80,43 +81,44 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return await _dbSet.FindAsync(id);
     }
 
-    public async Task<bool> AddAsync(T entity)
+    public async Task AddAsync(T entity)
     {
         await _dbSet.AddAsync(entity);
-        return await Save() > 0;
     }
 
-    public async Task<bool> UpdateAsync(T entity)
+    public async Task UpdateAsync(T entity)
     {
+        await Task.CompletedTask;
+
         _dbSet.Attach(entity);
         _db.Entry(entity).State = EntityState.Modified;
-        return await Save() > 0;
     }
 
-    public async Task<bool> RemoveAsync(int id)
+    public async Task RemoveAsync(int id)
     {
         T entity = await _dbSet.FindAsync(id);
         await RemoveAsync(entity);
-        return await Save() > 0;
     }
 
-    public async Task<bool> RemoveAsync(T entity)
+    public async Task RemoveAsync(T entity)
     {
+        await Task.CompletedTask;
+
         if (_db.Entry(entity).State == EntityState.Detached)
         {
             _dbSet.Attach(entity);
         }
         _dbSet.Remove(entity);
-        return await Save() > 0;
     }
 
-    public async Task<bool> RemoveRangeAsync(IEnumerable<T> entity)
+    public async Task RemoveRangeAsync(IEnumerable<T> entity)
     {
+        await Task.CompletedTask;
+
         _dbSet.RemoveRange(entity);
-        return await Save() > 0;
     }
 
-    private async Task<int> Save()
+    public async Task<int> Save()
     {
         return await _db.SaveChangesAsync();
     }

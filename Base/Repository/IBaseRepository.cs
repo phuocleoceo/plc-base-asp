@@ -16,13 +16,15 @@ public interface IBaseRepository<T> where T : class
 
     Task<T> FindByIdAsync(int id);
 
-    Task<bool> AddAsync(T entity);
+    Task AddAsync(T entity);
 
-    Task<bool> UpdateAsync(T entity);
+    Task UpdateAsync(T entity);
 
-    Task<bool> RemoveAsync(int id);
+    Task RemoveAsync(int id);
 
-    Task<bool> RemoveAsync(T entity);
+    Task RemoveAsync(T entity);
 
-    Task<bool> RemoveRangeAsync(IEnumerable<T> entity);
+    Task RemoveRangeAsync(IEnumerable<T> entity);
+
+    Task<int> Save();
 }

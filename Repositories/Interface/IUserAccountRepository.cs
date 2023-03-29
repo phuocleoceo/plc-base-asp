@@ -1,6 +1,6 @@
 namespace PlcBase.Repositories.Interface;
 
-public interface IExampleRepository
+public interface IUserAccountRepository
 {
 
 }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PlcBase.Models.Context.Configuration;
 using Microsoft.EntityFrameworkCore;
+using PlcBase.Models.Entities;
 using PlcBase.Base.Entity;
 
 namespace PlcBase.Models.Context;
@@ -31,4 +32,12 @@ public class DataContext : DbContext
         }
         return base.SaveChangesAsync(cancellationToken);
     }
+
+    public DbSet<AddressDistrictEntity> AddressDistricts { get; set; }
+    public DbSet<AddressProvinceEntity> AddressProvinces { get; set; }
+    public DbSet<AddressWardEntity> AddressWards { get; set; }
+    public DbSet<UserAccountEntity> UserAccounts { get; set; }
+    public DbSet<UserProfileEntity> UserProfiles { get; set; }
+    public DbSet<RoleEntity> Roles { get; set; }
+    public DbSet<PermissionEntity> Permissions { get; set; }
 }
