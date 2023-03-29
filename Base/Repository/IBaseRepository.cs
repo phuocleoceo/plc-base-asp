@@ -1,11 +1,13 @@
-using System.Linq.Expressions;
 using PlcBase.Base.DomainModel;
+using PlcBase.Base.DTO;
 
 namespace PlcBase.Base.Repository;
 
 public interface IBaseRepository<T> where T : class
 {
-    Task<List<U>> GetAllAsync<U>(QueryModel<T> queryModel = null);
+    Task<List<U>> GetManyAsync<U>(QueryModel<T> queryModel = null);
+
+    Task<PagedList<U>> GetPagedAsync<U>(QueryModel<T> queryModel = null);
 
     Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null);
 

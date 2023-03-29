@@ -1,6 +1,6 @@
 using PlcBase.Helpers;
 
-namespace PlcBase.Extensions.DataHandler;
+namespace PlcBase.Extensions.Utilities;
 
 public static class S3FileExtension
 {

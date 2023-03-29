@@ -18,7 +18,7 @@ public class AddressService : IAddressService
 
     public async Task<List<ProvinceDTO>> GetProvinces()
     {
-        return await _uof.AddressProvince.GetAllAsync<ProvinceDTO>();
+        return await _uof.AddressProvince.GetManyAsync<ProvinceDTO>();
     }
 
     public async Task<List<DistrictDTO>> GetDistricsOfProvince(int provinceId)
@@ -27,7 +27,7 @@ public class AddressService : IAddressService
         {
             Filters = { d => d.AddressProvinceId == provinceId },
         };
-        return await _uof.AddressDistrict.GetAllAsync<DistrictDTO>(queryModel);
+        return await _uof.AddressDistrict.GetManyAsync<DistrictDTO>(queryModel);
     }
 
     public async Task<List<WardDTO>> GetWardsOfDistrict(int districtId)
@@ -36,7 +36,7 @@ public class AddressService : IAddressService
         {
             Filters = { w => w.AddressDistrictId == districtId },
         };
-        return await _uof.AddressWard.GetAllAsync<WardDTO>(queryModel);
+        return await _uof.AddressWard.GetManyAsync<WardDTO>(queryModel);
     }
 
     public async Task<FullAddressDTO> GetFullAddressByWardId(int wardId)

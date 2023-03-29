@@ -4,7 +4,7 @@ using System.Net;
 
 namespace PlcBase.Extensions.Utilities;
 
-public static class HttpContextUtility
+public static class HttpContextExtension
 {
     public static ReqUser GetRequestUser(this HttpContext context)
     {

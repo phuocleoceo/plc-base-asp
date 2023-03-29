@@ -10,5 +10,9 @@ public class QueryModel<T>
 
     public Func<IQueryable<T>, IOrderedQueryable<T>> OrderBy { get; set; } = null;
 
+    public int PageNumber { get; set; } = 0;
+
+    public int PageSize { get; set; } = 0;
+
     public bool Tracking { get; set; } = false;
 }

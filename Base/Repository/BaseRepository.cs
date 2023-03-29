@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PlcBase.Base.DomainModel;
 using System.Linq.Expressions;
 using PlcBase.Models.Context;
+using PlcBase.Base.DTO;
 using AutoMapper;
 
 namespace PlcBase.Base.Repository;
@@ -20,10 +21,24 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         _dbSet = _db.Set<T>();
     }
 
-    public async Task<List<U>> GetAllAsync<U>(QueryModel<T> queryModel = null)
+    public async Task<List<U>> GetManyAsync<U>(QueryModel<T> queryModel = null)
     {
         IQueryable<T> query = GetQuery(queryModel);
         return await query.ProjectTo<U>(_mapper.ConfigurationProvider).ToListAsync();
+    }
+
+    public async Task<PagedList<U>> GetPagedAsync<U>(QueryModel<T> queryModel = null)
+    {
+        IQueryable<T> query = GetQuery(queryModel);
+
+        int count = query.Count();
+
+        List<U> items = await query.Skip((queryModel.PageNumber - 1) * queryModel.PageSize)
+                                   .Take(queryModel.PageSize)
+                                   .ProjectTo<U>(_mapper.ConfigurationProvider)
+                                   .ToListAsync();
+
+        return new PagedList<U>(items, count);
     }
 
     public async Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null)
