@@ -23,29 +23,32 @@ public class AddressService : IAddressService
 
     public async Task<List<DistrictDTO>> GetDistricsOfProvince(int provinceId)
     {
-        QueryModel<AddressDistrictEntity> queryModel = new QueryModel<AddressDistrictEntity>
-        {
-            Filters = { d => d.AddressProvinceId == provinceId },
-        };
-        return await _uof.AddressDistrict.GetManyAsync<DistrictDTO>(queryModel);
+        return await _uof.AddressDistrict.GetManyAsync<DistrictDTO>(
+            new QueryModel<AddressDistrictEntity>
+            {
+                Filters = { d => d.AddressProvinceId == provinceId },
+            }
+        );
     }
 
     public async Task<List<WardDTO>> GetWardsOfDistrict(int districtId)
     {
-        QueryModel<AddressWardEntity> queryModel = new QueryModel<AddressWardEntity>
-        {
-            Filters = { w => w.AddressDistrictId == districtId },
-        };
-        return await _uof.AddressWard.GetManyAsync<WardDTO>(queryModel);
+        return await _uof.AddressWard.GetManyAsync<WardDTO>(
+            new QueryModel<AddressWardEntity>
+            {
+                Filters = { w => w.AddressDistrictId == districtId },
+            }
+        );
     }
 
     public async Task<FullAddressDTO> GetFullAddressByWardId(int wardId)
     {
-        QueryModel<AddressWardEntity> queryModel = new QueryModel<AddressWardEntity>
-        {
-            Filters = { w => w.Id == wardId },
-            Includes = { w => w.AddressDistrict.AddressProvince },
-        };
-        return await _uof.AddressWard.GetOneAsync<FullAddressDTO>(queryModel);
+        return await _uof.AddressWard.GetOneAsync<FullAddressDTO>(
+            new QueryModel<AddressWardEntity>
+            {
+                Filters = { w => w.Id == wardId },
+                Includes = { w => w.AddressDistrict.AddressProvince },
+            }
+        );
     }
 }
