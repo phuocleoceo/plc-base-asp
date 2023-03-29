@@ -1,77 +1,62 @@
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using PlcBase.Base.DomainModel;
 using System.Linq.Expressions;
 using PlcBase.Models.Context;
+using AutoMapper;
 
 namespace PlcBase.Base.Repository;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
     private readonly DataContext _db;
+    private readonly IMapper _mapper;
     internal DbSet<T> _dbSet;
-    public BaseRepository(DataContext db)
+
+    public BaseRepository(DataContext db, IMapper mapper)
     {
         _db = db;
+        _mapper = mapper;
         _dbSet = _db.Set<T>();
     }
 
-    public IQueryable<T> GetQuery(Expression<Func<T, bool>> filter = null,
-                                 Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-                                 string includes = null,
-                                 bool tracking = true)
+    public async Task<List<U>> GetAllAsync<U>(QueryModel<T> queryModel = null)
+    {
+        IQueryable<T> query = queryModel != null ? GetQuery(queryModel) : _dbSet;
+        return await query.ProjectTo<U>(_mapper.ConfigurationProvider).ToListAsync();
+    }
+
+    public async Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null)
+    {
+        IQueryable<T> query = queryModel != null ? GetQuery(queryModel) : _dbSet;
+        return await query.ProjectTo<U>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+    }
+
+    protected IQueryable<T> GetQuery(QueryModel<T> queryModel)
     {
         IQueryable<T> query = _dbSet;
 
-        if (!tracking)
+        if (!queryModel.Tracking)
         {
             query = query.AsNoTracking();
         }
 
-        if (includes != null)
+        foreach (Expression<Func<T, object>> includeProp in queryModel.Includes)
         {
-            foreach (string includeProp in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProp);
-            }
+            query = query.Include(includeProp);
         }
 
-        if (filter != null)
+        foreach (Expression<Func<T, bool>> filterCondition in queryModel.Filters)
         {
-            query = query.Where(filter);
+            query = query.Where(filterCondition);
         }
 
-        if (orderBy != null)
+        if (queryModel.OrderBy != null)
         {
-            query = orderBy(query);
+            query = queryModel.OrderBy(query);
         }
 
         return query;
-    }
-
-    public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null,
-                                                string includes = null,
-                                                bool tracking = true)
-    {
-        IQueryable<T> query = _dbSet;
-
-        if (!tracking)
-        {
-            query = query.AsNoTracking();
-        }
-
-        if (includes != null)
-        {
-            foreach (string includeProp in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProp);
-            }
-        }
-
-        if (filter != null)
-        {
-            query = query.Where(filter);
-        }
-
-        return await query.FirstOrDefaultAsync();
     }
 
     public async Task<T> FindByIdAsync(int id)

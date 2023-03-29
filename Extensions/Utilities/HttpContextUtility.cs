@@ -15,7 +15,7 @@ public static class HttpContextUtility
     {
         string ipAddress = string.Empty;
 
-        var remoteIpAddress = context.Connection.RemoteIpAddress;
+        IPAddress remoteIpAddress = context.Connection.RemoteIpAddress;
 
         if (remoteIpAddress != null)
         {

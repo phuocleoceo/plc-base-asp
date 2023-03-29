@@ -1,18 +1,13 @@
 using System.Linq.Expressions;
+using PlcBase.Base.DomainModel;
 
 namespace PlcBase.Base.Repository;
 
 public interface IBaseRepository<T> where T : class
 {
+    Task<List<U>> GetAllAsync<U>(QueryModel<T> queryModel = null);
 
-    IQueryable<T> GetQuery(Expression<Func<T, bool>> filter = null,
-                           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-                           string includes = null,
-                           bool tracking = true);
-
-    Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null,
-                                   string includes = null,
-                                   bool tracking = true);
+    Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null);
 
     Task<T> FindByIdAsync(int id);
 
