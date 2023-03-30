@@ -14,7 +14,7 @@ public class JwtHelper : IJwtHelper
         _jwtSettings = jwtSettings.Value;
     }
 
-    public string CreateToken(List<Claim> claims)
+    public TokenData CreateToken(List<Claim> claims)
     {
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -27,6 +27,10 @@ public class JwtHelper : IJwtHelper
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
-        return tokenHandler.WriteToken(token);
+        return new TokenData()
+        {
+            Token = tokenHandler.WriteToken(token),
+            ExpiredAt = token.ValidTo,
+        };
     }
 }

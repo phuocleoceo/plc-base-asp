@@ -4,5 +4,5 @@ namespace PlcBase.Helpers;
 
 public interface IJwtHelper
 {
-    string CreateToken(List<Claim> claims);
+    TokenData CreateToken(List<Claim> claims);
 }

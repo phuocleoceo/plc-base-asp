@@ -11,4 +11,7 @@ public interface IUnitOfWork : IDisposable
     IPermisisonRepository Permisison { get; }
 
     Task<int> Save();
+    Task CreateTransaction();
+    Task CommitTransaction();
+    Task AbortTransaction();
 }
