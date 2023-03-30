@@ -8,5 +8,6 @@ public static class ServiceDIExtension
     public static void ConfigureServiceDI(this IServiceCollection services)
     {
         services.AddScoped<IAddressService, AddressService>();
+        services.AddScoped<IAuthService, AuthService>();
     }
 }

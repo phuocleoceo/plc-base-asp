@@ -14,9 +14,13 @@ public class UnitOfWork : IUnitOfWork
         _db = db;
         _mapper = mapper;
 
-        AddressProvince = new AddressProvinceRepository(_db, mapper);
+        AddressProvince = new AddressProvinceRepository(_db, _mapper);
         AddressDistrict = new AddressDistrictRepository(_db, mapper);
-        AddressWard = new AddressWardRepository(_db, mapper);
+        AddressWard = new AddressWardRepository(_db, _mapper);
+        UserAccount = new UserAccountRepository(_db, _mapper);
+        UserProfile = new UserProfileRepository(_db, _mapper);
+        Role = new RoleRepository(_db, _mapper);
+        Permisison = new PermissionRepository(_db, _mapper);
     }
 
     public void Dispose()
@@ -32,4 +36,8 @@ public class UnitOfWork : IUnitOfWork
     public IAddressProvinceRepository AddressProvince { get; private set; }
     public IAddressDistrictRepository AddressDistrict { get; private set; }
     public IAddressWardRepository AddressWard { get; private set; }
+    public IUserAccountRepository UserAccount { get; private set; }
+    public IUserProfileRepository UserProfile { get; private set; }
+    public IRoleRepository Role { get; private set; }
+    public IPermisisonRepository Permisison { get; private set; }
 }

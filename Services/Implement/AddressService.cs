@@ -9,21 +9,21 @@ namespace PlcBase.Services.Implement;
 
 public class AddressService : IAddressService
 {
-    private readonly IUnitOfWork _uof;
+    private readonly IUnitOfWork _uow;
 
-    public AddressService(IUnitOfWork uof, IMapper mapper)
+    public AddressService(IUnitOfWork uow, IMapper mapper)
     {
-        _uof = uof;
+        _uow = uow;
     }
 
     public async Task<List<ProvinceDTO>> GetProvinces()
     {
-        return await _uof.AddressProvince.GetManyAsync<ProvinceDTO>();
+        return await _uow.AddressProvince.GetManyAsync<ProvinceDTO>();
     }
 
     public async Task<List<DistrictDTO>> GetDistricsOfProvince(int provinceId)
     {
-        return await _uof.AddressDistrict.GetManyAsync<DistrictDTO>(
+        return await _uow.AddressDistrict.GetManyAsync<DistrictDTO>(
             new QueryModel<AddressDistrictEntity>
             {
                 Filters = { d => d.AddressProvinceId == provinceId },
@@ -33,7 +33,7 @@ public class AddressService : IAddressService
 
     public async Task<List<WardDTO>> GetWardsOfDistrict(int districtId)
     {
-        return await _uof.AddressWard.GetManyAsync<WardDTO>(
+        return await _uow.AddressWard.GetManyAsync<WardDTO>(
             new QueryModel<AddressWardEntity>
             {
                 Filters = { w => w.AddressDistrictId == districtId },
@@ -43,7 +43,7 @@ public class AddressService : IAddressService
 
     public async Task<FullAddressDTO> GetFullAddressByWardId(int wardId)
     {
-        return await _uof.AddressWard.GetOneAsync<FullAddressDTO>(
+        return await _uow.AddressWard.GetOneAsync<FullAddressDTO>(
             new QueryModel<AddressWardEntity>
             {
                 Filters = { w => w.Id == wardId },
