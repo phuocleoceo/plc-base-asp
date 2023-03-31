@@ -28,4 +28,24 @@ public class AuthController : BaseController
         UserRegisterResponseDTO registerResponse = await _authService.Register(userRegisterDTO);
         return HttpContext.Success(registerResponse);
     }
+
+    // [HttpPut("Confirm-Email")]
+    // public async Task<BaseResponse<object>> ConfirmEmail()
+    // {
+    // }
+
+    // [HttpPut("Change-Password")]
+    // public async Task<BaseResponse<object>> ChangePassword()
+    // {
+    // }
+
+    // [HttpGet("Forgot-Password")]
+    // public async Task<BaseResponse<object>> ForgotPassword()
+    // {
+    // }
+
+    // [HttpPut("Recover-Password")]
+    // public async Task<BaseResponse<object>> RecoverPassword()
+    // {
+    // }
 }

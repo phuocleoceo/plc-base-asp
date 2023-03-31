@@ -1,4 +1,6 @@
 using PlcBase.Repositories.Interface;
+using System.Collections.Specialized;
+using Microsoft.Extensions.Options;
 using PlcBase.Services.Interface;
 using PlcBase.Base.DomainModel;
 using PlcBase.Helpers.Password;
@@ -9,6 +11,7 @@ using PlcBase.Models.DTO;
 using PlcBase.Base.Error;
 using PlcBase.Helpers;
 using AutoMapper;
+using System.Web;
 
 namespace PlcBase.Services.Implement;
 
@@ -17,15 +20,23 @@ public class AuthService : IAuthService
     private readonly IUnitOfWork _uof;
     private readonly IJwtHelper _jwtHelper;
     private readonly IMapper _mapper;
+    private readonly ClientAppSettings _clientAppSettings;
+    private readonly ISendMailHelper _sendMailHelper;
 
     public AuthService(IUnitOfWork uof,
                        IJwtHelper jwtHelper,
-                       IMapper mapper)
+                       IMapper mapper,
+                       IOptions<ClientAppSettings> clientAppSettings,
+                       ISendMailHelper sendMailHelper)
     {
         _uof = uof;
         _jwtHelper = jwtHelper;
         _mapper = mapper;
+        _clientAppSettings = clientAppSettings.Value;
+        _sendMailHelper = sendMailHelper;
     }
+
+    #region Login
 
     public async Task<UserLoginResponseDTO> Login(UserLoginDTO userLoginDTO)
     {
@@ -74,6 +85,10 @@ public class AuthService : IAuthService
         return await Task.FromResult(claims);
     }
 
+    #endregion
+
+    #region Register
+
     public async Task<UserRegisterResponseDTO> Register(UserRegisterDTO userRegisterDTO)
     {
         try
@@ -109,6 +124,7 @@ public class AuthService : IAuthService
             _uof.UserProfile.Add(newUserProfile);
 
             // Send mail
+            await SendMailConfirm(newUserAccount);
 
             await _uof.Save();
             await _uof.CommitTransaction();
@@ -125,4 +141,24 @@ public class AuthService : IAuthService
             throw ex;
         }
     }
+
+    private async Task SendMailConfirm(UserAccountEntity newUserAccount)
+    {
+        string webClientPath = $"{_clientAppSettings.EndUserAppUrl}/{_clientAppSettings.ConfirmEmailPath}";
+        UriBuilder uriBuilder = new UriBuilder(webClientPath);
+        NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
+
+        query["userId"] = newUserAccount.Id.ToString();
+        query["code"] = newUserAccount.SecurityCode;
+        uriBuilder.Query = query.ToString();
+
+        await _sendMailHelper.SendEmailAsync(new MailContent()
+        {
+            ToEmail = newUserAccount.Email,
+            Subject = "Confirm email to use PLC Base",
+            Body = $"Confirm the registration by clicking on the <a href='{uriBuilder}'>link</a>"
+        });
+    }
+
+    #endregion
 }
