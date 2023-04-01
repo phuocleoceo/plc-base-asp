@@ -1,3 +1,4 @@
+using PlcBase.Base.DomainModel;
 using PlcBase.Models.DTO;
 
 namespace PlcBase.Services.Interface;
@@ -10,7 +11,7 @@ public interface IAuthService
 
     Task<bool> ConfirmEmail(UserConfirmEmailDTO userConfirmEmailDTO);
 
-    // Task<bool> ChangePassword(int userId, UserChangePasswordDTO userChangePasswordDTO);
+    Task<bool> ChangePassword(ReqUser reqUser, UserChangePasswordDTO userChangePasswordDTO);
 
     // Task ForgotPassword(string email);
 

@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
+using PlcBase.Extensions.Utilities;
 using PlcBase.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using PlcBase.Base.DomainModel;
 using PlcBase.Base.Controller;
 using PlcBase.Models.DTO;
 using PlcBase.Base.DTO;
@@ -35,10 +38,16 @@ public class AuthController : BaseController
         return HttpContext.Failure();
     }
 
-    // [HttpPut("Change-Password")]
-    // public async Task<BaseResponse<object>> ChangePassword()
-    // {
-    // }
+    [HttpPut("Change-Password")]
+    [Authorize]
+    public async Task<BaseResponse<bool>> ChangePassword([FromBody] UserChangePasswordDTO userChangePasswordDTO)
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _authService.ChangePassword(reqUser, userChangePasswordDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 
     // [HttpGet("Forgot-Password")]
     // public async Task<BaseResponse<object>> ForgotPassword()

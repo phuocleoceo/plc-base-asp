@@ -184,5 +184,27 @@ public class AuthService : IAuthService
         return await _uof.Save() > 0;
     }
 
+    public async Task<bool> ChangePassword(ReqUser reqUser, UserChangePasswordDTO userChangePasswordDTO)
+    {
+        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(reqUser.Id);
+
+        if (currentUser == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
+
+        if (!currentUser.IsVerified)
+            throw new BaseException(HttpCode.BAD_REQUEST, "account_unverified");
+
+        PasswordHash passwordHashDB = new PasswordHash(currentUser.PasswordHashed, currentUser.PasswordSalt);
+        if (!PasswordSecure.IsValidPasswod(userChangePasswordDTO.OldPassword, passwordHashDB))
+            throw new BaseException(HttpCode.BAD_REQUEST, "invalid_old_password");
+
+        PasswordHash newPasswordHash = PasswordSecure.GetPasswordHash(userChangePasswordDTO.NewPassword);
+        currentUser.PasswordHashed = newPasswordHash.PasswordHashed;
+        currentUser.PasswordSalt = newPasswordHash.PasswordSalt;
+
+        _uof.UserAccount.Update(currentUser);
+        return await _uof.Save() > 0;
+    }
+
     #endregion
 }
