@@ -18,21 +18,22 @@ public class AuthController : BaseController
     [HttpPost("Login")]
     public async Task<BaseResponse<UserLoginResponseDTO>> Login([FromBody] UserLoginDTO userLoginDTO)
     {
-        UserLoginResponseDTO loginResponse = await _authService.Login(userLoginDTO);
-        return HttpContext.Success(loginResponse);
+        return HttpContext.Success(await _authService.Login(userLoginDTO));
     }
 
     [HttpPost("Register")]
     public async Task<BaseResponse<UserRegisterResponseDTO>> Register([FromBody] UserRegisterDTO userRegisterDTO)
     {
-        UserRegisterResponseDTO registerResponse = await _authService.Register(userRegisterDTO);
-        return HttpContext.Success(registerResponse);
+        return HttpContext.Success(await _authService.Register(userRegisterDTO));
     }
 
-    // [HttpPut("Confirm-Email")]
-    // public async Task<BaseResponse<object>> ConfirmEmail()
-    // {
-    // }
+    [HttpPut("Confirm-Email")]
+    public async Task<BaseResponse<bool>> ConfirmEmail([FromBody] UserConfirmEmailDTO userConfirmEmailDTO)
+    {
+        if (await _authService.ConfirmEmail(userConfirmEmailDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 
     // [HttpPut("Change-Password")]
     // public async Task<BaseResponse<object>> ChangePassword()

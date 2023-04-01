@@ -8,7 +8,7 @@ public interface IAuthService
 
     Task<UserRegisterResponseDTO> Register(UserRegisterDTO userRegisterDTO);
 
-    // Task<bool> ConfirmEmail(UserConfirmEmailDTO userConfirmEmailDTO);
+    Task<bool> ConfirmEmail(UserConfirmEmailDTO userConfirmEmailDTO);
 
     // Task<bool> ChangePassword(int userId, UserChangePasswordDTO userChangePasswordDTO);
 

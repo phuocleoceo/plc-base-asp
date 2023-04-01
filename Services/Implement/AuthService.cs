@@ -161,4 +161,28 @@ public class AuthService : IAuthService
     }
 
     #endregion
+
+    #region Other Auth
+
+    public async Task<bool> ConfirmEmail(UserConfirmEmailDTO userConfirmEmailDTO)
+    {
+        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(userConfirmEmailDTO.UserId);
+
+        if (currentUser == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
+
+        if (currentUser.IsVerified)
+            throw new BaseException(HttpCode.BAD_REQUEST, "account_already_verified");
+
+        if (currentUser.SecurityCode != userConfirmEmailDTO.Code)
+            throw new BaseException(HttpCode.BAD_REQUEST, "security_code_invalid");
+
+        currentUser.IsVerified = true;
+        currentUser.SecurityCode = "";
+
+        _uof.UserAccount.Update(currentUser);
+        return await _uof.Save() > 0;
+    }
+
+    #endregion
 }

@@ -18,28 +18,24 @@ public class AddressController : BaseController
     [HttpGet("Provinces")]
     public async Task<BaseResponse<List<ProvinceDTO>>> GetProvinces()
     {
-        List<ProvinceDTO> provinces = await _addressService.GetProvinces();
-        return HttpContext.Success(provinces);
+        return HttpContext.Success(await _addressService.GetProvinces());
     }
 
     [HttpGet("Province/{id}/Districs")]
     public async Task<BaseResponse<List<DistrictDTO>>> GetDistricsOfProvince(int id)
     {
-        List<DistrictDTO> districts = await _addressService.GetDistricsOfProvince(id);
-        return HttpContext.Success(districts);
+        return HttpContext.Success(await _addressService.GetDistricsOfProvince(id));
     }
 
     [HttpGet("District/{id}/Wards")]
     public async Task<BaseResponse<List<WardDTO>>> GetWardsOfDistrict(int id)
     {
-        List<WardDTO> wards = await _addressService.GetWardsOfDistrict(id);
-        return HttpContext.Success(wards);
+        return HttpContext.Success(await _addressService.GetWardsOfDistrict(id));
     }
 
     [HttpGet("Full-Address/{id}")]
     public async Task<BaseResponse<FullAddressDTO>> GetFullAddressByWardId(int id)
     {
-        FullAddressDTO fullAddress = await _addressService.GetFullAddressByWardId(id);
-        return HttpContext.Success(fullAddress);
+        return HttpContext.Success(await _addressService.GetFullAddressByWardId(id));
     }
 }
