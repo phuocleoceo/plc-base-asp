@@ -49,10 +49,12 @@ public class AuthController : BaseController
         return HttpContext.Failure();
     }
 
-    // [HttpGet("Forgot-Password")]
-    // public async Task<BaseResponse<object>> ForgotPassword()
-    // {
-    // }
+    [HttpPost("Forgot-Password")]
+    public async Task<BaseResponse<bool>> ForgotPassword([FromBody] UserForgotPasswordDTO userForgotPasswordDTO)
+    {
+        await _authService.ForgotPassword(userForgotPasswordDTO);
+        return HttpContext.Success(true);
+    }
 
     // [HttpPut("Recover-Password")]
     // public async Task<BaseResponse<object>> RecoverPassword()

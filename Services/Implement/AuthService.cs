@@ -160,10 +160,6 @@ public class AuthService : IAuthService
         });
     }
 
-    #endregion
-
-    #region Other Auth
-
     public async Task<bool> ConfirmEmail(UserConfirmEmailDTO userConfirmEmailDTO)
     {
         UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(userConfirmEmailDTO.UserId);
@@ -183,6 +179,10 @@ public class AuthService : IAuthService
         _uof.UserAccount.Update(currentUser);
         return await _uof.Save() > 0;
     }
+
+    #endregion
+
+    #region Other Auth
 
     public async Task<bool> ChangePassword(ReqUser reqUser, UserChangePasswordDTO userChangePasswordDTO)
     {
@@ -204,6 +204,52 @@ public class AuthService : IAuthService
 
         _uof.UserAccount.Update(currentUser);
         return await _uof.Save() > 0;
+    }
+
+    public async Task ForgotPassword(UserForgotPasswordDTO userForgotPasswordDTO)
+    {
+        string identityInformation = userForgotPasswordDTO.IdentityInformation;
+
+        UserAccountEntity currentUser = await _uof.UserAccount.GetOneAsync<UserAccountEntity>(
+            new QueryModel<UserAccountEntity>()
+            {
+                Includes = { ua => ua.UserProfile },
+                Filters = { ua => ua.Email == identityInformation ||
+                                  ua.UserProfile.PhoneNumber == identityInformation ||
+                                  ua.UserProfile.IdentityNumber == identityInformation }
+            });
+
+        if (currentUser == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
+
+        if (!currentUser.IsVerified)
+            throw new BaseException(HttpCode.BAD_REQUEST, "account_unverified");
+
+        string newSecurityCode = CodeSecure.CreateRandomCode();
+        currentUser.SecurityCode = newSecurityCode;
+
+        _uof.UserAccount.Update(currentUser);
+        await _uof.Save();
+
+        await SendMailForgotPassword(currentUser);
+    }
+
+    private async Task SendMailForgotPassword(UserAccountEntity currentUserAccount)
+    {
+        string webClientPath = $"{_clientAppSettings.EndUserAppUrl}/{_clientAppSettings.RecoverPasswordPath}";
+        UriBuilder uriBuilder = new UriBuilder(webClientPath);
+        NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
+
+        query["userId"] = currentUserAccount.Id.ToString();
+        query["code"] = currentUserAccount.SecurityCode;
+        uriBuilder.Query = query.ToString();
+
+        await _sendMailHelper.SendEmailAsync(new MailContent()
+        {
+            ToEmail = currentUserAccount.Email,
+            Subject = "Password recovery for your PLC Base account",
+            Body = $"Clicking on the <a href='{uriBuilder}'>link</a> to recover your password"
+        });
     }
 
     #endregion

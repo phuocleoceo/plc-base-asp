@@ -13,7 +13,7 @@ public interface IAuthService
 
     Task<bool> ChangePassword(ReqUser reqUser, UserChangePasswordDTO userChangePasswordDTO);
 
-    // Task ForgotPassword(string email);
+    Task ForgotPassword(UserForgotPasswordDTO userForgotPasswordDTO);
 
     // Task RecoverPassword(UserRecoverPasswordDTO userRecoverPasswordDTO);
 }
