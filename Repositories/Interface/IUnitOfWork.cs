@@ -1,3 +1,7 @@
+using PlcBase.Features.AccessControl.Repositories;
+using PlcBase.Features.Address.Repositories;
+using PlcBase.Features.User.Repositories;
+
 namespace PlcBase.Repositories.Interface;
 
 public interface IUnitOfWork : IDisposable

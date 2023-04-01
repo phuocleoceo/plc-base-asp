@@ -1,7 +1,7 @@
 using PlcBase.Base.Repository;
 using PlcBase.Models.Entities;
 
-namespace PlcBase.Repositories.Interface;
+namespace PlcBase.Features.User.Repositories;
 
 public interface IUserAccountRepository : IBaseRepository<UserAccountEntity>
 {

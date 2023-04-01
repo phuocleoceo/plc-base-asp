@@ -6,7 +6,7 @@ using PlcBase.Base.Controller;
 using PlcBase.Base.Authorize;
 using PlcBase.Base.DTO;
 
-namespace PlcBase.Controllers;
+namespace PlcBase.Features.Test.Controllers;
 
 public class ResponseController : BaseController
 {

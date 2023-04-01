@@ -1,7 +1,7 @@
 using PlcBase.Base.DomainModel;
 using PlcBase.Models.DTO;
 
-namespace PlcBase.Services.Interface;
+namespace PlcBase.Features.Auth.Services;
 
 public interface IAuthService
 {

@@ -1,10 +1,9 @@
-using PlcBase.Repositories.Interface;
 using PlcBase.Base.Repository;
 using PlcBase.Models.Entities;
 using PlcBase.Models.Context;
 using AutoMapper;
 
-namespace PlcBase.Repositories.Implement;
+namespace PlcBase.Features.User.Repositories;
 
 public class UserAccountRepository : BaseRepository<UserAccountEntity>, IUserAccountRepository
 {

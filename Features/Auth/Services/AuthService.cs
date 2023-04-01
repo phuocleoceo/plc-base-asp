@@ -1,7 +1,6 @@
 using PlcBase.Repositories.Interface;
 using System.Collections.Specialized;
 using Microsoft.Extensions.Options;
-using PlcBase.Services.Interface;
 using PlcBase.Base.DomainModel;
 using PlcBase.Helpers.Password;
 using PlcBase.Common.Constants;
@@ -13,7 +12,7 @@ using PlcBase.Helpers;
 using AutoMapper;
 using System.Web;
 
-namespace PlcBase.Services.Implement;
+namespace PlcBase.Features.Auth.Services;
 
 public class AuthService : IAuthService
 {

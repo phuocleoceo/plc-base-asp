@@ -1,6 +1,6 @@
 using PlcBase.Models.DTO;
 
-namespace PlcBase.Services.Interface;
+namespace PlcBase.Features.Address.Services;
 
 public interface IAddressService
 {

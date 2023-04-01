@@ -5,7 +5,7 @@ using PlcBase.Base.Controller;
 using PlcBase.Base.DTO;
 using PlcBase.Helpers;
 
-namespace PlcBase.Controllers;
+namespace PlcBase.Features.Test.Controllers;
 
 public class VNPController : BaseController
 {

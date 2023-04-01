@@ -4,14 +4,14 @@ using PlcBase.Models.Entities;
 using PlcBase.Models.Context;
 using AutoMapper;
 
-namespace PlcBase.Repositories.Implement;
+namespace PlcBase.Features.AccessControl.Repositories;
 
-public class AddressWardRepository : BaseRepository<AddressWardEntity>, IAddressWardRepository
+public class PermissionRepository : BaseRepository<PermissionEntity>, IPermisisonRepository
 {
     private readonly DataContext _db;
     private readonly IMapper _mapper;
 
-    public AddressWardRepository(DataContext db, IMapper mapper) : base(db, mapper)
+    public PermissionRepository(DataContext db, IMapper mapper) : base(db, mapper)
     {
         _db = db;
         _mapper = mapper;

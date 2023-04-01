@@ -1,11 +1,10 @@
 using PlcBase.Repositories.Interface;
-using PlcBase.Services.Interface;
 using PlcBase.Base.DomainModel;
 using PlcBase.Models.Entities;
 using PlcBase.Models.DTO;
 using AutoMapper;
 
-namespace PlcBase.Services.Implement;
+namespace PlcBase.Features.Address.Services;
 
 public class AddressService : IAddressService
 {

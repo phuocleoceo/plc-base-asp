@@ -1,10 +1,10 @@
-using PlcBase.Services.Interface;
+using PlcBase.Features.Address.Services;
 using Microsoft.AspNetCore.Mvc;
 using PlcBase.Base.Controller;
 using PlcBase.Models.DTO;
 using PlcBase.Base.DTO;
 
-namespace PlcBase.Controllers;
+namespace PlcBase.Features.Address.Controllers;
 
 public class AddressController : BaseController
 {
