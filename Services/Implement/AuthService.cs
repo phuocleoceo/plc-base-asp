@@ -252,5 +252,27 @@ public class AuthService : IAuthService
         });
     }
 
+    public async Task<bool> RecoverPassword(UserRecoverPasswordDTO userRecoverPasswordDTO)
+    {
+        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(userRecoverPasswordDTO.UserId);
+
+        if (currentUser == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
+
+        if (!currentUser.IsVerified)
+            throw new BaseException(HttpCode.BAD_REQUEST, "account_unverified");
+
+        if (currentUser.SecurityCode != userRecoverPasswordDTO.Code)
+            throw new BaseException(HttpCode.BAD_REQUEST, "security_code_invalid");
+
+        PasswordHash newPasswordHash = PasswordSecure.GetPasswordHash(userRecoverPasswordDTO.NewPassword);
+        currentUser.PasswordHashed = newPasswordHash.PasswordHashed;
+        currentUser.PasswordSalt = newPasswordHash.PasswordSalt;
+        currentUser.SecurityCode = "";
+
+        _uof.UserAccount.Update(currentUser);
+        return await _uof.Save() > 0;
+    }
+
     #endregion
 }

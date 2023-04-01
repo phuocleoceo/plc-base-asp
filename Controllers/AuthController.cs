@@ -56,8 +56,11 @@ public class AuthController : BaseController
         return HttpContext.Success(true);
     }
 
-    // [HttpPut("Recover-Password")]
-    // public async Task<BaseResponse<object>> RecoverPassword()
-    // {
-    // }
+    [HttpPut("Recover-Password")]
+    public async Task<BaseResponse<bool>> RecoverPassword(UserRecoverPasswordDTO userRecoverPasswordDTO)
+    {
+        if (await _authService.RecoverPassword(userRecoverPasswordDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }
