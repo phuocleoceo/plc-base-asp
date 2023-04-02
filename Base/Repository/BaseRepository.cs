@@ -1,8 +1,8 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using PlcBase.Shared.Data.Context;
 using PlcBase.Base.DomainModel;
 using System.Linq.Expressions;
-using PlcBase.Models.Context;
 using PlcBase.Base.DTO;
 using AutoMapper;
 

@@ -1,8 +1,9 @@
+using AutoMapper;
+
+using PlcBase.Features.Address.Entities;
+using PlcBase.Features.Address.DTO;
 using PlcBase.Shared.Repositories;
 using PlcBase.Base.DomainModel;
-using PlcBase.Models.Entities;
-using PlcBase.Models.DTO;
-using AutoMapper;
 
 namespace PlcBase.Features.Address.Services;
 

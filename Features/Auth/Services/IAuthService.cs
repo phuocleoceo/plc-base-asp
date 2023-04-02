@@ -1,5 +1,5 @@
+using PlcBase.Features.Auth.DTOs;
 using PlcBase.Base.DomainModel;
-using PlcBase.Models.DTO;
 
 namespace PlcBase.Features.Auth.Services;
 

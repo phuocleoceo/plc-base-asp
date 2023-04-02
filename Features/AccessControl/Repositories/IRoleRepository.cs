@@ -1,5 +1,5 @@
+using PlcBase.Features.AccessControl.Entities;
 using PlcBase.Base.Repository;
-using PlcBase.Models.Entities;
 
 namespace PlcBase.Features.AccessControl.Repositories;
 

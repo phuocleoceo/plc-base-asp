@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using PlcBase.Features.Auth.Services;
+using PlcBase.Features.Auth.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using PlcBase.Shared.Utilities;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Controller;
-using PlcBase.Models.DTO;
 using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.Auth.Controllers;

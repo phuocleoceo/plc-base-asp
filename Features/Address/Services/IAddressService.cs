@@ -1,4 +1,4 @@
-using PlcBase.Models.DTO;
+using PlcBase.Features.Address.DTO;
 
 namespace PlcBase.Features.Address.Services;
 

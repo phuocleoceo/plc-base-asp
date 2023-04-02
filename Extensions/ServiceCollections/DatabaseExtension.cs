@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using PlcBase.Models.Context;
+using PlcBase.Shared.Data.Context;
 
 namespace PlcBase.Extensions.ServiceCollections;
 
