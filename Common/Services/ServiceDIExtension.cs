@@ -1,7 +1,7 @@
 using PlcBase.Features.Address.Services;
 using PlcBase.Features.Auth.Services;
 
-namespace PlcBase.Shared.Services;
+namespace PlcBase.Common.Services;
 
 public static class ServiceDIExtension
 {

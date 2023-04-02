@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
 
-using PlcBase.Shared.Data.Context.Configuration;
+using PlcBase.Common.Data.Context.Configuration;
 using PlcBase.Features.AccessControl.Entities;
 using PlcBase.Features.Address.Entities;
 using PlcBase.Features.User.Entities;
 using PlcBase.Base.Entity;
 
-namespace PlcBase.Shared.Data.Context;
+namespace PlcBase.Common.Data.Context;
 
 public class DataContext : DbContext
 {

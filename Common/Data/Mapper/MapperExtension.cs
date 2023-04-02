@@ -2,7 +2,7 @@ using PlcBase.Features.AccessControl.DTOs;
 using PlcBase.Features.Address.DTOs;
 using PlcBase.Features.Auth.DTOs;
 
-namespace PlcBase.Shared.Data.Mapper;
+namespace PlcBase.Common.Data.Mapper;
 
 public static class MapperExtension
 {

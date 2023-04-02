@@ -1,7 +1,8 @@
-using PlcBase.Features.User.Entities;
-using PlcBase.Shared.Data.Context;
-using PlcBase.Base.Repository;
 using AutoMapper;
+
+using PlcBase.Features.User.Entities;
+using PlcBase.Common.Data.Context;
+using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.User.Repositories;
 

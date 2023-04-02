@@ -1,15 +1,16 @@
 using System.Collections.Specialized;
-using PlcBase.Features.User.Entities;
 using Microsoft.Extensions.Options;
-using PlcBase.Shared.Repositories;
-using PlcBase.Features.Auth.DTOs;
-using PlcBase.Base.DomainModel;
-using PlcBase.Shared.Constants;
 using System.Security.Claims;
-using PlcBase.Shared.Helpers;
-using PlcBase.Base.Error;
 using AutoMapper;
 using System.Web;
+
+using PlcBase.Features.User.Entities;
+using PlcBase.Common.Repositories;
+using PlcBase.Features.Auth.DTOs;
+using PlcBase.Shared.Constants;
+using PlcBase.Base.DomainModel;
+using PlcBase.Shared.Helpers;
+using PlcBase.Base.Error;
 
 namespace PlcBase.Features.Auth.Services;
 

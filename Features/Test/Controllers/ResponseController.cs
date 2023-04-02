@@ -1,6 +1,7 @@
-using static PlcBase.Shared.Enums.PermissionPolicy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using static PlcBase.Shared.Enums.PermissionPolicy;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.Controller;
 using PlcBase.Base.Authorize;

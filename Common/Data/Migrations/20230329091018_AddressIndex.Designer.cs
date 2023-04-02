@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PlcBase.Shared.Data.Context;
+using PlcBase.Common.Data.Context;
 
 #nullable disable
 
-namespace plcbase.Shared.Data.Migrations
+namespace plcbase.Common.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
     [Migration("20230329091018_AddressIndex")]

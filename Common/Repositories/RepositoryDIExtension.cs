@@ -1,4 +1,4 @@
-namespace PlcBase.Shared.Repositories;
+namespace PlcBase.Common.Repositories;
 
 public static class RepositoryDIExtension
 {

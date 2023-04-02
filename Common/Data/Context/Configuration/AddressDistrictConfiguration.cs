@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PlcBase.Features.Address.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace PlcBase.Shared.Data.Context.Configuration;
+using PlcBase.Features.Address.Entities;
+
+namespace PlcBase.Common.Data.Context.Configuration;
 
 public class AddressDistrictConfiguration : IEntityTypeConfiguration<AddressDistrictEntity>
 {

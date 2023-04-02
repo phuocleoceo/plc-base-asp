@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace plcbase.Shared.Data.Migrations
+namespace plcbase.Common.Data.Migrations
 {
     public partial class AddressIndex : Migration
     {

@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+
 using PlcBase.Features.User.Entities;
 
-namespace PlcBase.Shared.Data.Context.Configuration;
+namespace PlcBase.Common.Data.Context.Configuration;
 
 public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfileEntity>
 {

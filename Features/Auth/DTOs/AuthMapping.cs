@@ -1,5 +1,6 @@
-using PlcBase.Features.User.Entities;
 using AutoMapper;
+
+using PlcBase.Features.User.Entities;
 
 namespace PlcBase.Features.Auth.DTOs;
 

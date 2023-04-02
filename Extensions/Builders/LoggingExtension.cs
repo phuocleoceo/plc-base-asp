@@ -1,7 +1,8 @@
-using PlcBase.Shared.Constants;
-using PlcBase.Shared.Helpers;
 using Serilog.Core;
 using Serilog;
+
+using PlcBase.Shared.Constants;
+using PlcBase.Shared.Helpers;
 
 namespace PlcBase.Extensions.Builders;
 

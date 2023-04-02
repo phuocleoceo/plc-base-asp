@@ -1,11 +1,12 @@
-using PlcBase.Features.AccessControl.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
-using PlcBase.Features.Address.Repositories;
-using PlcBase.Features.User.Repositories;
-using PlcBase.Shared.Data.Context;
 using AutoMapper;
 
-namespace PlcBase.Shared.Repositories;
+using PlcBase.Features.AccessControl.Repositories;
+using PlcBase.Features.Address.Repositories;
+using PlcBase.Features.User.Repositories;
+using PlcBase.Common.Data.Context;
+
+namespace PlcBase.Common.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

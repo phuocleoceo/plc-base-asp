@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc
-;
+using Microsoft.AspNetCore.Mvc;
+
 using PlcBase.Features.Address.Services;
 using PlcBase.Features.Address.DTO;
 using PlcBase.Base.Controller;

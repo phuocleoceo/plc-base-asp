@@ -1,6 +1,6 @@
-using PlcBase.Shared.Repositories;
-using PlcBase.Shared.Data.Mapper;
-using PlcBase.Shared.Services;
+using PlcBase.Common.Repositories;
+using PlcBase.Common.Data.Mapper;
+using PlcBase.Common.Services;
 using PlcBase.Shared.Helpers;
 
 namespace PlcBase.Extensions.ServiceCollections;

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+
 using PlcBase.Features.User.Entities;
 using PlcBase.Shared.Enums;
 using PlcBase.Base.Entity;

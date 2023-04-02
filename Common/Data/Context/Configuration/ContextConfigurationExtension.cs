@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace PlcBase.Shared.Data.Context.Configuration;
+namespace PlcBase.Common.Data.Context.Configuration;
 
 public static class ContextConfigurationExtension
 {

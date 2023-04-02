@@ -1,9 +1,10 @@
 using Microsoft.Extensions.Options;
-using PlcBase.Shared.Constants;
-using PlcBase.Base.Error;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+
+using PlcBase.Shared.Constants;
+using PlcBase.Base.Error;
 
 namespace PlcBase.Shared.Helpers;
 

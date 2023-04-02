@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Serialization;
-using PlcBase.Shared.Constants;
 using Newtonsoft.Json;
+
+using PlcBase.Shared.Constants;
 
 namespace PlcBase.Base.DTO;
 
