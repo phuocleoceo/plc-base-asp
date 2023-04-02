@@ -1,5 +1,5 @@
 using Newtonsoft.Json.Serialization;
-using PlcBase.Common.Constants;
+using PlcBase.Shared.Constants;
 using Newtonsoft.Json;
 
 namespace PlcBase.Base.DTO;

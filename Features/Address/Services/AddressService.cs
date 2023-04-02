@@ -1,4 +1,4 @@
-using PlcBase.Repositories.Interface;
+using PlcBase.Shared.Repositories;
 using PlcBase.Base.DomainModel;
 using PlcBase.Models.Entities;
 using PlcBase.Models.DTO;

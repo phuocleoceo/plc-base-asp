@@ -1,5 +1,5 @@
 using Amazon.Extensions.NETCore.Setup;
-using PlcBase.Helpers;
+using PlcBase.Shared.Helpers;
 using Amazon.Runtime;
 using Amazon.S3;
 

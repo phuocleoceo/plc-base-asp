@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using PlcBase.Common.Enums;
+using PlcBase.Shared.Enums;
 using PlcBase.Base.Entity;
 
 namespace PlcBase.Models.Entities;

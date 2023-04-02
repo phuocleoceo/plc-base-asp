@@ -1,14 +1,13 @@
-using PlcBase.Repositories.Interface;
 using System.Collections.Specialized;
 using Microsoft.Extensions.Options;
+using PlcBase.Shared.Repositories;
 using PlcBase.Base.DomainModel;
-using PlcBase.Helpers.Password;
-using PlcBase.Common.Constants;
+using PlcBase.Shared.Constants;
 using PlcBase.Models.Entities;
 using System.Security.Claims;
+using PlcBase.Shared.Helpers;
 using PlcBase.Models.DTO;
 using PlcBase.Base.Error;
-using PlcBase.Helpers;
 using AutoMapper;
 using System.Web;
 

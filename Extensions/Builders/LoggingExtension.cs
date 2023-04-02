@@ -1,5 +1,5 @@
-using PlcBase.Common.Constants;
-using PlcBase.Helpers;
+using PlcBase.Shared.Constants;
+using PlcBase.Shared.Helpers;
 using Serilog.Core;
 using Serilog;
 

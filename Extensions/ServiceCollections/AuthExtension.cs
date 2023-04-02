@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using PlcBase.Helpers;
+using PlcBase.Shared.Helpers;
 
 namespace PlcBase.Extensions.ServiceCollections;
 

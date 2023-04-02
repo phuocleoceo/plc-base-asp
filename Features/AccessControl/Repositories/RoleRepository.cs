@@ -1,4 +1,3 @@
-using PlcBase.Repositories.Interface;
 using PlcBase.Base.Repository;
 using PlcBase.Models.Entities;
 using PlcBase.Models.Context;
