@@ -5,7 +5,7 @@ using PlcBase.Base.DomainModel;
 
 namespace PlcBase.Shared.Utilities;
 
-public static class HttpContextExtension
+public static class HttpContextUtility
 {
     public static ReqUser GetRequestUser(this HttpContext context)
     {

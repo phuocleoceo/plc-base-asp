@@ -2,7 +2,7 @@ using PlcBase.Shared.Helpers;
 
 namespace PlcBase.Shared.Utilities;
 
-public static class S3FileExtension
+public static class AWSUtility
 {
     public static S3FileUpload GetS3FileUpload(this IFormFile formFile, string prefix = "")
     {
