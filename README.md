@@ -9,5 +9,5 @@
 - dotnet run / dotnet watch
 
 ## EFCore Code first:
-- dotnet-ef migrations add {migration-name} -o Models/Migrations
+- dotnet-ef migrations add {migration-name} -o Common/Data/Migrations
 - dotnet-ef database update

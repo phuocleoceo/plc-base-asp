@@ -1,10 +1,11 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using PlcBase.Base.DomainModel;
 using System.Linq.Expressions;
-using PlcBase.Models.Context;
-using PlcBase.Base.DTO;
 using AutoMapper;
+
+using PlcBase.Common.Data.Context;
+using PlcBase.Base.DomainModel;
+using PlcBase.Base.DTO;
 
 namespace PlcBase.Base.Repository;
 

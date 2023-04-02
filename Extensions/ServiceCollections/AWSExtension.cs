@@ -1,7 +1,8 @@
 using Amazon.Extensions.NETCore.Setup;
-using PlcBase.Helpers;
 using Amazon.Runtime;
 using Amazon.S3;
+
+using PlcBase.Shared.Helpers;
 
 namespace PlcBase.Extensions.ServiceCollections;
 

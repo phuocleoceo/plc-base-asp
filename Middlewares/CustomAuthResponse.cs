@@ -1,4 +1,4 @@
-using PlcBase.Common.Constants;
+using PlcBase.Shared.Constants;
 using PlcBase.Base.Error;
 
 namespace PlcBase.Middlewares;

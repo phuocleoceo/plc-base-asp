@@ -1,5 +1,5 @@
 using PlcBase.Extensions.Builders;
-using PlcBase.Helpers;
+using PlcBase.Shared.Helpers;
 
 namespace PlcBase.Middlewares;
 

@@ -1,5 +1,6 @@
 using Savorboard.CAP.InMemoryMessageQueue;
-using PlcBase.Helpers;
+
+using PlcBase.Shared.Helpers;
 
 namespace PlcBase.Extensions.ServiceCollections;
 
