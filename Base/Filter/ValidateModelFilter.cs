@@ -1,13 +1,15 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 
+using PlcBase.Shared.Constants;
+using PlcBase.Base.Error;
+
 namespace PlcBase.Base.Filter;
 
 public class ValidateModelFilter : IActionFilter
 {
     public void OnActionExecuting(ActionExecutingContext context)
     {
-        Console.WriteLine("---------------------asdasdsa");
         if (!context.ModelState.IsValid)
         {
             var errors = context.ModelState
@@ -30,7 +32,6 @@ public class ValidateModelFilter : IActionFilter
 
     public void OnActionExecuted(ActionExecutedContext context)
     {
-
     }
 }
 

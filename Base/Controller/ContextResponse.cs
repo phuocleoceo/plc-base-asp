@@ -10,12 +10,17 @@ public static class ContextResponse
             this HttpContext context,
             T Data = default(T),
             int StatusCode = HttpCode.OK,
-            string Message = "")
+            string Message = null)
     {
         context.Response.StatusCode = StatusCode;
         context.Items["responseMessage"] = Message;
 
-        return new BaseResponse<T>(Data, StatusCode, Message);
+        return new BaseResponse<T>()
+        {
+            Data = Data,
+            StatusCode = StatusCode,
+            Message = Message,
+        };
     }
 
     public static dynamic Failure(
