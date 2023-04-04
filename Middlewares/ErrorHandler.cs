@@ -29,13 +29,18 @@ public static class ErrorHandler
                 if (contextFeature != null)
                 {
                     string message = exception.Message;
+
                     int statusCode = exception.GetType() == typeof(BaseException) ?
                                             ((BaseException)exception).StatusCode :
                                             HttpCode.INTERNAL_SERVER_ERROR;
 
+                    Dictionary<string, string[]> errors =
+                                     exception.GetType() == typeof(BaseException)
+                                        ? ((BaseException)exception).Errors : null;
+
                     logger.LogErrorResponse(context, message, statusCode);
 
-                    await context.WriteErrorResponse(message, statusCode);
+                    await context.WriteErrorResponse(message, statusCode, errors);
                 }
             });
         });
@@ -52,7 +57,8 @@ public static class ErrorHandler
 
     private static async Task WriteErrorResponse(this HttpContext context,
                                                  string message,
-                                                 int statusCode)
+                                                 int statusCode,
+                                                 Dictionary<string, string[]> errors)
     {
         context.Response.StatusCode = statusCode;
         context.Items["isError"] = true;
@@ -60,7 +66,8 @@ public static class ErrorHandler
         await context.Response.WriteAsync(new BaseResponse<string>()
         {
             StatusCode = statusCode,
-            Message = message
+            Message = message,
+            Errors = errors,
         }.ToString());
     }
 }

@@ -7,21 +7,13 @@ namespace PlcBase.Base.DTO;
 
 public class BaseResponse<T>
 {
-    public T Data { get; set; }
+    public T Data { get; set; } = default(T);
 
-    public int StatusCode { get; set; }
+    public int StatusCode { get; set; } = HttpCode.OK;
 
-    public string Message { get; set; }
+    public string Message { get; set; } = null;
 
-    public BaseResponse() { }
-    public BaseResponse(T Data = default(T),
-                        int StatusCode = HttpCode.OK,
-                        string Message = "")
-    {
-        this.Data = Data;
-        this.StatusCode = StatusCode;
-        this.Message = Message;
-    }
+    public Dictionary<string, string[]> Errors { get; set; } = null;
 
     public override string ToString()
     {

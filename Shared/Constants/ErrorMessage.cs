@@ -9,4 +9,6 @@ public static class ErrorMessage
     public const string FORBIDDEN_RESOURCE = "forbidden_resource";
 
     public const string INVALID_TOKEN = "invalid_token";
+
+    public const string VALIDATION_ERROR = "validation_error";
 }
