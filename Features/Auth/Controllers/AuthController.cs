@@ -6,7 +6,6 @@ using PlcBase.Features.Auth.DTOs;
 using PlcBase.Shared.Utilities;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Controller;
-using PlcBase.Base.Filter;
 using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.Auth.Controllers;
@@ -21,7 +20,6 @@ public class AuthController : BaseController
     }
 
     [HttpPost("Login")]
-    [ServiceFilter(typeof(ValidateModelFilter))]
     public async Task<BaseResponse<UserLoginResponseDTO>> Login([FromBody] UserLoginDTO userLoginDTO)
     {
         return HttpContext.Success(await _authService.Login(userLoginDTO));
