@@ -34,7 +34,7 @@ public static class ErrorHandler
                                             ((BaseException)exception).StatusCode :
                                             HttpCode.INTERNAL_SERVER_ERROR;
 
-                    Dictionary<string, List<string>> errors =
+                    Dictionary<string, string[]> errors =
                                      exception.GetType() == typeof(BaseException)
                                         ? ((BaseException)exception).Errors : null;
 
@@ -58,7 +58,7 @@ public static class ErrorHandler
     private static async Task WriteErrorResponse(this HttpContext context,
                                                  string message,
                                                  int statusCode,
-                                                 Dictionary<string, List<string>> errors)
+                                                 Dictionary<string, string[]> errors)
     {
         context.Response.StatusCode = statusCode;
         context.Items["isError"] = true;

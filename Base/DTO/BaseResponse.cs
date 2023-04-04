@@ -13,7 +13,7 @@ public class BaseResponse<T>
 
     public string Message { get; set; } = null;
 
-    public Dictionary<string, List<string>> Errors { get; set; } = null;
+    public Dictionary<string, string[]> Errors { get; set; } = null;
 
     public override string ToString()
     {

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
 
 using PlcBase.Shared.Constants;
 using PlcBase.Base.Error;
@@ -12,36 +11,22 @@ public class ValidateModelFilter : IActionFilter
     {
         if (!context.ModelState.IsValid)
         {
-            var errors = context.ModelState
-                .Where(x => x.Value.Errors.Count > 0)
-                .Select(x => new { x.Key, x.Value.Errors })
-                .ToArray();
+            Dictionary<string, string[]> errors = context.ModelState
+                            .Where(x => x.Value.Errors.Count > 0)
+                            .ToDictionary(
+                                k => k.Key,
+                                k => k.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                            );
 
-            var errorResponse = new ErrorResponse
-            {
-                Errors = errors.SelectMany(x => x.Errors.Select(e => new ErrorModel
-                {
-                    FieldName = x.Key,
-                    Message = e.ErrorMessage
-                })).ToList()
-            };
-
-            context.Result = new UnprocessableEntityObjectResult(errorResponse);
+            throw new BaseException(
+                HttpCode.UNPROCESSABLE_ENTITY,
+                ErrorMessage.VALIDATION_ERROR,
+                errors
+            );
         }
     }
 
     public void OnActionExecuted(ActionExecutedContext context)
     {
     }
-}
-
-public class ErrorModel
-{
-    public string FieldName { get; set; }
-    public string Message { get; set; }
-}
-
-public class ErrorResponse
-{
-    public List<ErrorModel> Errors { get; set; } = new List<ErrorModel>();
 }
