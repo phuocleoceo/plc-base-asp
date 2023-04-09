@@ -6,6 +6,7 @@ namespace PlcBase.Common.Repositories;
 
 public interface IUnitOfWork : IDisposable
 {
+    IDapperContainer DapperContainer { get; }
     IAddressProvinceRepository AddressProvince { get; }
     IAddressDistrictRepository AddressDistrict { get; }
     IAddressWardRepository AddressWard { get; }

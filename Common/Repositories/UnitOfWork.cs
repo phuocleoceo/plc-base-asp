@@ -19,6 +19,7 @@ public class UnitOfWork : IUnitOfWork
         _db = db;
         _mapper = mapper;
 
+        DapperContainer = new DapperContainer(_db);
         AddressProvince = new AddressProvinceRepository(_db, _mapper);
         AddressDistrict = new AddressDistrictRepository(_db, _mapper);
         AddressWard = new AddressWardRepository(_db, _mapper);
@@ -28,6 +29,7 @@ public class UnitOfWork : IUnitOfWork
         Permisison = new PermissionRepository(_db, _mapper);
     }
 
+    public IDapperContainer DapperContainer { get; private set; }
     public IAddressProvinceRepository AddressProvince { get; private set; }
     public IAddressDistrictRepository AddressDistrict { get; private set; }
     public IAddressWardRepository AddressWard { get; private set; }
