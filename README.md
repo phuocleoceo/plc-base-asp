@@ -15,8 +15,8 @@
 ## EFCore Code First
 
 - dotnet tool install dotnet-ef
-- dotnet-ef migrations add {migration-name} -o Common/Data/Migrations
-- dotnet-ef database update
+- dotnet ef migrations add {migration-name} -o Common/Data/Migrations
+- dotnet ef database update
 
 ## Cshapier Formatter Tool
 
