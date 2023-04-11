@@ -76,4 +76,12 @@ public class AuthController : BaseController
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }
+
+    [HttpPost("Refresh-Token")]
+    public async Task<BaseResponse<UserRefreshTokenResponseDTO>> RefreshToken(
+        [FromBody] UserRefreshTokenDTO userRefreshTokenDTO
+    )
+    {
+        return HttpContext.Success(await _authService.RefreshToken(userRefreshTokenDTO));
+    }
 }

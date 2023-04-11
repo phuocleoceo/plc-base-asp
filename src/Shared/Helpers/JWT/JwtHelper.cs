@@ -17,7 +17,7 @@ public class JwtHelper : IJwtHelper
         _jwtSettings = jwtSettings.Value;
     }
 
-    public TokenData CreateToken(List<Claim> claims)
+    public TokenData CreateToken(IEnumerable<Claim> claims)
     {
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {

@@ -319,4 +319,40 @@ public class AuthService : IAuthService
     }
 
     #endregion
+
+    public async Task<UserRefreshTokenResponseDTO> RefreshToken(
+        UserRefreshTokenDTO userRefreshTokenDTO
+    )
+    {
+        ClaimsPrincipal principal = _jwtHelper.GetPrincipalFromExpiredToken(
+            userRefreshTokenDTO.AccessToken
+        );
+
+        int userId = Convert.ToInt32(principal.FindFirstValue(CustomClaimTypes.UserId));
+        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(userId);
+
+        if (currentUser == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "account_has_token_not_found");
+
+        if (
+            currentUser.RefreshToken != userRefreshTokenDTO.RefreshToken
+            || currentUser.RefreshTokenExpiredAt <= DateTime.UtcNow
+        )
+            throw new BaseException(HttpCode.BAD_REQUEST, "refresh_token_invalid_or_expired");
+
+        TokenData accessToken = _jwtHelper.CreateToken(principal.Claims);
+        TokenData refreshToken = _jwtHelper.CreateRefreshToken();
+
+        currentUser.RefreshToken = refreshToken.Token;
+        _uof.UserAccount.Update(currentUser);
+        await _uof.Save();
+
+        return new UserRefreshTokenResponseDTO()
+        {
+            AccessToken = accessToken.Token,
+            AccessTokenExpiredAt = accessToken.ExpiredAt,
+            RefreshToken = refreshToken.Token,
+            RefreshTokenExpiredAt = currentUser.RefreshTokenExpiredAt.Value,
+        };
+    }
 }

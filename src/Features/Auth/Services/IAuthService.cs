@@ -16,4 +16,6 @@ public interface IAuthService
     Task ForgotPassword(UserForgotPasswordDTO userForgotPasswordDTO);
 
     Task<bool> RecoverPassword(UserRecoverPasswordDTO userRecoverPasswordDTO);
+
+    Task<UserRefreshTokenResponseDTO> RefreshToken(UserRefreshTokenDTO userRefreshTokenDTO);
 }
