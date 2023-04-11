@@ -1,8 +1,8 @@
 using System.Collections.Specialized;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
-using AutoMapper;
 using System.Web;
+using AutoMapper;
 
 using PlcBase.Features.User.Entities;
 using PlcBase.Common.Repositories;
@@ -65,15 +65,23 @@ public class AuthService : IAuthService
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_password");
 
         List<Claim> userClaims = await GetUserClaims(currentUser);
-        TokenData userToken = _jwtHelper.CreateToken(userClaims);
+        TokenData accessToken = _jwtHelper.CreateToken(userClaims);
+        TokenData refreshToken = _jwtHelper.CreateRefreshToken();
+
+        currentUser.RefreshToken = refreshToken.Token;
+        currentUser.RefreshTokenExpiredAt = refreshToken.ExpiredAt;
+        _uof.UserAccount.Update(currentUser);
+        await _uof.Save();
 
         return new UserLoginResponseDTO()
         {
             Id = currentUser.Id,
             Email = currentUser.Email,
             RoleId = currentUser.RoleId,
-            AccessToken = userToken.Token,
-            TokenExpiredAt = userToken.ExpiredAt,
+            AccessToken = accessToken.Token,
+            AccessTokenExpiredAt = accessToken.ExpiredAt,
+            RefreshToken = refreshToken.Token,
+            RefreshTokenExpiredAt = refreshToken.ExpiredAt,
         };
     }
 
@@ -87,6 +95,56 @@ public class AuthService : IAuthService
         claims.Add(new Claim(CustomClaimTypes.Email, user.Email));
 
         return await Task.FromResult(claims);
+    }
+
+    public async Task<UserRefreshTokenResponseDTO> RefreshToken(
+        UserRefreshTokenDTO userRefreshTokenDTO
+    )
+    {
+        ClaimsPrincipal principal = _jwtHelper.GetPrincipalFromExpiredToken(
+            userRefreshTokenDTO.AccessToken
+        );
+
+        int userId = Convert.ToInt32(principal.FindFirstValue(CustomClaimTypes.UserId));
+        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(userId);
+
+        if (currentUser == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "account_has_token_not_found");
+
+        if (
+            currentUser.RefreshToken != userRefreshTokenDTO.RefreshToken
+            || currentUser.RefreshTokenExpiredAt <= DateTime.UtcNow
+        )
+            throw new BaseException(HttpCode.BAD_REQUEST, "refresh_token_invalid_or_expired");
+
+        TokenData accessToken = _jwtHelper.CreateToken(principal.Claims);
+        TokenData refreshToken = _jwtHelper.CreateRefreshToken();
+
+        currentUser.RefreshToken = refreshToken.Token;
+        _uof.UserAccount.Update(currentUser);
+        await _uof.Save();
+
+        return new UserRefreshTokenResponseDTO()
+        {
+            AccessToken = accessToken.Token,
+            AccessTokenExpiredAt = accessToken.ExpiredAt,
+            RefreshToken = refreshToken.Token,
+            RefreshTokenExpiredAt = currentUser.RefreshTokenExpiredAt.Value,
+        };
+    }
+
+    public async Task<bool> RevokeRefreshToken(ReqUser reqUser)
+    {
+        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(reqUser.Id);
+
+        if (currentUser == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
+
+        currentUser.RefreshToken = null;
+        currentUser.RefreshTokenExpiredAt = null;
+
+        _uof.UserAccount.Update(currentUser);
+        return await _uof.Save() > 0;
     }
 
     #endregion
@@ -134,7 +192,6 @@ public class AuthService : IAuthService
             newUserProfile.UserAccountId = newUserAccount.Id;
             _uof.UserProfile.Add(newUserProfile);
 
-            // Send mail
             await SendMailConfirm(newUserAccount);
 
             await _uof.Save();

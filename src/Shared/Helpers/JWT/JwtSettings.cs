@@ -13,4 +13,5 @@ public class JwtSettings
     public bool ValidateAudience { get; set; }
     public string ValidAudience { get; set; }
     public int ClockSkew { get; set; }
+    public double RefreshTokenExpires { get; set; }
 }

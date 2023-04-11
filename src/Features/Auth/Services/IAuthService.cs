@@ -7,6 +7,10 @@ public interface IAuthService
 {
     Task<UserLoginResponseDTO> Login(UserLoginDTO userLoginDTO);
 
+    Task<UserRefreshTokenResponseDTO> RefreshToken(UserRefreshTokenDTO userRefreshTokenDTO);
+
+    Task<bool> RevokeRefreshToken(ReqUser reqUser);
+
     Task<UserRegisterResponseDTO> Register(UserRegisterDTO userRegisterDTO);
 
     Task<bool> ConfirmEmail(UserConfirmEmailDTO userConfirmEmailDTO);

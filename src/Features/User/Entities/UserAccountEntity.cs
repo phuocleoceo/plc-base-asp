@@ -27,6 +27,12 @@ public class UserAccountEntity : BaseEntity
     [Column("is_actived")]
     public bool IsActived { get; set; }
 
+    [Column("refresh_token")]
+    public string RefreshToken { get; set; }
+
+    [Column("refresh_token_expired_at")]
+    public DateTime? RefreshTokenExpiredAt { get; set; }
+
     [ForeignKey(nameof(Role))]
     [Column("role_id")]
     public int RoleId { get; set; }
