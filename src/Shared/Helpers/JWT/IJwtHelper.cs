@@ -6,7 +6,7 @@ public interface IJwtHelper
 {
     TokenData CreateToken(List<Claim> claims);
 
-    string CreateRefreshToken();
+    TokenData CreateRefreshToken();
 
     ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
 }

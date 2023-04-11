@@ -65,15 +65,23 @@ public class AuthService : IAuthService
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_password");
 
         List<Claim> userClaims = await GetUserClaims(currentUser);
-        TokenData userToken = _jwtHelper.CreateToken(userClaims);
+        TokenData accessToken = _jwtHelper.CreateToken(userClaims);
+        TokenData refreshToken = _jwtHelper.CreateRefreshToken();
+
+        currentUser.RefreshToken = refreshToken.Token;
+        currentUser.RefreshTokenExpiredAt = refreshToken.ExpiredAt;
+        _uof.UserAccount.Update(currentUser);
+        await _uof.Save();
 
         return new UserLoginResponseDTO()
         {
             Id = currentUser.Id,
             Email = currentUser.Email,
             RoleId = currentUser.RoleId,
-            AccessToken = userToken.Token,
-            TokenExpiredAt = userToken.ExpiredAt,
+            AccessToken = accessToken.Token,
+            AccessTokenExpiredAt = accessToken.ExpiredAt,
+            RefreshToken = refreshToken.Token,
+            RefreshTokenExpiredAt = refreshToken.ExpiredAt,
         };
     }
 
@@ -134,7 +142,6 @@ public class AuthService : IAuthService
             newUserProfile.UserAccountId = newUserAccount.Id;
             _uof.UserProfile.Add(newUserProfile);
 
-            // Send mail
             await SendMailConfirm(newUserAccount);
 
             await _uof.Save();

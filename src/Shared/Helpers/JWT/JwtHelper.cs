@@ -22,7 +22,7 @@ public class JwtHelper : IJwtHelper
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddMinutes(_jwtSettings.Expires),
+            Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.Expires),
             SigningCredentials = JwtOptions.GetPrivateKey(_jwtSettings),
             Audience = _jwtSettings.ValidateAudience ? _jwtSettings.ValidAudience : null,
             Issuer = _jwtSettings.ValidateIssuer ? _jwtSettings.ValidIssuer : null,
@@ -37,9 +37,13 @@ public class JwtHelper : IJwtHelper
         };
     }
 
-    public string CreateRefreshToken()
+    public TokenData CreateRefreshToken()
     {
-        return CodeSecure.CreateRandomCode(length: 32);
+        return new TokenData()
+        {
+            Token = CodeSecure.CreateRandomCode(32),
+            ExpiredAt = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpires)
+        };
     }
 
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
