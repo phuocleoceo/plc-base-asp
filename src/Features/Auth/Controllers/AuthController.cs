@@ -84,4 +84,15 @@ public class AuthController : BaseController
     {
         return HttpContext.Success(await _authService.RefreshToken(userRefreshTokenDTO));
     }
+
+    [HttpPost("Revoke-Refresh-Token")]
+    [Authorize]
+    public async Task<BaseResponse<bool>> RevokeRefreshToken()
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _authService.RevokeRefreshToken(reqUser))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }
