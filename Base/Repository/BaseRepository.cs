@@ -5,6 +5,7 @@ using AutoMapper;
 
 using PlcBase.Common.Data.Context;
 using PlcBase.Base.DomainModel;
+using PlcBase.Base.Entity;
 using PlcBase.Base.DTO;
 
 namespace PlcBase.Base.Repository;
@@ -100,6 +101,11 @@ public class BaseRepository<T> : IBaseRepository<T>
         return await _dbSet.AnyAsync(predicate);
     }
 
+    public async Task<int> CountAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.CountAsync(predicate);
+    }
+
     public void Add(T entity)
     {
         _dbSet.Add(entity);
@@ -122,6 +128,7 @@ public class BaseRepository<T> : IBaseRepository<T>
         {
             _dbSet.Attach(entity);
         }
+
         _dbSet.Remove(entity);
     }
 
@@ -134,5 +141,16 @@ public class BaseRepository<T> : IBaseRepository<T>
     {
         T entity = await _dbSet.FindAsync(id);
         Remove(entity);
+    }
+
+    public async Task SoftDeleteById(int id)
+    {
+        T entity = await _dbSet.FindAsync(id);
+
+        if (entity is ISoftDeletable softDeletableEntity)
+        {
+            softDeletableEntity.DeletedAt = DateTime.UtcNow;
+            Update(softDeletableEntity as T);
+        }
     }
 }
