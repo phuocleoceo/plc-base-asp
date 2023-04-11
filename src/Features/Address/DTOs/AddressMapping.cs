@@ -17,8 +17,14 @@ public class AddressMapping : Profile
 
         CreateMap<AddressWardEntity, FullAddressDTO>()
             .ForMember(dto => dto.Ward, prop => prop.MapFrom(entity => entity.Name))
-            .ForMember(dto => dto.District, prop => prop.MapFrom(entity => entity.AddressDistrict.Name))
-            .ForMember(dto => dto.Province, prop => prop.MapFrom(entity => entity.AddressDistrict.AddressProvince.Name))
+            .ForMember(
+                dto => dto.District,
+                prop => prop.MapFrom(entity => entity.AddressDistrict.Name)
+            )
+            .ForMember(
+                dto => dto.Province,
+                prop => prop.MapFrom(entity => entity.AddressDistrict.AddressProvince.Name)
+            )
             .PreserveReferences();
     }
 }

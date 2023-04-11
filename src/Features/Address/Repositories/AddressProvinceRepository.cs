@@ -6,7 +6,9 @@ using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.Address.Repositories;
 
-public class AddressProvinceRepository : BaseRepository<AddressProvinceEntity>, IAddressProvinceRepository
+public class AddressProvinceRepository
+    : BaseRepository<AddressProvinceEntity>,
+        IAddressProvinceRepository
 {
     private readonly DataContext _db;
     private readonly IMapper _mapper;

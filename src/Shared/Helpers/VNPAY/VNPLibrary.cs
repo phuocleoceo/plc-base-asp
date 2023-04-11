@@ -7,8 +7,12 @@ namespace PlcBase.Shared.Helpers;
 
 public class VNPLibrary
 {
-    private readonly SortedList<string, string> _requestData = new SortedList<string, string>(new VnPayCompare());
-    private readonly SortedList<string, string> _responseData = new SortedList<string, string>(new VnPayCompare());
+    private readonly SortedList<string, string> _requestData = new SortedList<string, string>(
+        new VnPayCompare()
+    );
+    private readonly SortedList<string, string> _responseData = new SortedList<string, string>(
+        new VnPayCompare()
+    );
 
     public void AddRequestData(string key, string value)
     {
@@ -48,7 +52,9 @@ public class VNPLibrary
         {
             if (!String.IsNullOrEmpty(kv.Value))
             {
-                data.Append(WebUtility.UrlEncode(kv.Key) + "=" + WebUtility.UrlEncode(kv.Value) + "&");
+                data.Append(
+                    WebUtility.UrlEncode(kv.Key) + "=" + WebUtility.UrlEncode(kv.Value) + "&"
+                );
             }
         }
         string queryString = data.ToString();
@@ -91,7 +97,9 @@ public class VNPLibrary
         {
             if (!String.IsNullOrEmpty(kv.Value))
             {
-                data.Append(WebUtility.UrlEncode(kv.Key) + "=" + WebUtility.UrlEncode(kv.Value) + "&");
+                data.Append(
+                    WebUtility.UrlEncode(kv.Key) + "=" + WebUtility.UrlEncode(kv.Value) + "&"
+                );
             }
         }
         //remove last '&'

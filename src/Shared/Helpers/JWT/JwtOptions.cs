@@ -6,7 +6,10 @@ namespace PlcBase.Shared.Helpers;
 
 public static class JwtOptions
 {
-    public static TokenValidationParameters GetTokenParams(JwtSettings jwtSettings, SecurityKey securityKey)
+    public static TokenValidationParameters GetTokenParams(
+        JwtSettings jwtSettings,
+        SecurityKey securityKey
+    )
     {
         return new TokenValidationParameters
         {

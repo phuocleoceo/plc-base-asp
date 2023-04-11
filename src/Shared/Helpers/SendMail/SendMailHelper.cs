@@ -41,7 +41,11 @@ public class SendMailHelper : ISendMailHelper
                         file.CopyTo(ms);
                         fileBytes = ms.ToArray();
                     }
-                    builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
+                    builder.Attachments.Add(
+                        file.FileName,
+                        fileBytes,
+                        ContentType.Parse(file.ContentType)
+                    );
                 }
             }
         }

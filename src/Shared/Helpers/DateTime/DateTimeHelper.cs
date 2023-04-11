@@ -13,7 +13,10 @@ public class DateTimeHelper : IDateTimeHelper
 
     public DateTime Now()
     {
-        return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, _dateTimeSettings.TimeZone);
+        return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
+            DateTime.UtcNow,
+            _dateTimeSettings.TimeZone
+        );
     }
 
     public DateTime ConvertLocalTime(DateTime dateTime)

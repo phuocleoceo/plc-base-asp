@@ -2,7 +2,10 @@ namespace PlcBase.Extensions.ServiceCollections;
 
 public static class ServiceExtension
 {
-    public static void ConfigureService(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureService(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         // CORS
         services.ConfigureCors(configuration);

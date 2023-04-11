@@ -6,7 +6,10 @@ namespace PlcBase.Extensions.ServiceCollections;
 
 public static class DatabaseExtension
 {
-    public static void ConfigureDataContext(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureDataContext(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         string selectedDatabase = configuration.GetSection("SelectedDatabase").Value;
         string connectionString = configuration.GetConnectionString(selectedDatabase);

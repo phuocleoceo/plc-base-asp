@@ -4,14 +4,20 @@ namespace PlcBase.Extensions.ServiceCollections;
 
 public static class SwaggerExtension
 {
-    public static void ConfigureSwagger(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureSwagger(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.AddEndpointsApiExplorer();
         services.ConfigureSwaggerDoc(configuration);
         services.ConfigureSwaggerAuth();
     }
 
-    private static void ConfigureSwaggerDoc(this IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureSwaggerDoc(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.AddSwaggerGen(c =>
         {
@@ -42,7 +48,11 @@ public static class SwaggerExtension
                     {
                         new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" },
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
                             Scheme = "oauth2",
                             Name = "Bearer",
                             In = ParameterLocation.Header

@@ -2,7 +2,10 @@ namespace PlcBase.Shared.Helpers;
 
 public static class AppSettingExtension
 {
-    public static void ConfigureAppSetting(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureAppSetting(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.Configure<DateTimeSettings>(configuration.GetSection("DateTimeSettings"));
         services.Configure<MailSettings>(configuration.GetSection("MailSettings"));

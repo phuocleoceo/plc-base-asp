@@ -4,9 +4,11 @@ namespace PlcBase.Base.DomainModel;
 
 public class QueryModel<T>
 {
-    public List<Expression<Func<T, bool>>> Filters { get; set; } = new List<Expression<Func<T, bool>>>();
+    public List<Expression<Func<T, bool>>> Filters { get; set; } =
+        new List<Expression<Func<T, bool>>>();
 
-    public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>();
+    public List<Expression<Func<T, object>>> Includes { get; set; } =
+        new List<Expression<Func<T, object>>>();
 
     public Func<IQueryable<T>, IOrderedQueryable<T>> OrderBy { get; set; } = null;
 

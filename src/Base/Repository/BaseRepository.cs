@@ -41,7 +41,9 @@ public class BaseRepository<T> : IBaseRepository<T>
 
         int count = query.Count();
 
-        query = query.Skip((queryModel.PageNumber - 1) * queryModel.PageSize).Take(queryModel.PageSize);
+        query = query
+            .Skip((queryModel.PageNumber - 1) * queryModel.PageSize)
+            .Take(queryModel.PageSize);
 
         List<U> items =
             typeof(U) != typeof(T)

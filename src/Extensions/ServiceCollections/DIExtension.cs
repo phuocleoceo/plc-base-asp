@@ -8,7 +8,10 @@ namespace PlcBase.Extensions.ServiceCollections;
 
 public static class DIExtension
 {
-    public static void ConfigureDataFactory(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureDataFactory(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.ConfigureAutoMapper();
         services.ConfigureFilterDI();

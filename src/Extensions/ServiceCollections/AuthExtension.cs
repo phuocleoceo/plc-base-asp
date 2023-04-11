@@ -22,7 +22,10 @@ public static class AuthExtension
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
-                options.TokenValidationParameters = JwtOptions.GetTokenParams(tokenSettings, publicKey);
+                options.TokenValidationParameters = JwtOptions.GetTokenParams(
+                    tokenSettings,
+                    publicKey
+                );
             });
     }
 }

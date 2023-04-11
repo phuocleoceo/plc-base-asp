@@ -42,7 +42,10 @@ public class AuthService : IAuthService
     public async Task<UserLoginResponseDTO> Login(UserLoginDTO userLoginDTO)
     {
         UserAccountEntity currentUser = await _uof.UserAccount.GetOneAsync<UserAccountEntity>(
-            new QueryModel<UserAccountEntity>() { Filters = { u => u.Email == userLoginDTO.Email }, }
+            new QueryModel<UserAccountEntity>()
+            {
+                Filters = { u => u.Email == userLoginDTO.Email },
+            }
         );
 
         if (currentUser == null)
@@ -54,7 +57,10 @@ public class AuthService : IAuthService
         if (!currentUser.IsActived)
             throw new BaseException(HttpCode.BAD_REQUEST, "account_inactived");
 
-        PasswordHash passwordHash = new PasswordHash(currentUser.PasswordHashed, currentUser.PasswordSalt);
+        PasswordHash passwordHash = new PasswordHash(
+            currentUser.PasswordHashed,
+            currentUser.PasswordSalt
+        );
         if (!PasswordSecure.IsValidPasswod(userLoginDTO.Password, passwordHash))
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_password");
 
@@ -107,7 +113,10 @@ public class AuthService : IAuthService
                         || up.IdentityNumber == newUserProfile.IdentityNumber
                 )
             )
-                throw new BaseException(HttpCode.BAD_REQUEST, "phone_number_or_identity_number_existed");
+                throw new BaseException(
+                    HttpCode.BAD_REQUEST,
+                    "phone_number_or_identity_number_existed"
+                );
 
             // Create user account
             PasswordHash passwordHash = PasswordSecure.GetPasswordHash(userRegisterDTO.Password);
@@ -131,7 +140,11 @@ public class AuthService : IAuthService
             await _uof.Save();
             await _uof.CommitTransaction();
 
-            return new UserRegisterResponseDTO() { Id = newUserAccount.Id, Email = newUserAccount.Email, };
+            return new UserRegisterResponseDTO()
+            {
+                Id = newUserAccount.Id,
+                Email = newUserAccount.Email,
+            };
         }
         catch (BaseException ex)
         {
@@ -142,7 +155,8 @@ public class AuthService : IAuthService
 
     private async Task SendMailConfirm(UserAccountEntity newUserAccount)
     {
-        string webClientPath = $"{_clientAppSettings.EndUserAppUrl}/{_clientAppSettings.ConfirmEmailPath}";
+        string webClientPath =
+            $"{_clientAppSettings.EndUserAppUrl}/{_clientAppSettings.ConfirmEmailPath}";
         UriBuilder uriBuilder = new UriBuilder(webClientPath);
         NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
@@ -155,14 +169,17 @@ public class AuthService : IAuthService
             {
                 ToEmail = newUserAccount.Email,
                 Subject = "Confirm email to use PLC Base",
-                Body = $"Confirm the registration by clicking on the <a href='{uriBuilder}'>link</a>"
+                Body =
+                    $"Confirm the registration by clicking on the <a href='{uriBuilder}'>link</a>"
             }
         );
     }
 
     public async Task<bool> ConfirmEmail(UserConfirmEmailDTO userConfirmEmailDTO)
     {
-        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(userConfirmEmailDTO.UserId);
+        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(
+            userConfirmEmailDTO.UserId
+        );
 
         if (currentUser == null)
             throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
@@ -184,7 +201,10 @@ public class AuthService : IAuthService
 
     #region Other Auth
 
-    public async Task<bool> ChangePassword(ReqUser reqUser, UserChangePasswordDTO userChangePasswordDTO)
+    public async Task<bool> ChangePassword(
+        ReqUser reqUser,
+        UserChangePasswordDTO userChangePasswordDTO
+    )
     {
         UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(reqUser.Id);
 
@@ -194,11 +214,16 @@ public class AuthService : IAuthService
         if (!currentUser.IsVerified)
             throw new BaseException(HttpCode.BAD_REQUEST, "account_unverified");
 
-        PasswordHash passwordHashDB = new PasswordHash(currentUser.PasswordHashed, currentUser.PasswordSalt);
+        PasswordHash passwordHashDB = new PasswordHash(
+            currentUser.PasswordHashed,
+            currentUser.PasswordSalt
+        );
         if (!PasswordSecure.IsValidPasswod(userChangePasswordDTO.OldPassword, passwordHashDB))
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_old_password");
 
-        PasswordHash newPasswordHash = PasswordSecure.GetPasswordHash(userChangePasswordDTO.NewPassword);
+        PasswordHash newPasswordHash = PasswordSecure.GetPasswordHash(
+            userChangePasswordDTO.NewPassword
+        );
         currentUser.PasswordHashed = newPasswordHash.PasswordHashed;
         currentUser.PasswordSalt = newPasswordHash.PasswordSalt;
 
@@ -241,7 +266,8 @@ public class AuthService : IAuthService
 
     private async Task SendMailForgotPassword(UserAccountEntity currentUserAccount)
     {
-        string webClientPath = $"{_clientAppSettings.EndUserAppUrl}/{_clientAppSettings.RecoverPasswordPath}";
+        string webClientPath =
+            $"{_clientAppSettings.EndUserAppUrl}/{_clientAppSettings.RecoverPasswordPath}";
         UriBuilder uriBuilder = new UriBuilder(webClientPath);
         NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
@@ -261,7 +287,9 @@ public class AuthService : IAuthService
 
     public async Task<bool> RecoverPassword(UserRecoverPasswordDTO userRecoverPasswordDTO)
     {
-        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(userRecoverPasswordDTO.UserId);
+        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(
+            userRecoverPasswordDTO.UserId
+        );
 
         if (currentUser == null)
             throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
@@ -272,7 +300,9 @@ public class AuthService : IAuthService
         if (currentUser.SecurityCode != userRecoverPasswordDTO.Code)
             throw new BaseException(HttpCode.BAD_REQUEST, "security_code_invalid");
 
-        PasswordHash newPasswordHash = PasswordSecure.GetPasswordHash(userRecoverPasswordDTO.NewPassword);
+        PasswordHash newPasswordHash = PasswordSecure.GetPasswordHash(
+            userRecoverPasswordDTO.NewPassword
+        );
         currentUser.PasswordHashed = newPasswordHash.PasswordHashed;
         currentUser.PasswordSalt = newPasswordHash.PasswordSalt;
         currentUser.SecurityCode = "";

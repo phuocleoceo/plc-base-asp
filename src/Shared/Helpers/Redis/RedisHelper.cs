@@ -24,7 +24,8 @@ public class RedisHelper : IRedisHelper
     public async Task SetWithTTL<T>(string key, T obj)
     {
         TimeSpan expires = TimeSpan.FromSeconds(_cacheSettings.Expires);
-        DistributedCacheEntryOptions options = new DistributedCacheEntryOptions().SetSlidingExpiration(expires);
+        DistributedCacheEntryOptions options =
+            new DistributedCacheEntryOptions().SetSlidingExpiration(expires);
 
         string objStr = JsonConvert.SerializeObject(obj);
         await _redisCache.SetStringAsync(key, objStr, options);

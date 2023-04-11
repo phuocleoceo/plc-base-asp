@@ -37,16 +37,25 @@ public class JwtMiddleware
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             SecurityKey publicKey = JwtOptions.GetPublicKey(_jwtSettings);
 
-            TokenValidationParameters tokenValidationParameters = JwtOptions.GetTokenParams(_jwtSettings, publicKey);
+            TokenValidationParameters tokenValidationParameters = JwtOptions.GetTokenParams(
+                _jwtSettings,
+                publicKey
+            );
 
-            tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+            tokenHandler.ValidateToken(
+                token,
+                tokenValidationParameters,
+                out SecurityToken validatedToken
+            );
 
             JwtSecurityToken jwtToken = (JwtSecurityToken)validatedToken;
 
             // Get data from payload
             context.Items["reqUser"] = new ReqUser()
             {
-                Id = Convert.ToInt32(jwtToken.Claims.First(x => x.Type == CustomClaimTypes.UserId).Value),
+                Id = Convert.ToInt32(
+                    jwtToken.Claims.First(x => x.Type == CustomClaimTypes.UserId).Value
+                ),
                 Email = jwtToken.Claims.First(x => x.Type == CustomClaimTypes.Email).Value,
             };
         }

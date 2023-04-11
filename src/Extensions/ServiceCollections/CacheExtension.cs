@@ -4,9 +4,14 @@ namespace PlcBase.Extensions.ServiceCollections;
 
 public static class CacheExtension
 {
-    public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureRedis(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
-        CacheSettings cacheSettings = configuration.GetSection("CacheSettings").Get<CacheSettings>();
+        CacheSettings cacheSettings = configuration
+            .GetSection("CacheSettings")
+            .Get<CacheSettings>();
 
         if (cacheSettings.Enable)
         {

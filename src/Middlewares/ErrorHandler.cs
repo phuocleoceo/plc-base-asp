@@ -23,7 +23,8 @@ public static class ErrorHandler
                 context.Response.StatusCode = HttpCode.INTERNAL_SERVER_ERROR;
                 context.Response.ContentType = "application/json";
 
-                IExceptionHandlerFeature contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                IExceptionHandlerFeature contextFeature =
+                    context.Features.Get<IExceptionHandlerFeature>();
 
                 if (contextFeature != null)
                 {
@@ -35,7 +36,9 @@ public static class ErrorHandler
                             : HttpCode.INTERNAL_SERVER_ERROR;
 
                     Dictionary<string, string[]> errors =
-                        exception.GetType() == typeof(BaseException) ? ((BaseException)exception).Errors : null;
+                        exception.GetType() == typeof(BaseException)
+                            ? ((BaseException)exception).Errors
+                            : null;
 
                     logger.LogErrorResponse(context, message, statusCode);
 

@@ -19,7 +19,8 @@ public class VNPHelper : IVNPHelper
         vnpHistory.vnp_TxnRef = DateTime.UtcNow.Ticks;
         vnpHistory.vnp_IpAddr = paymentInfo.CustomerIpAddress;
         vnpHistory.vnp_OrderType = paymentInfo.OrderType;
-        vnpHistory.vnp_OrderInfo = "#" + $"{vnpHistory.vnp_TxnRef} | {paymentInfo.OrderDescription}";
+        vnpHistory.vnp_OrderInfo =
+            "#" + $"{vnpHistory.vnp_TxnRef} | {paymentInfo.OrderDescription}";
         vnpHistory.vnp_Amount = paymentInfo.Amount;
         vnpHistory.vnp_BankCode = paymentInfo.BankCode;
         vnpHistory.vnp_CreateDate = _dateTimeHelper.Now().ToString("yyyyMMddHHmmss");
