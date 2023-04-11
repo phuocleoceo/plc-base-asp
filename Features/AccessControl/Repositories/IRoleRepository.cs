@@ -3,7 +3,4 @@ using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.AccessControl.Repositories;
 
-public interface IRoleRepository : IBaseRepository<RoleEntity>
-{
-
-}
+public interface IRoleRepository : IBaseRepository<RoleEntity> { }

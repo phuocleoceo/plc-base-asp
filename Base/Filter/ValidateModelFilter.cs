@@ -12,21 +12,12 @@ public class ValidateModelFilter : IActionFilter
         if (!context.ModelState.IsValid)
         {
             Dictionary<string, string[]> errors = context.ModelState
-                            .Where(x => x.Value.Errors.Count > 0)
-                            .ToDictionary(
-                                k => k.Key,
-                                k => k.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                            );
+                .Where(x => x.Value.Errors.Count > 0)
+                .ToDictionary(k => k.Key, k => k.Value.Errors.Select(e => e.ErrorMessage).ToArray());
 
-            throw new BaseException(
-                HttpCode.UNPROCESSABLE_ENTITY,
-                ErrorMessage.VALIDATION_ERROR,
-                errors
-            );
+            throw new BaseException(HttpCode.UNPROCESSABLE_ENTITY, ErrorMessage.VALIDATION_ERROR, errors);
         }
     }
 
-    public void OnActionExecuted(ActionExecutedContext context)
-    {
-    }
+    public void OnActionExecuted(ActionExecutedContext context) { }
 }

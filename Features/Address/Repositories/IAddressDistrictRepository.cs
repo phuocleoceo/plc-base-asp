@@ -3,7 +3,4 @@ using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.Address.Repositories;
 
-public interface IAddressDistrictRepository : IBaseRepository<AddressDistrictEntity>
-{
-
-}
+public interface IAddressDistrictRepository : IBaseRepository<AddressDistrictEntity> { }

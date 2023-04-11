@@ -22,13 +22,9 @@ public class S3Helper : IS3Helper
 
     private AmazonS3Client SetupS3Client()
     {
-        AmazonS3Config s3Config = new AmazonS3Config()
-        {
-            RegionEndpoint = Amazon.RegionEndpoint.APSoutheast1
-        };
+        AmazonS3Config s3Config = new AmazonS3Config() { RegionEndpoint = Amazon.RegionEndpoint.APSoutheast1 };
 
-        BasicAWSCredentials credentials =
-                    new BasicAWSCredentials(_s3Settings.AccessKey, _s3Settings.SecretKey);
+        BasicAWSCredentials credentials = new BasicAWSCredentials(_s3Settings.AccessKey, _s3Settings.SecretKey);
 
         return new AmazonS3Client(credentials, s3Config);
     }

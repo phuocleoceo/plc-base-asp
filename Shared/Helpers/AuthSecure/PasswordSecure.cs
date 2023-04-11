@@ -9,11 +9,7 @@ public static class PasswordSecure
     {
         using HMACSHA512 hmac = new HMACSHA512();
         byte[] passwordByte = Encoding.UTF8.GetBytes(password);
-        return new PasswordHash()
-        {
-            PasswordHashed = hmac.ComputeHash(passwordByte),
-            PasswordSalt = hmac.Key
-        };
+        return new PasswordHash() { PasswordHashed = hmac.ComputeHash(passwordByte), PasswordSalt = hmac.Key };
     }
 
     public static bool IsValidPasswod(string password, PasswordHash passwordHash)

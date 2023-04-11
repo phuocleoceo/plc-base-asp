@@ -9,14 +9,8 @@ public class PermisisonConfiguration : IEntityTypeConfiguration<PermissionEntity
 {
     public void Configure(EntityTypeBuilder<PermissionEntity> builder)
     {
-        builder.HasIndex(c => new
-        {
-            c.Key,
-        }).IsUnique();
+        builder.HasIndex(c => new { c.Key, }).IsUnique();
 
-        builder.HasIndex(c => new
-        {
-            c.RoleId,
-        });
+        builder.HasIndex(c => new { c.RoleId, });
     }
 }

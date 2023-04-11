@@ -7,8 +7,8 @@ public static class AWSUtility
     public static S3FileUpload GetS3FileUpload(this IFormFile formFile, string prefix = "")
     {
         string filePath = String.IsNullOrEmpty(prefix)
-                            ? formFile.FileName
-                            : $"{prefix.TrimEnd('/')}/{formFile.FileName}";
+            ? formFile.FileName
+            : $"{prefix.TrimEnd('/')}/{formFile.FileName}";
 
         return new S3FileUpload()
         {

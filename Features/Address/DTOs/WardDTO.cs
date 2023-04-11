@@ -1,6 +1,3 @@
 namespace PlcBase.Features.Address.DTO;
 
-public class WardDTO : AddressDTO
-{
-
-}
+public class WardDTO : AddressDTO { }

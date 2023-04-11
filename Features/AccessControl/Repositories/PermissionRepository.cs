@@ -11,7 +11,8 @@ public class PermissionRepository : BaseRepository<PermissionEntity>, IPermisiso
     private readonly DataContext _db;
     private readonly IMapper _mapper;
 
-    public PermissionRepository(DataContext db, IMapper mapper) : base(db, mapper)
+    public PermissionRepository(DataContext db, IMapper mapper)
+        : base(db, mapper)
     {
         _db = db;
         _mapper = mapper;

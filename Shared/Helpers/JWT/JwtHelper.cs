@@ -27,10 +27,6 @@ public class JwtHelper : IJwtHelper
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
-        return new TokenData()
-        {
-            Token = tokenHandler.WriteToken(token),
-            ExpiredAt = token.ValidTo,
-        };
+        return new TokenData() { Token = tokenHandler.WriteToken(token), ExpiredAt = token.ValidTo, };
     }
 }

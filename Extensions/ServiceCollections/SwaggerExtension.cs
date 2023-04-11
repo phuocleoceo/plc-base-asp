@@ -15,12 +15,7 @@ public static class SwaggerExtension
     {
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Title = "PLC API",
-                Version = "v1",
-            });
-
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "PLC API", Version = "v1", });
         });
     }
 
@@ -28,32 +23,34 @@ public static class SwaggerExtension
     {
         services.AddSwaggerGen(c =>
         {
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                Description = @"Enter 'Bearer ' + your Token   
+            c.AddSecurityDefinition(
+                "Bearer",
+                new OpenApiSecurityScheme
+                {
+                    Description =
+                        @"Enter 'Bearer ' + your Token   
                                     Example: Bearer 123456789",
-                Name = "Authorization",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer"
-            });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-            {
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                }
+            );
+            c.AddSecurityRequirement(
+                new OpenApiSecurityRequirement()
+                {
                     {
                         new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" },
                             Scheme = "oauth2",
                             Name = "Bearer",
                             In = ParameterLocation.Header
                         },
                         new List<string>()
                     }
-            });
+                }
+            );
         });
     }
 }

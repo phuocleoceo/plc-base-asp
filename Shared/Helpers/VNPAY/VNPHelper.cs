@@ -7,8 +7,7 @@ public class VNPHelper : IVNPHelper
     private readonly IDateTimeHelper _dateTimeHelper;
     private readonly VNPSettings _vnpSettings;
 
-    public VNPHelper(IDateTimeHelper dateTimeHelper,
-                     IOptions<VNPSettings> vnpSettings)
+    public VNPHelper(IDateTimeHelper dateTimeHelper, IOptions<VNPSettings> vnpSettings)
     {
         _dateTimeHelper = dateTimeHelper;
         _vnpSettings = vnpSettings.Value;

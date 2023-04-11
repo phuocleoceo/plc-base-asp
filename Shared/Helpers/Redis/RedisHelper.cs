@@ -9,8 +9,7 @@ public class RedisHelper : IRedisHelper
     private readonly IDistributedCache _redisCache;
     private readonly CacheSettings _cacheSettings;
 
-    public RedisHelper(IDistributedCache redisCache,
-                       IOptions<CacheSettings> cacheSettings)
+    public RedisHelper(IDistributedCache redisCache, IOptions<CacheSettings> cacheSettings)
     {
         _redisCache = redisCache;
         _cacheSettings = cacheSettings.Value;
@@ -25,8 +24,7 @@ public class RedisHelper : IRedisHelper
     public async Task SetWithTTL<T>(string key, T obj)
     {
         TimeSpan expires = TimeSpan.FromSeconds(_cacheSettings.Expires);
-        DistributedCacheEntryOptions options = new DistributedCacheEntryOptions()
-                            .SetSlidingExpiration(expires);
+        DistributedCacheEntryOptions options = new DistributedCacheEntryOptions().SetSlidingExpiration(expires);
 
         string objStr = JsonConvert.SerializeObject(obj);
         await _redisCache.SetStringAsync(key, objStr, options);
@@ -35,7 +33,8 @@ public class RedisHelper : IRedisHelper
     public async Task<T> Get<T>(string key)
     {
         string obj = await _redisCache.GetStringAsync(key);
-        if (String.IsNullOrEmpty(obj)) return default(T);
+        if (String.IsNullOrEmpty(obj))
+            return default(T);
         return JsonConvert.DeserializeObject<T>(obj);
     }
 

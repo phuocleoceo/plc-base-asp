@@ -24,11 +24,7 @@ public class DapperContainer : IDapperContainer
 
     public async Task Execute(DapperQuery dapperQuery)
     {
-        await _connection.ExecuteAsync(
-            dapperQuery.Query,
-            dapperQuery.Params,
-            commandType: dapperQuery.CommandType
-        );
+        await _connection.ExecuteAsync(dapperQuery.Query, dapperQuery.Params, commandType: dapperQuery.CommandType);
     }
 
     public async Task<IEnumerable<T>> List<T>(DapperQuery dapperQuery)

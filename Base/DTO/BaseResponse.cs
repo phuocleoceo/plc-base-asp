@@ -20,10 +20,7 @@ public class BaseResponse<T>
         return JsonConvert.SerializeObject(
             this,
             Formatting.Indented,
-            new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            }
+            new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }
         );
     }
 }

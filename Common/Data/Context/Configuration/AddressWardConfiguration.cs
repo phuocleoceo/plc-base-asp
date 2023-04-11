@@ -9,9 +9,6 @@ public class AddressWardConfiguration : IEntityTypeConfiguration<AddressWardEnti
 {
     public void Configure(EntityTypeBuilder<AddressWardEntity> builder)
     {
-        builder.HasIndex(c => new
-        {
-            c.AddressDistrictId,
-        });
+        builder.HasIndex(c => new { c.AddressDistrictId, });
     }
 }

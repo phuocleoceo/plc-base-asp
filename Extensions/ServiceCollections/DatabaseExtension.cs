@@ -13,10 +13,7 @@ public static class DatabaseExtension
 
         services.AddDbContext<DataContext>(options =>
         {
-            options.UseMySql(
-                connectionString,
-                ServerVersion.AutoDetect(connectionString)
-            );
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         });
     }
 }

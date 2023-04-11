@@ -11,6 +11,7 @@ namespace PlcBase.Features.Test.Controllers;
 public class VNPController : BaseController
 {
     private readonly IVNPHelper _vnpHelper;
+
     public VNPController(IVNPHelper vnpHelper)
     {
         _vnpHelper = vnpHelper;

@@ -7,8 +7,5 @@ namespace PlcBase.Common.Data.Context.Configuration;
 
 public class AddressProvinceConfiguration : IEntityTypeConfiguration<AddressProvinceEntity>
 {
-    public void Configure(EntityTypeBuilder<AddressProvinceEntity> builder)
-    {
-
-    }
+    public void Configure(EntityTypeBuilder<AddressProvinceEntity> builder) { }
 }

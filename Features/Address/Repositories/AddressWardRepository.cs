@@ -11,7 +11,8 @@ public class AddressWardRepository : BaseRepository<AddressWardEntity>, IAddress
     private readonly DataContext _db;
     private readonly IMapper _mapper;
 
-    public AddressWardRepository(DataContext db, IMapper mapper) : base(db, mapper)
+    public AddressWardRepository(DataContext db, IMapper mapper)
+        : base(db, mapper)
     {
         _db = db;
         _mapper = mapper;

@@ -24,20 +24,14 @@ public class AddressService : IAddressService
     public async Task<List<DistrictDTO>> GetDistricsOfProvince(int provinceId)
     {
         return await _uow.AddressDistrict.GetManyAsync<DistrictDTO>(
-            new QueryModel<AddressDistrictEntity>
-            {
-                Filters = { d => d.AddressProvinceId == provinceId },
-            }
+            new QueryModel<AddressDistrictEntity> { Filters = { d => d.AddressProvinceId == provinceId }, }
         );
     }
 
     public async Task<List<WardDTO>> GetWardsOfDistrict(int districtId)
     {
         return await _uow.AddressWard.GetManyAsync<WardDTO>(
-            new QueryModel<AddressWardEntity>
-            {
-                Filters = { w => w.AddressDistrictId == districtId },
-            }
+            new QueryModel<AddressWardEntity> { Filters = { w => w.AddressDistrictId == districtId }, }
         );
     }
 

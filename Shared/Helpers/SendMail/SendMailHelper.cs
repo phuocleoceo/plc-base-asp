@@ -61,8 +61,7 @@ public class SendMailHelper : ISendMailHelper
         }
         catch (Exception ex)
         {
-            throw new BaseException
-            (
+            throw new BaseException(
                 HttpCode.BAD_REQUEST,
                 $"Error when sending email to {mailContent.ToEmail} with reason {ex.Message}"
             );

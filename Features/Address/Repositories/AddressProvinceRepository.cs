@@ -11,7 +11,8 @@ public class AddressProvinceRepository : BaseRepository<AddressProvinceEntity>, 
     private readonly DataContext _db;
     private readonly IMapper _mapper;
 
-    public AddressProvinceRepository(DataContext db, IMapper mapper) : base(db, mapper)
+    public AddressProvinceRepository(DataContext db, IMapper mapper)
+        : base(db, mapper)
     {
         _db = db;
         _mapper = mapper;

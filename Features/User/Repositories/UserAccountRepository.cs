@@ -11,10 +11,10 @@ public class UserAccountRepository : BaseRepository<UserAccountEntity>, IUserAcc
     private readonly DataContext _db;
     private readonly IMapper _mapper;
 
-    public UserAccountRepository(DataContext db, IMapper mapper) : base(db, mapper)
+    public UserAccountRepository(DataContext db, IMapper mapper)
+        : base(db, mapper)
     {
         _db = db;
         _mapper = mapper;
     }
 }
-

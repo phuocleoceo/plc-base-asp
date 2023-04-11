@@ -22,11 +22,12 @@ public static class HttpContextUtility
         {
             if (remoteIpAddress.AddressFamily == AddressFamily.InterNetworkV6)
             {
-                remoteIpAddress = Dns.GetHostEntry(remoteIpAddress).AddressList
-                    .FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
+                remoteIpAddress = Dns.GetHostEntry(remoteIpAddress)
+                    .AddressList.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
             }
 
-            if (remoteIpAddress != null) ipAddress = remoteIpAddress.ToString();
+            if (remoteIpAddress != null)
+                ipAddress = remoteIpAddress.ToString();
 
             return ipAddress;
         }

@@ -9,9 +9,6 @@ public class UserAccountConfiguration : IEntityTypeConfiguration<UserAccountEnti
 {
     public void Configure(EntityTypeBuilder<UserAccountEntity> builder)
     {
-        builder.HasIndex(c => new
-        {
-            c.Email,
-        }).IsUnique();
+        builder.HasIndex(c => new { c.Email, }).IsUnique();
     }
 }

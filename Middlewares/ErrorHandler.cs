@@ -17,26 +17,25 @@ public static class ErrorHandler
             appError.Run(async context =>
             {
                 IExceptionHandlerPathFeature exceptionHandlerPathFeature =
-                                    context.Features.Get<IExceptionHandlerPathFeature>();
+                    context.Features.Get<IExceptionHandlerPathFeature>();
                 Exception exception = exceptionHandlerPathFeature.Error;
 
                 context.Response.StatusCode = HttpCode.INTERNAL_SERVER_ERROR;
                 context.Response.ContentType = "application/json";
 
-                IExceptionHandlerFeature contextFeature =
-                                    context.Features.Get<IExceptionHandlerFeature>();
+                IExceptionHandlerFeature contextFeature = context.Features.Get<IExceptionHandlerFeature>();
 
                 if (contextFeature != null)
                 {
                     string message = exception.Message;
 
-                    int statusCode = exception.GetType() == typeof(BaseException) ?
-                                            ((BaseException)exception).StatusCode :
-                                            HttpCode.INTERNAL_SERVER_ERROR;
+                    int statusCode =
+                        exception.GetType() == typeof(BaseException)
+                            ? ((BaseException)exception).StatusCode
+                            : HttpCode.INTERNAL_SERVER_ERROR;
 
                     Dictionary<string, string[]> errors =
-                                     exception.GetType() == typeof(BaseException)
-                                        ? ((BaseException)exception).Errors : null;
+                        exception.GetType() == typeof(BaseException) ? ((BaseException)exception).Errors : null;
 
                     logger.LogErrorResponse(context, message, statusCode);
 
@@ -46,28 +45,34 @@ public static class ErrorHandler
         });
     }
 
-    private static void LogErrorResponse(this ILoggerManager logger,
-                                         HttpContext context,
-                                         string message,
-                                         int statusCode)
+    private static void LogErrorResponse(
+        this ILoggerManager logger,
+        HttpContext context,
+        string message,
+        int statusCode
+    )
     {
         string logContent = context.GetLogContent(message, statusCode);
         logger.LogError(logContent);
     }
 
-    private static async Task WriteErrorResponse(this HttpContext context,
-                                                 string message,
-                                                 int statusCode,
-                                                 Dictionary<string, string[]> errors)
+    private static async Task WriteErrorResponse(
+        this HttpContext context,
+        string message,
+        int statusCode,
+        Dictionary<string, string[]> errors
+    )
     {
         context.Response.StatusCode = statusCode;
         context.Items["isError"] = true;
 
-        await context.Response.WriteAsync(new BaseResponse<string>()
-        {
-            StatusCode = statusCode,
-            Message = message,
-            Errors = errors,
-        }.ToString());
+        await context.Response.WriteAsync(
+            new BaseResponse<string>()
+            {
+                StatusCode = statusCode,
+                Message = message,
+                Errors = errors,
+            }.ToString()
+        );
     }
 }

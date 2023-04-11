@@ -10,9 +10,12 @@ public class BaseException : Exception
 
     public BaseException() { }
 
-    public BaseException(int StatusCode = HttpCode.INTERNAL_SERVER_ERROR,
-                         string Message = "",
-                         Dictionary<string, string[]> Errors = null) : base(Message)
+    public BaseException(
+        int StatusCode = HttpCode.INTERNAL_SERVER_ERROR,
+        string Message = "",
+        Dictionary<string, string[]> Errors = null
+    )
+        : base(Message)
     {
         this.StatusCode = StatusCode;
         this.Errors = Errors;

@@ -14,17 +14,13 @@ public static class LoggingExtension
 
         if (logSettings.Enable)
         {
-            Logger log = new LoggerConfiguration()
-                        .ReadFrom.Configuration(configuration)
-                        .CreateLogger();
+            Logger log = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
 
             loggingBuilder.AddSerilog(log);
         }
     }
 
-    public static string GetLogContent(this HttpContext context,
-                                       string message = null,
-                                       int statusCode = HttpCode.OK)
+    public static string GetLogContent(this HttpContext context, string message = null, int statusCode = HttpCode.OK)
     {
         LogContent content = new LogContent
         {

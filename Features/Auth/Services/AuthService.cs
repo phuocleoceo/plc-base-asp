@@ -22,11 +22,13 @@ public class AuthService : IAuthService
     private readonly ClientAppSettings _clientAppSettings;
     private readonly ISendMailHelper _sendMailHelper;
 
-    public AuthService(IUnitOfWork uof,
-                       IJwtHelper jwtHelper,
-                       IMapper mapper,
-                       IOptions<ClientAppSettings> clientAppSettings,
-                       ISendMailHelper sendMailHelper)
+    public AuthService(
+        IUnitOfWork uof,
+        IJwtHelper jwtHelper,
+        IMapper mapper,
+        IOptions<ClientAppSettings> clientAppSettings,
+        ISendMailHelper sendMailHelper
+    )
     {
         _uof = uof;
         _jwtHelper = jwtHelper;
@@ -40,10 +42,7 @@ public class AuthService : IAuthService
     public async Task<UserLoginResponseDTO> Login(UserLoginDTO userLoginDTO)
     {
         UserAccountEntity currentUser = await _uof.UserAccount.GetOneAsync<UserAccountEntity>(
-            new QueryModel<UserAccountEntity>()
-            {
-                Filters = { u => u.Email == userLoginDTO.Email },
-            }
+            new QueryModel<UserAccountEntity>() { Filters = { u => u.Email == userLoginDTO.Email }, }
         );
 
         if (currentUser == null)
@@ -101,9 +100,13 @@ public class AuthService : IAuthService
             if (await _uof.UserAccount.AnyAsync(ua => ua.Email == newUserAccount.Email))
                 throw new BaseException(HttpCode.BAD_REQUEST, "email_existed");
 
-            if (await _uof.UserProfile.AnyAsync(up =>
-                                    up.PhoneNumber == newUserProfile.PhoneNumber ||
-                                    up.IdentityNumber == newUserProfile.IdentityNumber))
+            if (
+                await _uof.UserProfile.AnyAsync(
+                    up =>
+                        up.PhoneNumber == newUserProfile.PhoneNumber
+                        || up.IdentityNumber == newUserProfile.IdentityNumber
+                )
+            )
                 throw new BaseException(HttpCode.BAD_REQUEST, "phone_number_or_identity_number_existed");
 
             // Create user account
@@ -128,11 +131,7 @@ public class AuthService : IAuthService
             await _uof.Save();
             await _uof.CommitTransaction();
 
-            return new UserRegisterResponseDTO()
-            {
-                Id = newUserAccount.Id,
-                Email = newUserAccount.Email,
-            };
+            return new UserRegisterResponseDTO() { Id = newUserAccount.Id, Email = newUserAccount.Email, };
         }
         catch (BaseException ex)
         {
@@ -151,12 +150,14 @@ public class AuthService : IAuthService
         query["code"] = newUserAccount.SecurityCode;
         uriBuilder.Query = query.ToString();
 
-        await _sendMailHelper.SendEmailAsync(new MailContent()
-        {
-            ToEmail = newUserAccount.Email,
-            Subject = "Confirm email to use PLC Base",
-            Body = $"Confirm the registration by clicking on the <a href='{uriBuilder}'>link</a>"
-        });
+        await _sendMailHelper.SendEmailAsync(
+            new MailContent()
+            {
+                ToEmail = newUserAccount.Email,
+                Subject = "Confirm email to use PLC Base",
+                Body = $"Confirm the registration by clicking on the <a href='{uriBuilder}'>link</a>"
+            }
+        );
     }
 
     public async Task<bool> ConfirmEmail(UserConfirmEmailDTO userConfirmEmailDTO)
@@ -213,10 +214,15 @@ public class AuthService : IAuthService
             new QueryModel<UserAccountEntity>()
             {
                 Includes = { ua => ua.UserProfile },
-                Filters = { ua => ua.Email == identityInformation ||
-                                  ua.UserProfile.PhoneNumber == identityInformation ||
-                                  ua.UserProfile.IdentityNumber == identityInformation }
-            });
+                Filters =
+                {
+                    ua =>
+                        ua.Email == identityInformation
+                        || ua.UserProfile.PhoneNumber == identityInformation
+                        || ua.UserProfile.IdentityNumber == identityInformation
+                }
+            }
+        );
 
         if (currentUser == null)
             throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
@@ -243,12 +249,14 @@ public class AuthService : IAuthService
         query["code"] = currentUserAccount.SecurityCode;
         uriBuilder.Query = query.ToString();
 
-        await _sendMailHelper.SendEmailAsync(new MailContent()
-        {
-            ToEmail = currentUserAccount.Email,
-            Subject = "Password recovery for your PLC Base account",
-            Body = $"Clicking on the <a href='{uriBuilder}'>link</a> to recover your password"
-        });
+        await _sendMailHelper.SendEmailAsync(
+            new MailContent()
+            {
+                ToEmail = currentUserAccount.Email,
+                Subject = "Password recovery for your PLC Base account",
+                Body = $"Clicking on the <a href='{uriBuilder}'>link</a> to recover your password"
+            }
+        );
     }
 
     public async Task<bool> RecoverPassword(UserRecoverPasswordDTO userRecoverPasswordDTO)

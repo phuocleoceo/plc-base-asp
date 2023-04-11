@@ -5,13 +5,17 @@ using PlcBase.Base.DTO;
 
 namespace PlcBase.Base.Repository;
 
-public interface IBaseRepository<T> where T : class
+public interface IBaseRepository<T>
+    where T : class
 {
-    Task<List<U>> GetManyAsync<U>(QueryModel<T> queryModel = null) where U : class;
+    Task<List<U>> GetManyAsync<U>(QueryModel<T> queryModel = null)
+        where U : class;
 
-    Task<PagedList<U>> GetPagedAsync<U>(QueryModel<T> queryModel = null) where U : class;
+    Task<PagedList<U>> GetPagedAsync<U>(QueryModel<T> queryModel = null)
+        where U : class;
 
-    Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null) where U : class;
+    Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null)
+        where U : class;
 
     Task<T> FindByIdAsync(int id);
 

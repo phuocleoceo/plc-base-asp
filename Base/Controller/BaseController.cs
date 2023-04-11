@@ -6,7 +6,4 @@ namespace PlcBase.Base.Controller;
 [ApiController]
 [Route("api/[controller]")]
 [ServiceFilter(typeof(ValidateModelFilter))]
-public class BaseController : ControllerBase
-{
-
-}
+public class BaseController : ControllerBase { }

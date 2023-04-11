@@ -29,7 +29,7 @@ public abstract class ReqParam
     public override string ToString()
     {
         return $"page number: {this.PageNumber}, "
-                + $"page size: {this.PageSize}, "
-                + $"search value: \"{this.SearchValue}\", ";
+            + $"page size: {this.PageSize}, "
+            + $"search value: \"{this.SearchValue}\", ";
     }
 }

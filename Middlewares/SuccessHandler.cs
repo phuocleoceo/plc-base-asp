@@ -7,12 +7,14 @@ public static class SuccessHandler
 {
     public static void ConfigureSuccessHandler(this IApplicationBuilder app, ILoggerManager logger)
     {
-        app.Use(async (context, next) =>
-        {
-            await next();
+        app.Use(
+            async (context, next) =>
+            {
+                await next();
 
-            logger.LogSuccessResponse(context);
-        });
+                logger.LogSuccessResponse(context);
+            }
+        );
     }
 
     private static void LogSuccessResponse(this ILoggerManager logger, HttpContext context)

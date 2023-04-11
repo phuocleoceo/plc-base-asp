@@ -4,8 +4,6 @@ public static class CorsExtension
 {
     public static void UseCorsPipeline(this WebApplication app)
     {
-        app.UseCors(options => options.AllowAnyOrigin()
-                                .AllowAnyMethod()
-                                .AllowAnyHeader());
+        app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
     }
 }

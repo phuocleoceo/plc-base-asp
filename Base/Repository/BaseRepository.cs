@@ -9,7 +9,8 @@ using PlcBase.Base.DTO;
 
 namespace PlcBase.Base.Repository;
 
-public class BaseRepository<T> : IBaseRepository<T> where T : class
+public class BaseRepository<T> : IBaseRepository<T>
+    where T : class
 {
     private readonly DataContext _db;
     private readonly IMapper _mapper;
@@ -22,46 +23,49 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         _dbSet = _db.Set<T>();
     }
 
-    public async Task<List<U>> GetManyAsync<U>(QueryModel<T> queryModel = null) where U : class
+    public async Task<List<U>> GetManyAsync<U>(QueryModel<T> queryModel = null)
+        where U : class
     {
         IQueryable<T> query = GetQuery(queryModel);
 
         return typeof(U) != typeof(T)
-                ? await query.ProjectTo<U>(_mapper.ConfigurationProvider).ToListAsync()
-                : await query.ToListAsync() as List<U>;
-
+            ? await query.ProjectTo<U>(_mapper.ConfigurationProvider).ToListAsync()
+            : await query.ToListAsync() as List<U>;
     }
 
-    public async Task<PagedList<U>> GetPagedAsync<U>(QueryModel<T> queryModel = null) where U : class
+    public async Task<PagedList<U>> GetPagedAsync<U>(QueryModel<T> queryModel = null)
+        where U : class
     {
         IQueryable<T> query = GetQuery(queryModel);
 
         int count = query.Count();
 
-        query = query.Skip((queryModel.PageNumber - 1) * queryModel.PageSize)
-                     .Take(queryModel.PageSize);
+        query = query.Skip((queryModel.PageNumber - 1) * queryModel.PageSize).Take(queryModel.PageSize);
 
-        List<U> items = typeof(U) != typeof(T)
+        List<U> items =
+            typeof(U) != typeof(T)
                 ? await query.ProjectTo<U>(_mapper.ConfigurationProvider).ToListAsync()
                 : await query.ToListAsync() as List<U>;
 
         return new PagedList<U>(items, count);
     }
 
-    public async Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null) where U : class
+    public async Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null)
+        where U : class
     {
         IQueryable<T> query = GetQuery(queryModel);
 
         return typeof(U) != typeof(T)
-                ? await query.ProjectTo<U>(_mapper.ConfigurationProvider).FirstOrDefaultAsync()
-                : await query.FirstOrDefaultAsync() as U;
+            ? await query.ProjectTo<U>(_mapper.ConfigurationProvider).FirstOrDefaultAsync()
+            : await query.FirstOrDefaultAsync() as U;
     }
 
     protected IQueryable<T> GetQuery(QueryModel<T> queryModel)
     {
         IQueryable<T> query = _dbSet;
 
-        if (queryModel == null) return query;
+        if (queryModel == null)
+            return query;
 
         if (!queryModel.Tracking)
         {

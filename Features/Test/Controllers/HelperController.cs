@@ -12,8 +12,7 @@ public class HelperController : BaseController
     private readonly ISendMailHelper _sendMailHelper;
     private readonly IS3Helper _s3Helper;
 
-    public HelperController(ISendMailHelper sendMailHelper,
-                            IS3Helper s3Helper)
+    public HelperController(ISendMailHelper sendMailHelper, IS3Helper s3Helper)
     {
         _sendMailHelper = sendMailHelper;
         _s3Helper = s3Helper;

@@ -24,7 +24,8 @@ public class JwtMiddleware
     {
         string token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
-        if (token != null) getDataFromTokenPayload(context, token);
+        if (token != null)
+            getDataFromTokenPayload(context, token);
 
         await _next(context);
     }
@@ -36,11 +37,9 @@ public class JwtMiddleware
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             SecurityKey publicKey = JwtOptions.GetPublicKey(_jwtSettings);
 
-            TokenValidationParameters tokenValidationParameters =
-                                JwtOptions.GetTokenParams(_jwtSettings, publicKey);
+            TokenValidationParameters tokenValidationParameters = JwtOptions.GetTokenParams(_jwtSettings, publicKey);
 
-            tokenHandler.ValidateToken(token,
-                tokenValidationParameters, out SecurityToken validatedToken);
+            tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
 
             JwtSecurityToken jwtToken = (JwtSecurityToken)validatedToken;
 
