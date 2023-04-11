@@ -1,0 +1,10 @@
+{
+  "tasks": [
+    {
+      "name": "Run CSharpier Formatter",
+      "command": "dotnet",
+      "args": ["csharpier", "${staged}"],
+      "include": ["**/*.cs"]
+    }
+  ]
+}
