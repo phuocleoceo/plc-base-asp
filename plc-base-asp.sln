@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plctest", "test\plctest.csproj", "{87339A9C-C444-4B66-9DE8-14602EC77800}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plcbase", "src\plcbase.csproj", "{45529413-66B6-415C-A07B-978219327C78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87339A9C-C444-4B66-9DE8-14602EC77800}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87339A9C-C444-4B66-9DE8-14602EC77800}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87339A9C-C444-4B66-9DE8-14602EC77800}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87339A9C-C444-4B66-9DE8-14602EC77800}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45529413-66B6-415C-A07B-978219327C78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45529413-66B6-415C-A07B-978219327C78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45529413-66B6-415C-A07B-978219327C78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45529413-66B6-415C-A07B-978219327C78}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
