@@ -20,7 +20,8 @@ public class VNPController : BaseController
     [HttpPost("Create")]
     public BaseResponse<VNPHistory> CreatePayment(VNPPaymentInformation payment)
     {
-        payment.CustomerIpAddress = HttpContext.GetIpAddress();
+        // payment.CustomerIpAddress = HttpContext.GetIpAddress();
+        payment.CustomerIpAddress = "8.8.8.8";
         Tuple<string, VNPHistory> result = _vnpHelper.CreatePayment(payment);
         return HttpContext.Success(result.Item2, HttpCode.OK, result.Item1);
     }
