@@ -9,5 +9,7 @@ public class ConfigSettingMapping : Profile
     public ConfigSettingMapping()
     {
         CreateMap<ConfigSettingEntity, ConfigSettingDTO>();
+
+        CreateMap<ConfigSettingUpdateDTO, ConfigSettingEntity>();
     }
 }

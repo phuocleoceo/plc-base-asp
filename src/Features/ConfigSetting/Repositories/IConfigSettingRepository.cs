@@ -3,4 +3,7 @@ using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.ConfigSetting.Repositories;
 
-public interface IConfigSettingRepository : IBaseRepository<ConfigSettingEntity> { }
+public interface IConfigSettingRepository : IBaseRepository<ConfigSettingEntity>
+{
+    Task<ConfigSettingEntity> GetByKey(string key);
+}

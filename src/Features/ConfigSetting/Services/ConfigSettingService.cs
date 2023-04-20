@@ -23,18 +23,24 @@ public class ConfigSettingService : IConfigSettingService
         return await _uow.ConfigSetting.GetManyAsync<ConfigSettingDTO>();
     }
 
-    public Task<ConfigSettingDTO> GetByKey(string key)
+    public async Task<ConfigSettingDTO> GetByKey(string key)
     {
-        throw new NotImplementedException();
+        return await _uow.ConfigSetting.GetOneAsync<ConfigSettingDTO>(
+            new QueryModel<ConfigSettingEntity>() { Filters = { cf => cf.Key == key } }
+        );
     }
 
-    public Task<double> GetValueByKey(string key)
+    public async Task<double> GetValueByKey(string key)
     {
-        throw new NotImplementedException();
+        return (await _uow.ConfigSetting.GetByKey(key)).Value;
     }
 
-    public Task<bool> UpdateForKey(string key, ConfigSettingUpdateDTO configSettingUpdateDTO)
+    public async Task<bool> UpdateForKey(string key, ConfigSettingUpdateDTO configSettingUpdateDTO)
     {
-        throw new NotImplementedException();
+        ConfigSettingEntity configSettingDB = await _uow.ConfigSetting.GetByKey(key);
+        _mapper.Map(configSettingUpdateDTO, configSettingDB);
+
+        _uow.ConfigSetting.Update(configSettingDB);
+        return await _uow.Save() > 0;
     }
 }
