@@ -1,4 +1,5 @@
 using PlcBase.Features.AccessControl.DTOs;
+using PlcBase.Features.ConfigSetting.DTOs;
 using PlcBase.Features.Address.DTOs;
 using PlcBase.Features.Auth.DTOs;
 
@@ -11,5 +12,6 @@ public static class MapperExtension
         services.AddAutoMapper(typeof(AuthMapping));
         services.AddAutoMapper(typeof(AddressMapping));
         services.AddAutoMapper(typeof(RolePermissionMapping));
+        services.AddAutoMapper(typeof(ConfigSettingMapping));
     }
 }

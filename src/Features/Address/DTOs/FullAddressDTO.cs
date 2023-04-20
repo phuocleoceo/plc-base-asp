@@ -1,4 +1,4 @@
-namespace PlcBase.Features.Address.DTO;
+namespace PlcBase.Features.Address.DTOs;
 
 public class FullAddressDTO
 {

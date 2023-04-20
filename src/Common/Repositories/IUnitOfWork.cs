@@ -1,4 +1,5 @@
 using PlcBase.Features.AccessControl.Repositories;
+using PlcBase.Features.ConfigSetting.Repositories;
 using PlcBase.Features.Address.Repositories;
 using PlcBase.Features.User.Repositories;
 
@@ -14,6 +15,7 @@ public interface IUnitOfWork : IDisposable
     IUserProfileRepository UserProfile { get; }
     IRoleRepository Role { get; }
     IPermisisonRepository Permisison { get; }
+    IConfigSettingRepository ConfigSetting { get; }
 
     Task<int> Save();
     Task CreateTransaction();

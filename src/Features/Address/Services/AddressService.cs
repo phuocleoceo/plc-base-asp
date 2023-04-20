@@ -1,7 +1,5 @@
-using AutoMapper;
-
 using PlcBase.Features.Address.Entities;
-using PlcBase.Features.Address.DTO;
+using PlcBase.Features.Address.DTOs;
 using PlcBase.Common.Repositories;
 using PlcBase.Base.DomainModel;
 
@@ -11,7 +9,7 @@ public class AddressService : IAddressService
 {
     private readonly IUnitOfWork _uow;
 
-    public AddressService(IUnitOfWork uow, IMapper mapper)
+    public AddressService(IUnitOfWork uow)
     {
         _uow = uow;
     }

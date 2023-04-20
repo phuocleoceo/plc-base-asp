@@ -5,6 +5,7 @@ using PlcBase.Features.AccessControl.Repositories;
 using PlcBase.Features.Address.Repositories;
 using PlcBase.Features.User.Repositories;
 using PlcBase.Common.Data.Context;
+using PlcBase.Features.ConfigSetting.Repositories;
 
 namespace PlcBase.Common.Repositories;
 
@@ -27,6 +28,7 @@ public class UnitOfWork : IUnitOfWork
         UserProfile = new UserProfileRepository(_db, _mapper);
         Role = new RoleRepository(_db, _mapper);
         Permisison = new PermissionRepository(_db, _mapper);
+        ConfigSetting = new ConfigSettingRepository(_db, _mapper);
     }
 
     public IDapperContainer DapperContainer { get; private set; }
@@ -37,6 +39,7 @@ public class UnitOfWork : IUnitOfWork
     public IUserProfileRepository UserProfile { get; private set; }
     public IRoleRepository Role { get; private set; }
     public IPermisisonRepository Permisison { get; private set; }
+    public IConfigSettingRepository ConfigSetting { get; private set; }
 
     public void Dispose()
     {
