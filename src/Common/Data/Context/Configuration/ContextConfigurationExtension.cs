@@ -13,5 +13,6 @@ public static class ContextConfigurationExtension
         modelBuilder.ApplyConfiguration(new UserProfileConfiguration());
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
         modelBuilder.ApplyConfiguration(new PermisisonConfiguration());
+        modelBuilder.ApplyConfiguration(new ConfigSettingConfiguration());
     }
 }

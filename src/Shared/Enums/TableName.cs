@@ -15,4 +15,6 @@ public static class TableName
     public const string ADDRESS_DISTRICT = "address_district";
 
     public const string ADDRESS_WARD = "address_ward";
+
+    public const string CONFIG_SETTING = "config_setting";
 }
