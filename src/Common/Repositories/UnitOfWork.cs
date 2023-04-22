@@ -2,10 +2,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 using AutoMapper;
 
 using PlcBase.Features.AccessControl.Repositories;
+using PlcBase.Features.ConfigSetting.Repositories;
 using PlcBase.Features.Address.Repositories;
+using PlcBase.Features.Media.Repositories;
 using PlcBase.Features.User.Repositories;
 using PlcBase.Common.Data.Context;
-using PlcBase.Features.ConfigSetting.Repositories;
 
 namespace PlcBase.Common.Repositories;
 
@@ -29,6 +30,7 @@ public class UnitOfWork : IUnitOfWork
         Role = new RoleRepository(_db, _mapper);
         Permisison = new PermissionRepository(_db, _mapper);
         ConfigSetting = new ConfigSettingRepository(_db, _mapper);
+        Media = new MediaRepository(_db, _mapper);
     }
 
     public IDapperContainer DapperContainer { get; private set; }
@@ -40,6 +42,7 @@ public class UnitOfWork : IUnitOfWork
     public IRoleRepository Role { get; private set; }
     public IPermisisonRepository Permisison { get; private set; }
     public IConfigSettingRepository ConfigSetting { get; private set; }
+    public IMediaRepository Media { get; private set; }
 
     public void Dispose()
     {

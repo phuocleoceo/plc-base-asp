@@ -14,5 +14,6 @@ public static class ContextConfigurationExtension
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
         modelBuilder.ApplyConfiguration(new PermisisonConfiguration());
         modelBuilder.ApplyConfiguration(new ConfigSettingConfiguration());
+        modelBuilder.ApplyConfiguration(new MediaConfiguration());
     }
 }

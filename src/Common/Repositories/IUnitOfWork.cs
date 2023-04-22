@@ -1,6 +1,7 @@
 using PlcBase.Features.AccessControl.Repositories;
 using PlcBase.Features.ConfigSetting.Repositories;
 using PlcBase.Features.Address.Repositories;
+using PlcBase.Features.Media.Repositories;
 using PlcBase.Features.User.Repositories;
 
 namespace PlcBase.Common.Repositories;
@@ -16,6 +17,7 @@ public interface IUnitOfWork : IDisposable
     IRoleRepository Role { get; }
     IPermisisonRepository Permisison { get; }
     IConfigSettingRepository ConfigSetting { get; }
+    IMediaRepository Media { get; }
 
     Task<int> Save();
     Task CreateTransaction();
