@@ -15,4 +15,5 @@ public static class TableName
     public const string PROJECT_MEMBER = "project_member";
     public const string PROJECT_STATUS = "project_status";
     public const string SPRINT = "sprint";
+    public const string ISSUE = "issue";
 }
