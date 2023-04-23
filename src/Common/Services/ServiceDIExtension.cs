@@ -4,6 +4,7 @@ using PlcBase.Features.ProjectStatus.Services;
 using PlcBase.Features.Address.Services;
 using PlcBase.Features.Project.Services;
 using PlcBase.Features.Sprint.Services;
+using PlcBase.Features.Issue.Services;
 using PlcBase.Features.Media.Services;
 using PlcBase.Features.Auth.Services;
 
@@ -21,5 +22,6 @@ public static class ServiceDIExtension
         services.AddScoped<IProjectMemberService, ProjectMemberService>();
         services.AddScoped<IProjectStatusService, ProjectStatusService>();
         services.AddScoped<ISprintService, SprintService>();
+        services.AddScoped<IIssueService, IssueService>();
     }
 }

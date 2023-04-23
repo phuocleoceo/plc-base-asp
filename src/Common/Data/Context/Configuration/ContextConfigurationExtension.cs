@@ -19,5 +19,6 @@ public static class ContextConfigurationExtension
         modelBuilder.ApplyConfiguration(new ProjectMemberConfiguration());
         modelBuilder.ApplyConfiguration(new ProjectStatusConfiguration());
         modelBuilder.ApplyConfiguration(new SprintConfiguration());
+        modelBuilder.ApplyConfiguration(new IssueConfiguration());
     }
 }
