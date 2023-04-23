@@ -32,7 +32,7 @@ public class IssueEntity : BaseEntity
 
     [ForeignKey(nameof(Sprint))]
     [Column("sprint_id")]
-    public int SprintId { get; set; }
+    public int? SprintId { get; set; }
     public SprintEntity Sprint { get; set; }
 
     [ForeignKey(nameof(Reporter))]
@@ -42,12 +42,12 @@ public class IssueEntity : BaseEntity
 
     [ForeignKey(nameof(Assignee))]
     [Column("assignee_id")]
-    public int AssigneeId { get; set; }
+    public int? AssigneeId { get; set; }
     public UserAccountEntity Assignee { get; set; }
 
     [ForeignKey(nameof(ProjectStatus))]
     [Column("project_status_id")]
-    public int ProjectStatusId { get; set; }
+    public int? ProjectStatusId { get; set; }
     public ProjectStatusEntity ProjectStatus { get; set; }
 
     [ForeignKey(nameof(Project))]
