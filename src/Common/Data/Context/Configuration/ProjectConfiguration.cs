@@ -9,6 +9,6 @@ public class ProjectConfiguration : IEntityTypeConfiguration<ProjectEntity>
 {
     public void Configure(EntityTypeBuilder<ProjectEntity> builder)
     {
-        builder.HasIndex(c => new { c.CreatorId, }).IsUnique();
+        builder.HasIndex(c => new { c.CreatorId }).IsUnique();
     }
 }
