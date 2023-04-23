@@ -11,8 +11,8 @@ using PlcBase.Common.Data.Context;
 namespace plcbase.Common.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230423033545_ProjectAndMember")]
-    partial class ProjectAndMember
+    [Migration("20230423040716_ProjectStatus")]
+    partial class ProjectStatus
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -283,8 +283,7 @@ namespace plcbase.Common.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId")
-                        .IsUnique();
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("project");
                 });
@@ -328,10 +327,43 @@ namespace plcbase.Common.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("UserId", "ProjectId")
-                        .IsUnique();
+                    b.HasIndex("UserId", "ProjectId");
 
                     b.ToTable("project_member");
+                });
+
+            modelBuilder.Entity("PlcBase.Features.ProjectStatus.Entities.ProjectStatusEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext")
+                        .HasColumnName("name");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("project_id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("project_status");
                 });
 
             modelBuilder.Entity("PlcBase.Features.User.Entities.UserAccountEntity", b =>
@@ -427,11 +459,11 @@ namespace plcbase.Common.Data.Migrations
                         .HasColumnName("display_name");
 
                     b.Property<string>("IdentityNumber")
-                        .HasColumnType("longtext")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("identity_number");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("phone_number");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -447,6 +479,9 @@ namespace plcbase.Common.Data.Migrations
                     b.HasIndex("AddressWardId");
 
                     b.HasIndex("UserAccountId")
+                        .IsUnique();
+
+                    b.HasIndex("UserAccountId", "IdentityNumber", "PhoneNumber")
                         .IsUnique();
 
                     b.ToTable("user_profile");
@@ -513,6 +548,17 @@ namespace plcbase.Common.Data.Migrations
                     b.Navigation("Project");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PlcBase.Features.ProjectStatus.Entities.ProjectStatusEntity", b =>
+                {
+                    b.HasOne("PlcBase.Features.Project.Entities.ProjectEntity", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("PlcBase.Features.User.Entities.UserAccountEntity", b =>
