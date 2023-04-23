@@ -12,4 +12,5 @@ public static class TableName
     public const string CONFIG_SETTING = "config_setting";
     public const string MEDIA = "media";
     public const string PROJECT = "project";
+    public const string PROJECT_MEMBER = "project_member";
 }

@@ -6,7 +6,7 @@ using PlcBase.Base.Entity;
 
 namespace PlcBase.Features.Project.Entities;
 
-[Table(TableName.CONFIG_SETTING)]
+[Table(TableName.PROJECT)]
 public class ProjectEntity : BaseSoftDeletableEntity
 {
     [Column("name")]
@@ -21,6 +21,5 @@ public class ProjectEntity : BaseSoftDeletableEntity
     [ForeignKey(nameof(Creator))]
     [Column("creator_id")]
     public int CreatorId { get; set; }
-
     public UserAccountEntity Creator { get; set; }
 }

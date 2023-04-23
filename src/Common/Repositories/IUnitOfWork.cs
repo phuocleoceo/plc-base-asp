@@ -1,5 +1,6 @@
 using PlcBase.Features.AccessControl.Repositories;
 using PlcBase.Features.ConfigSetting.Repositories;
+using PlcBase.Features.ProjectMember.Repositories;
 using PlcBase.Features.Address.Repositories;
 using PlcBase.Features.Project.Repositories;
 using PlcBase.Features.Media.Repositories;
@@ -20,6 +21,7 @@ public interface IUnitOfWork : IDisposable
     IConfigSettingRepository ConfigSetting { get; }
     IMediaRepository Media { get; }
     IProjectRepository Project { get; }
+    IProjectMemberRepository ProjectMember { get; }
 
     Task<int> Save();
     Task CreateTransaction();
