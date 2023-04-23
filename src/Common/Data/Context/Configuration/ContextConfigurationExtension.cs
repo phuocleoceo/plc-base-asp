@@ -15,5 +15,10 @@ public static class ContextConfigurationExtension
         modelBuilder.ApplyConfiguration(new PermisisonConfiguration());
         modelBuilder.ApplyConfiguration(new ConfigSettingConfiguration());
         modelBuilder.ApplyConfiguration(new MediaConfiguration());
+        modelBuilder.ApplyConfiguration(new ProjectConfiguration());
+        modelBuilder.ApplyConfiguration(new ProjectMemberConfiguration());
+        modelBuilder.ApplyConfiguration(new ProjectStatusConfiguration());
+        modelBuilder.ApplyConfiguration(new SprintConfiguration());
+        modelBuilder.ApplyConfiguration(new IssueConfiguration());
     }
 }

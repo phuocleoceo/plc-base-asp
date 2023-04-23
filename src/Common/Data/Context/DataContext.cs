@@ -4,7 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using PlcBase.Common.Data.Context.Configuration;
 using PlcBase.Features.AccessControl.Entities;
 using PlcBase.Features.ConfigSetting.Entities;
+using PlcBase.Features.ProjectMember.Entities;
+using PlcBase.Features.ProjectStatus.Entities;
 using PlcBase.Features.Address.Entities;
+using PlcBase.Features.Project.Entities;
+using PlcBase.Features.Sprint.Entities;
+using PlcBase.Features.Issue.Entities;
 using PlcBase.Features.Media.Entities;
 using PlcBase.Features.User.Entities;
 using PlcBase.Base.Entity;
@@ -48,4 +53,9 @@ public class DataContext : DbContext
     public DbSet<PermissionEntity> Permissions { get; set; }
     public DbSet<ConfigSettingEntity> ConfigSettings { get; set; }
     public DbSet<MediaEntity> Medias { get; set; }
+    public DbSet<ProjectEntity> Projects { get; set; }
+    public DbSet<ProjectMemberEntity> ProjectMembers { get; set; }
+    public DbSet<ProjectStatusEntity> ProjectStatuses { get; set; }
+    public DbSet<SprintEntity> Sprints { get; set; }
+    public DbSet<IssueEntity> Issues { get; set; }
 }

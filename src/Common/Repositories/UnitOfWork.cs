@@ -3,7 +3,12 @@ using AutoMapper;
 
 using PlcBase.Features.AccessControl.Repositories;
 using PlcBase.Features.ConfigSetting.Repositories;
+using PlcBase.Features.ProjectMember.Repositories;
+using PlcBase.Features.ProjectStatus.Repositories;
 using PlcBase.Features.Address.Repositories;
+using PlcBase.Features.Project.Repositories;
+using PlcBase.Features.Sprint.Repositories;
+using PlcBase.Features.Issue.Repositories;
 using PlcBase.Features.Media.Repositories;
 using PlcBase.Features.User.Repositories;
 using PlcBase.Common.Data.Context;
@@ -31,6 +36,11 @@ public class UnitOfWork : IUnitOfWork
         Permisison = new PermissionRepository(_db, _mapper);
         ConfigSetting = new ConfigSettingRepository(_db, _mapper);
         Media = new MediaRepository(_db, _mapper);
+        Project = new ProjectRepository(_db, _mapper);
+        ProjectMember = new ProjectMemberRepository(_db, _mapper);
+        ProjectStatus = new ProjectStatusRepository(_db, _mapper);
+        Sprint = new SprintRepository(_db, _mapper);
+        Issue = new IssueRepository(_db, _mapper);
     }
 
     public IDapperContainer DapperContainer { get; private set; }
@@ -43,6 +53,11 @@ public class UnitOfWork : IUnitOfWork
     public IPermisisonRepository Permisison { get; private set; }
     public IConfigSettingRepository ConfigSetting { get; private set; }
     public IMediaRepository Media { get; private set; }
+    public IProjectRepository Project { get; private set; }
+    public IProjectMemberRepository ProjectMember { get; private set; }
+    public IProjectStatusRepository ProjectStatus { get; private set; }
+    public ISprintRepository Sprint { get; private set; }
+    public IIssueRepository Issue { get; private set; }
 
     public void Dispose()
     {
