@@ -4,6 +4,7 @@ using PlcBase.Features.ProjectMember.Repositories;
 using PlcBase.Features.ProjectStatus.Repositories;
 using PlcBase.Features.Address.Repositories;
 using PlcBase.Features.Project.Repositories;
+using PlcBase.Features.Sprint.Repositories;
 using PlcBase.Features.Media.Repositories;
 using PlcBase.Features.User.Repositories;
 
@@ -24,6 +25,7 @@ public interface IUnitOfWork : IDisposable
     IProjectRepository Project { get; }
     IProjectMemberRepository ProjectMember { get; }
     IProjectStatusRepository ProjectStatus { get; }
+    ISprintRepository Sprint { get; }
 
     Task<int> Save();
     Task CreateTransaction();

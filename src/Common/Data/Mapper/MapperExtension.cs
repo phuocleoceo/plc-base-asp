@@ -4,6 +4,7 @@ using PlcBase.Features.ProjectMember.DTOs;
 using PlcBase.Features.ProjectStatus.DTOs;
 using PlcBase.Features.Address.DTOs;
 using PlcBase.Features.Project.DTOs;
+using PlcBase.Features.Sprint.DTOs;
 using PlcBase.Features.Media.DTOs;
 using PlcBase.Features.Auth.DTOs;
 
@@ -21,5 +22,6 @@ public static class MapperExtension
         services.AddAutoMapper(typeof(ProjectMapping));
         services.AddAutoMapper(typeof(ProjectMemberMapping));
         services.AddAutoMapper(typeof(ProjectStatusMapping));
+        services.AddAutoMapper(typeof(SprintMapping));
     }
 }

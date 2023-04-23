@@ -8,6 +8,7 @@ using PlcBase.Features.ProjectMember.Entities;
 using PlcBase.Features.ProjectStatus.Entities;
 using PlcBase.Features.Address.Entities;
 using PlcBase.Features.Project.Entities;
+using PlcBase.Features.Sprint.Entities;
 using PlcBase.Features.Media.Entities;
 using PlcBase.Features.User.Entities;
 using PlcBase.Base.Entity;
@@ -54,4 +55,5 @@ public class DataContext : DbContext
     public DbSet<ProjectEntity> Projects { get; set; }
     public DbSet<ProjectMemberEntity> ProjectMembers { get; set; }
     public DbSet<ProjectStatusEntity> ProjectStatuses { get; set; }
+    public DbSet<SprintEntity> Sprints { get; set; }
 }
