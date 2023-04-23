@@ -17,5 +17,6 @@ public static class ContextConfigurationExtension
         modelBuilder.ApplyConfiguration(new MediaConfiguration());
         modelBuilder.ApplyConfiguration(new ProjectConfiguration());
         modelBuilder.ApplyConfiguration(new ProjectMemberConfiguration());
+        modelBuilder.ApplyConfiguration(new ProjectStatusConfiguration());
     }
 }

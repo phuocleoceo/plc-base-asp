@@ -1,6 +1,7 @@
 using PlcBase.Features.AccessControl.DTOs;
 using PlcBase.Features.ConfigSetting.DTOs;
 using PlcBase.Features.ProjectMember.DTOs;
+using PlcBase.Features.ProjectStatus.DTOs;
 using PlcBase.Features.Address.DTOs;
 using PlcBase.Features.Project.DTOs;
 using PlcBase.Features.Media.DTOs;
@@ -19,5 +20,6 @@ public static class MapperExtension
         services.AddAutoMapper(typeof(MediaMapping));
         services.AddAutoMapper(typeof(ProjectMapping));
         services.AddAutoMapper(typeof(ProjectMemberMapping));
+        services.AddAutoMapper(typeof(ProjectStatusMapping));
     }
 }
