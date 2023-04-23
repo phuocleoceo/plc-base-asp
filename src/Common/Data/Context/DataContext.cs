@@ -6,6 +6,7 @@ using PlcBase.Features.AccessControl.Entities;
 using PlcBase.Features.ConfigSetting.Entities;
 using PlcBase.Features.ProjectMember.Entities;
 using PlcBase.Features.ProjectStatus.Entities;
+using PlcBase.Features.Invitation.Entities;
 using PlcBase.Features.Address.Entities;
 using PlcBase.Features.Project.Entities;
 using PlcBase.Features.Sprint.Entities;
@@ -56,6 +57,7 @@ public class DataContext : DbContext
     public DbSet<ProjectEntity> Projects { get; set; }
     public DbSet<ProjectMemberEntity> ProjectMembers { get; set; }
     public DbSet<ProjectStatusEntity> ProjectStatuses { get; set; }
+    public DbSet<InvitationEntity> Invitations { get; set; }
     public DbSet<SprintEntity> Sprints { get; set; }
     public DbSet<IssueEntity> Issues { get; set; }
 }

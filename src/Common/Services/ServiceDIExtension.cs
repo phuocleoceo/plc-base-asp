@@ -1,6 +1,7 @@
 using PlcBase.Features.ConfigSetting.Services;
 using PlcBase.Features.ProjectMember.Services;
 using PlcBase.Features.ProjectStatus.Services;
+using PlcBase.Features.Invitation.Services;
 using PlcBase.Features.Address.Services;
 using PlcBase.Features.Project.Services;
 using PlcBase.Features.Sprint.Services;
@@ -21,6 +22,7 @@ public static class ServiceDIExtension
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IProjectMemberService, ProjectMemberService>();
         services.AddScoped<IProjectStatusService, ProjectStatusService>();
+        services.AddScoped<IInvitationService, InvitationService>();
         services.AddScoped<ISprintService, SprintService>();
         services.AddScoped<IIssueService, IssueService>();
     }
