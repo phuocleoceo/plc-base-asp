@@ -4,6 +4,7 @@ using AutoMapper;
 using PlcBase.Features.AccessControl.Repositories;
 using PlcBase.Features.ConfigSetting.Repositories;
 using PlcBase.Features.Address.Repositories;
+using PlcBase.Features.Project.Repositories;
 using PlcBase.Features.Media.Repositories;
 using PlcBase.Features.User.Repositories;
 using PlcBase.Common.Data.Context;
@@ -31,6 +32,7 @@ public class UnitOfWork : IUnitOfWork
         Permisison = new PermissionRepository(_db, _mapper);
         ConfigSetting = new ConfigSettingRepository(_db, _mapper);
         Media = new MediaRepository(_db, _mapper);
+        Project = new ProjectRepository(_db, _mapper);
     }
 
     public IDapperContainer DapperContainer { get; private set; }
@@ -43,6 +45,7 @@ public class UnitOfWork : IUnitOfWork
     public IPermisisonRepository Permisison { get; private set; }
     public IConfigSettingRepository ConfigSetting { get; private set; }
     public IMediaRepository Media { get; private set; }
+    public IProjectRepository Project { get; private set; }
 
     public void Dispose()
     {

@@ -5,6 +5,7 @@ using PlcBase.Common.Data.Context.Configuration;
 using PlcBase.Features.AccessControl.Entities;
 using PlcBase.Features.ConfigSetting.Entities;
 using PlcBase.Features.Address.Entities;
+using PlcBase.Features.Project.Entities;
 using PlcBase.Features.Media.Entities;
 using PlcBase.Features.User.Entities;
 using PlcBase.Base.Entity;
@@ -48,4 +49,5 @@ public class DataContext : DbContext
     public DbSet<PermissionEntity> Permissions { get; set; }
     public DbSet<ConfigSettingEntity> ConfigSettings { get; set; }
     public DbSet<MediaEntity> Medias { get; set; }
+    public DbSet<ProjectEntity> Projects { get; set; }
 }
