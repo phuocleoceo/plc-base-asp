@@ -9,6 +9,8 @@ public class ProjectMemberConfiguration : IEntityTypeConfiguration<ProjectMember
 {
     public void Configure(EntityTypeBuilder<ProjectMemberEntity> builder)
     {
-        builder.HasIndex(c => new { c.UserId, c.ProjectId });
+        builder.HasIndex(c => new { c.UserId, });
+
+        builder.HasIndex(c => new { c.ProjectId, });
     }
 }

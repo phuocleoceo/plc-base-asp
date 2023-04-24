@@ -14,8 +14,8 @@ public class IssueConfiguration : IEntityTypeConfiguration<IssueEntity>
                 new
                 {
                     c.ProjectId,
-                    c.SprintId,
-                    c.AssigneeId
+                    c.AssigneeId,
+                    c.SprintId
                 }
         );
     }
