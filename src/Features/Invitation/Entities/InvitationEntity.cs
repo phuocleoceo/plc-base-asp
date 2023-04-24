@@ -25,9 +25,9 @@ public class InvitationEntity : BaseEntity
     public int ProjectId { get; set; }
     public ProjectEntity Project { get; set; }
 
-    [Column("accepted")]
-    public bool Accepted { get; set; }
+    [Column("accepted_at")]
+    public DateTime? AcceptedAt { get; set; }
 
-    [Column("declined")]
-    public bool Declined { get; set; }
+    [Column("declined_at")]
+    public DateTime? DeclinedAt { get; set; }
 }

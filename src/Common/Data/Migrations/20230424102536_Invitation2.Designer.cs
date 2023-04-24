@@ -11,8 +11,8 @@ using PlcBase.Common.Data.Context;
 namespace plcbase.Common.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230423040716_ProjectStatus")]
-    partial class ProjectStatus
+    [Migration("20230424102536_Invitation2")]
+    partial class Invitation2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -208,6 +208,126 @@ namespace plcbase.Common.Data.Migrations
                     b.ToTable("config_setting");
                 });
 
+            modelBuilder.Entity("PlcBase.Features.Invitation.Entities.InvitationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("AcceptedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("accepted_at");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeclinedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("declined_at");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("project_id");
+
+                    b.Property<int>("RecipientId")
+                        .HasColumnType("int")
+                        .HasColumnName("recipient_id");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int")
+                        .HasColumnName("sender_id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("invitation");
+                });
+
+            modelBuilder.Entity("PlcBase.Features.Issue.Entities.IssueEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int?>("AssigneeId")
+                        .HasColumnType("int")
+                        .HasColumnName("assignee_id");
+
+                    b.Property<int?>("BacklogIndex")
+                        .HasColumnType("int")
+                        .HasColumnName("backlog_index");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Priority")
+                        .HasColumnType("longtext")
+                        .HasColumnName("priority");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("project_id");
+
+                    b.Property<int?>("ProjectStatusId")
+                        .HasColumnType("int")
+                        .HasColumnName("project_status_id");
+
+                    b.Property<int>("ReporterId")
+                        .HasColumnType("int")
+                        .HasColumnName("reporter_id");
+
+                    b.Property<int?>("SprintId")
+                        .HasColumnType("int")
+                        .HasColumnName("sprint_id");
+
+                    b.Property<double>("StoryPoint")
+                        .HasColumnType("double")
+                        .HasColumnName("story_point");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("longtext")
+                        .HasColumnName("title");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("longtext")
+                        .HasColumnName("type");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssigneeId");
+
+                    b.HasIndex("ProjectStatusId");
+
+                    b.HasIndex("ReporterId");
+
+                    b.HasIndex("SprintId");
+
+                    b.HasIndex("ProjectId", "AssigneeId", "SprintId");
+
+                    b.ToTable("issue");
+                });
+
             modelBuilder.Entity("PlcBase.Features.Media.Entities.MediaEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -327,7 +447,7 @@ namespace plcbase.Common.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("UserId", "ProjectId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("project_member");
                 });
@@ -364,6 +484,52 @@ namespace plcbase.Common.Data.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("project_status");
+                });
+
+            modelBuilder.Entity("PlcBase.Features.Sprint.Entities.SprintEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("end_time");
+
+                    b.Property<string>("Goal")
+                        .HasColumnType("longtext")
+                        .HasColumnName("goal");
+
+                    b.Property<bool>("IsInProgress")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_in_progress");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("project_id");
+
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("start_time");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("longtext")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("sprint");
                 });
 
             modelBuilder.Entity("PlcBase.Features.User.Entities.UserAccountEntity", b =>
@@ -481,7 +647,7 @@ namespace plcbase.Common.Data.Migrations
                     b.HasIndex("UserAccountId")
                         .IsUnique();
 
-                    b.HasIndex("UserAccountId", "IdentityNumber", "PhoneNumber")
+                    b.HasIndex("IdentityNumber", "PhoneNumber")
                         .IsUnique();
 
                     b.ToTable("user_profile");
@@ -520,6 +686,70 @@ namespace plcbase.Common.Data.Migrations
                     b.Navigation("AddressDistrict");
                 });
 
+            modelBuilder.Entity("PlcBase.Features.Invitation.Entities.InvitationEntity", b =>
+                {
+                    b.HasOne("PlcBase.Features.Project.Entities.ProjectEntity", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PlcBase.Features.User.Entities.UserAccountEntity", "Recipient")
+                        .WithMany()
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PlcBase.Features.User.Entities.UserAccountEntity", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("Recipient");
+
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("PlcBase.Features.Issue.Entities.IssueEntity", b =>
+                {
+                    b.HasOne("PlcBase.Features.User.Entities.UserAccountEntity", "Assignee")
+                        .WithMany()
+                        .HasForeignKey("AssigneeId");
+
+                    b.HasOne("PlcBase.Features.Project.Entities.ProjectEntity", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PlcBase.Features.ProjectStatus.Entities.ProjectStatusEntity", "ProjectStatus")
+                        .WithMany()
+                        .HasForeignKey("ProjectStatusId");
+
+                    b.HasOne("PlcBase.Features.User.Entities.UserAccountEntity", "Reporter")
+                        .WithMany()
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PlcBase.Features.Sprint.Entities.SprintEntity", "Sprint")
+                        .WithMany()
+                        .HasForeignKey("SprintId");
+
+                    b.Navigation("Assignee");
+
+                    b.Navigation("Project");
+
+                    b.Navigation("ProjectStatus");
+
+                    b.Navigation("Reporter");
+
+                    b.Navigation("Sprint");
+                });
+
             modelBuilder.Entity("PlcBase.Features.Project.Entities.ProjectEntity", b =>
                 {
                     b.HasOne("PlcBase.Features.User.Entities.UserAccountEntity", "Creator")
@@ -551,6 +781,17 @@ namespace plcbase.Common.Data.Migrations
                 });
 
             modelBuilder.Entity("PlcBase.Features.ProjectStatus.Entities.ProjectStatusEntity", b =>
+                {
+                    b.HasOne("PlcBase.Features.Project.Entities.ProjectEntity", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("PlcBase.Features.Sprint.Entities.SprintEntity", b =>
                 {
                     b.HasOne("PlcBase.Features.Project.Entities.ProjectEntity", "Project")
                         .WithMany()

@@ -61,7 +61,7 @@ public class JwtMiddleware
         }
         catch
         {
-            throw new BaseException(HttpCode.BAD_REQUEST, ErrorMessage.INVALID_TOKEN);
+            // throw new BaseException(HttpCode.BAD_REQUEST, ErrorMessage.INVALID_TOKEN);
         }
     }
 }
