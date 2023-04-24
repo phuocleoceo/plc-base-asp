@@ -25,12 +25,12 @@ public class JwtMiddleware
         string token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
         if (token != null)
-            getDataFromTokenPayload(context, token);
+            GetDataFromTokenPayload(context, token);
 
         await _next(context);
     }
 
-    private void getDataFromTokenPayload(HttpContext context, string token)
+    private void GetDataFromTokenPayload(HttpContext context, string token)
     {
         try
         {
@@ -61,7 +61,7 @@ public class JwtMiddleware
         }
         catch
         {
-            throw new BaseException(HttpCode.BAD_REQUEST, ErrorMessage.INVALID_TOKEN);
+            // throw new BaseException(HttpCode.BAD_REQUEST, ErrorMessage.INVALID_TOKEN);
         }
     }
 }

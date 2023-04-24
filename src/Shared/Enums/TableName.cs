@@ -11,6 +11,7 @@ public static class TableName
     public const string ADDRESS_WARD = "address_ward";
     public const string CONFIG_SETTING = "config_setting";
     public const string MEDIA = "media";
+    public const string INVITATION = "invitation";
     public const string PROJECT = "project";
     public const string PROJECT_MEMBER = "project_member";
     public const string PROJECT_STATUS = "project_status";

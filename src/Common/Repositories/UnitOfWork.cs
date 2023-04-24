@@ -5,6 +5,7 @@ using PlcBase.Features.AccessControl.Repositories;
 using PlcBase.Features.ConfigSetting.Repositories;
 using PlcBase.Features.ProjectMember.Repositories;
 using PlcBase.Features.ProjectStatus.Repositories;
+using PlcBase.Features.Invitation.Repositories;
 using PlcBase.Features.Address.Repositories;
 using PlcBase.Features.Project.Repositories;
 using PlcBase.Features.Sprint.Repositories;
@@ -39,6 +40,7 @@ public class UnitOfWork : IUnitOfWork
         Project = new ProjectRepository(_db, _mapper);
         ProjectMember = new ProjectMemberRepository(_db, _mapper);
         ProjectStatus = new ProjectStatusRepository(_db, _mapper);
+        Invitation = new InvitationRepository(_db, _mapper);
         Sprint = new SprintRepository(_db, _mapper);
         Issue = new IssueRepository(_db, _mapper);
     }
@@ -56,6 +58,7 @@ public class UnitOfWork : IUnitOfWork
     public IProjectRepository Project { get; private set; }
     public IProjectMemberRepository ProjectMember { get; private set; }
     public IProjectStatusRepository ProjectStatus { get; private set; }
+    public IInvitationRepository Invitation { get; private set; }
     public ISprintRepository Sprint { get; private set; }
     public IIssueRepository Issue { get; private set; }
 

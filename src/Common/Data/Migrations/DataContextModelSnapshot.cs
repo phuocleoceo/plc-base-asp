@@ -206,6 +206,52 @@ namespace plcbase.Common.Data.Migrations
                     b.ToTable("config_setting");
                 });
 
+            modelBuilder.Entity("PlcBase.Features.Invitation.Entities.InvitationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("AcceptedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("accepted_at");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeclinedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("declined_at");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("project_id");
+
+                    b.Property<int>("RecipientId")
+                        .HasColumnType("int")
+                        .HasColumnName("recipient_id");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int")
+                        .HasColumnName("sender_id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("invitation");
+                });
+
             modelBuilder.Entity("PlcBase.Features.Issue.Entities.IssueEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -275,7 +321,7 @@ namespace plcbase.Common.Data.Migrations
 
                     b.HasIndex("SprintId");
 
-                    b.HasIndex("ProjectId", "ProjectStatusId", "SprintId", "ReporterId", "AssigneeId");
+                    b.HasIndex("ProjectId", "AssigneeId", "SprintId");
 
                     b.ToTable("issue");
                 });
@@ -399,7 +445,7 @@ namespace plcbase.Common.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("UserId", "ProjectId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("project_member");
                 });
@@ -599,7 +645,7 @@ namespace plcbase.Common.Data.Migrations
                     b.HasIndex("UserAccountId")
                         .IsUnique();
 
-                    b.HasIndex("UserAccountId", "IdentityNumber", "PhoneNumber")
+                    b.HasIndex("IdentityNumber", "PhoneNumber")
                         .IsUnique();
 
                     b.ToTable("user_profile");
@@ -636,6 +682,33 @@ namespace plcbase.Common.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("AddressDistrict");
+                });
+
+            modelBuilder.Entity("PlcBase.Features.Invitation.Entities.InvitationEntity", b =>
+                {
+                    b.HasOne("PlcBase.Features.Project.Entities.ProjectEntity", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PlcBase.Features.User.Entities.UserAccountEntity", "Recipient")
+                        .WithMany()
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PlcBase.Features.User.Entities.UserAccountEntity", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("Recipient");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("PlcBase.Features.Issue.Entities.IssueEntity", b =>

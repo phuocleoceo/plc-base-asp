@@ -1,0 +1,1 @@
+insert into plcCapstone.role (id, name, description, created_at) values (1, 'admin', 'Quản lý', NOW());

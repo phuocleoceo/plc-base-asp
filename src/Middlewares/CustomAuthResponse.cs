@@ -12,11 +12,20 @@ public static class CustomAuthResponse
             {
                 await next();
 
-                if (context.Response.StatusCode == HttpCode.UNAUTHORIZED)
-                    throw new BaseException(HttpCode.UNAUTHORIZED, ErrorMessage.UNAUTHORIZED_USER);
+                switch (context.Response.StatusCode)
+                {
+                    case HttpCode.UNAUTHORIZED:
+                        throw new BaseException(
+                            HttpCode.UNAUTHORIZED,
+                            ErrorMessage.UNAUTHORIZED_USER
+                        );
 
-                if (context.Response.StatusCode == HttpCode.FORBIDDEN)
-                    throw new BaseException(HttpCode.FORBIDDEN, ErrorMessage.FORBIDDEN_RESOURCE);
+                    case HttpCode.FORBIDDEN:
+                        throw new BaseException(
+                            HttpCode.FORBIDDEN,
+                            ErrorMessage.FORBIDDEN_RESOURCE
+                        );
+                }
             }
         );
     }

@@ -14,10 +14,8 @@ public class IssueConfiguration : IEntityTypeConfiguration<IssueEntity>
                 new
                 {
                     c.ProjectId,
-                    c.ProjectStatusId,
-                    c.SprintId,
-                    c.ReporterId,
-                    c.AssigneeId
+                    c.AssigneeId,
+                    c.SprintId
                 }
         );
     }
