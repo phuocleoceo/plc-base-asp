@@ -9,6 +9,6 @@ public class InvitationConfiguration : IEntityTypeConfiguration<InvitationEntity
 {
     public void Configure(EntityTypeBuilder<InvitationEntity> builder)
     {
-        // builder.HasIndex(c => new { c.ProjectId });
+        builder.HasIndex(c => new { c.ProjectId, c.RecipientId, });
     }
 }
