@@ -58,5 +58,7 @@ public class UserMapping : Profile
 
         CreateMap<UserAccountEntity, UserAccountDTO>()
             .ForMember(dto => dto.RoleName, prop => prop.MapFrom(entity => entity.Role.Name));
+
+        CreateMap<UserProfileUpdateDTO, UserProfileEntity>();
     }
 }

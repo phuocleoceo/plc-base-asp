@@ -13,4 +13,6 @@ public interface IUserService
     Task<UserProfileAnonymousDTO> GetUserProfileAnonymous(int userId);
 
     Task<UserAccountDTO> GetUserAccountById(int userId);
+
+    Task<bool> UpdateUserProfile(ReqUser reqUser, UserProfileUpdateDTO userProfileUpdateDTO);
 }

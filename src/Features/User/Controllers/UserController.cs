@@ -33,6 +33,18 @@ public class UserController : BaseController
         return HttpContext.Success(await _userService.GetUserProfilePersonal(reqUser));
     }
 
+    [HttpPut("Personal")]
+    public async Task<BaseResponse<bool>> UpdateUserProfilePersonal(
+        [FromBody] UserProfileUpdateDTO userProfileUpdateDTO
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _userService.UpdateUserProfile(reqUser, userProfileUpdateDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
     [HttpGet("Anonymous/{userId}")]
     public async Task<BaseResponse<UserProfileAnonymousDTO>> GetUserProfileAnonymous(int userId)
     {

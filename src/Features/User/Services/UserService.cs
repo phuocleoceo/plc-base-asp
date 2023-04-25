@@ -1,12 +1,12 @@
 using AutoMapper;
 
 using PlcBase.Features.User.Entities;
-using PlcBase.Features.User.DTOs;
 using PlcBase.Common.Repositories;
+using PlcBase.Features.User.DTOs;
+using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Error;
 using PlcBase.Base.DTO;
-using PlcBase.Shared.Constants;
 
 namespace PlcBase.Features.User.Services;
 
@@ -77,5 +77,24 @@ public class UserService : IUserService
                     Filters = { ua => ua.Id == userId },
                 }
             ) ?? throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
+    }
+
+    public async Task<bool> UpdateUserProfile(
+        ReqUser reqUser,
+        UserProfileUpdateDTO userProfileUpdateDTO
+    )
+    {
+        UserProfileEntity userProfileDb = await _uow.UserProfile.GetOneAsync<UserProfileEntity>(
+            new QueryModel<UserProfileEntity>()
+            {
+                Filters = { up => up.UserAccountId == reqUser.Id },
+            }
+        );
+        if (userProfileDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "user_not_found");
+
+        _mapper.Map(userProfileUpdateDTO, userProfileDb);
+        _uow.UserProfile.Update(userProfileDb);
+        return await _uow.Save() > 0;
     }
 }
