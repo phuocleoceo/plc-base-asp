@@ -97,4 +97,17 @@ public class UserService : IUserService
         _uow.UserProfile.Update(userProfileDb);
         return await _uow.Save() > 0;
     }
+
+    public async Task<bool> UpdateUserAccount(int userId, UserAccountUpdateDTO userAccountUpdateDTO)
+    {
+        UserAccountEntity userAccountDb = await _uow.UserAccount.GetOneAsync<UserAccountEntity>(
+            new QueryModel<UserAccountEntity>() { Filters = { ua => ua.Id == userId }, }
+        );
+        if (userAccountDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
+
+        _mapper.Map(userAccountUpdateDTO, userAccountDb);
+        _uow.UserAccount.Update(userAccountDb);
+        return await _uow.Save() > 0;
+    }
 }

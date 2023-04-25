@@ -56,4 +56,15 @@ public class UserController : BaseController
     {
         return HttpContext.Success(await _userService.GetUserAccountById(userId));
     }
+
+    [HttpPut("Account/{userId}")]
+    public async Task<BaseResponse<bool>> UpdateUserAccount(
+        int userId,
+        [FromBody] UserAccountUpdateDTO userAccountUpdateDTO
+    )
+    {
+        if (await _userService.UpdateUserAccount(userId, userAccountUpdateDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }
