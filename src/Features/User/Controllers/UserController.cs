@@ -32,4 +32,10 @@ public class UserController : BaseController
         ReqUser reqUser = HttpContext.GetRequestUser();
         return HttpContext.Success(await _userService.GetUserProfilePersonal(reqUser));
     }
+
+    [HttpGet("Anonymous/{userId}")]
+    public async Task<BaseResponse<UserProfileAnonymousDTO>> GetUserProfileAnonymous(int userId)
+    {
+        return HttpContext.Success(await _userService.GetUserProfileAnonymous(userId));
+    }
 }

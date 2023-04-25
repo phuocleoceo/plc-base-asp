@@ -39,5 +39,21 @@ public class UserMapping : Profile
                 prop =>
                     prop.MapFrom(entity => entity.AddressWard.AddressDistrict.AddressProvince.Name)
             );
+
+        CreateMap<UserProfileEntity, UserProfileAnonymousDTO>()
+            .ForMember(dto => dto.Email, prop => prop.MapFrom(entity => entity.UserAccount.Email))
+            .ForMember(
+                dto => dto.AddressWard,
+                prop => prop.MapFrom(entity => entity.AddressWard.Name)
+            )
+            .ForMember(
+                dto => dto.AddressDistrict,
+                prop => prop.MapFrom(entity => entity.AddressWard.AddressDistrict.Name)
+            )
+            .ForMember(
+                dto => dto.AddressProvince,
+                prop =>
+                    prop.MapFrom(entity => entity.AddressWard.AddressDistrict.AddressProvince.Name)
+            );
     }
 }

@@ -4,7 +4,9 @@ using PlcBase.Features.User.Entities;
 using PlcBase.Features.User.DTOs;
 using PlcBase.Common.Repositories;
 using PlcBase.Base.DomainModel;
+using PlcBase.Base.Error;
 using PlcBase.Base.DTO;
+using PlcBase.Shared.Constants;
 
 namespace PlcBase.Features.User.Services;
 
@@ -39,15 +41,30 @@ public class UserService : IUserService
     public async Task<UserProfilePersonalDTO> GetUserProfilePersonal(ReqUser reqUser)
     {
         return await _uow.UserProfile.GetOneAsync<UserProfilePersonalDTO>(
-            new QueryModel<UserProfileEntity>()
-            {
-                Includes =
+                new QueryModel<UserProfileEntity>()
                 {
-                    up => up.UserAccount,
-                    up => up.AddressWard.AddressDistrict.AddressProvince,
-                },
-                Filters = { up => up.UserAccountId == reqUser.Id },
-            }
-        );
+                    Includes =
+                    {
+                        up => up.UserAccount,
+                        up => up.AddressWard.AddressDistrict.AddressProvince,
+                    },
+                    Filters = { up => up.UserAccountId == reqUser.Id },
+                }
+            ) ?? throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
+    }
+
+    public async Task<UserProfileAnonymousDTO> GetUserProfileAnonymous(int userId)
+    {
+        return await _uow.UserProfile.GetOneAsync<UserProfileAnonymousDTO>(
+                new QueryModel<UserProfileEntity>()
+                {
+                    Includes =
+                    {
+                        up => up.UserAccount,
+                        up => up.AddressWard.AddressDistrict.AddressProvince,
+                    },
+                    Filters = { up => up.UserAccountId == userId },
+                }
+            ) ?? throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
     }
 }

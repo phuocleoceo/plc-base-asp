@@ -9,4 +9,6 @@ public interface IUserService
     Task<PagedList<UserDTO>> GetAllUsers(UserParams userParams);
 
     Task<UserProfilePersonalDTO> GetUserProfilePersonal(ReqUser reqUser);
+
+    Task<UserProfileAnonymousDTO> GetUserProfileAnonymous(int userId);
 }
