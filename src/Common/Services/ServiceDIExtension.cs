@@ -8,6 +8,7 @@ using PlcBase.Features.Sprint.Services;
 using PlcBase.Features.Issue.Services;
 using PlcBase.Features.Media.Services;
 using PlcBase.Features.Auth.Services;
+using PlcBase.Features.User.Services;
 
 namespace PlcBase.Common.Services;
 
@@ -17,6 +18,7 @@ public static class ServiceDIExtension
     {
         services.AddScoped<IAddressService, AddressService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IConfigSettingService, ConfigSettingService>();
         services.AddScoped<IMediaService, MediaService>();
         services.AddScoped<IProjectService, ProjectService>();
