@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using PlcBase.Features.User.Services;
@@ -25,5 +24,12 @@ public class UserController : BaseController
     )
     {
         return HttpContext.Success(await _userService.GetAllUsers(userParams));
+    }
+
+    [HttpGet("Personal")]
+    public async Task<BaseResponse<UserProfilePersonalDTO>> GetUserProfilePersonal()
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+        return HttpContext.Success(await _userService.GetUserProfilePersonal(reqUser));
     }
 }

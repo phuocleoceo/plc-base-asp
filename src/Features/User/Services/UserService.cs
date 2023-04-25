@@ -35,4 +35,19 @@ public class UserService : IUserService
             }
         );
     }
+
+    public async Task<UserProfilePersonalDTO> GetUserProfilePersonal(ReqUser reqUser)
+    {
+        return await _uow.UserProfile.GetOneAsync<UserProfilePersonalDTO>(
+            new QueryModel<UserProfileEntity>()
+            {
+                Includes =
+                {
+                    up => up.UserAccount,
+                    up => up.AddressWard.AddressDistrict.AddressProvince,
+                },
+                Filters = { up => up.UserAccountId == reqUser.Id },
+            }
+        );
+    }
 }
