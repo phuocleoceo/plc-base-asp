@@ -7,6 +7,7 @@ using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.Helper.Controllers;
 
+[Route("api")]
 public class HelperController : BaseController
 {
     private readonly IS3Helper _s3Helper;
@@ -16,7 +17,7 @@ public class HelperController : BaseController
         _s3Helper = s3Helper;
     }
 
-    [HttpPost("/api/upload-file")]
+    [HttpPost("upload-file")]
     public async Task<BaseResponse<string>> S3Upload(IFormFile file, string prefix = "")
     {
         string fileUrl = await _s3Helper.UploadFile(file.GetS3FileUpload());

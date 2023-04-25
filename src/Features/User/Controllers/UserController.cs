@@ -18,4 +18,12 @@ public class UserController : BaseController
     {
         _userService = userService;
     }
+
+    [HttpGet]
+    public async Task<BaseResponse<PagedList<UserDTO>>> GetAllUsers(
+        [FromQuery] UserParams userParams
+    )
+    {
+        return HttpContext.Success(await _userService.GetAllUsers(userParams));
+    }
 }
