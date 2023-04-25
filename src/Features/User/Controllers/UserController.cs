@@ -38,4 +38,10 @@ public class UserController : BaseController
     {
         return HttpContext.Success(await _userService.GetUserProfileAnonymous(userId));
     }
+
+    [HttpGet("Account/{userId}")]
+    public async Task<BaseResponse<UserAccountDTO>> GetUserAccountById(int userId)
+    {
+        return HttpContext.Success(await _userService.GetUserAccountById(userId));
+    }
 }

@@ -50,7 +50,7 @@ public class UserService : IUserService
                     },
                     Filters = { up => up.UserAccountId == reqUser.Id },
                 }
-            ) ?? throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
+            ) ?? throw new BaseException(HttpCode.NOT_FOUND, "user_not_found");
     }
 
     public async Task<UserProfileAnonymousDTO> GetUserProfileAnonymous(int userId)
@@ -64,6 +64,17 @@ public class UserService : IUserService
                         up => up.AddressWard.AddressDistrict.AddressProvince,
                     },
                     Filters = { up => up.UserAccountId == userId },
+                }
+            ) ?? throw new BaseException(HttpCode.NOT_FOUND, "user_not_found");
+    }
+
+    public async Task<UserAccountDTO> GetUserAccountById(int userId)
+    {
+        return await _uow.UserAccount.GetOneAsync<UserAccountDTO>(
+                new QueryModel<UserAccountEntity>()
+                {
+                    Includes = { ua => ua.Role, },
+                    Filters = { ua => ua.Id == userId },
                 }
             ) ?? throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
     }

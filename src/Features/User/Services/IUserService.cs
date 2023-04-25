@@ -11,4 +11,6 @@ public interface IUserService
     Task<UserProfilePersonalDTO> GetUserProfilePersonal(ReqUser reqUser);
 
     Task<UserProfileAnonymousDTO> GetUserProfileAnonymous(int userId);
+
+    Task<UserAccountDTO> GetUserAccountById(int userId);
 }
