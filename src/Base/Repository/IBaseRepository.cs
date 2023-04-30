@@ -35,5 +35,7 @@ public interface IBaseRepository<T>
 
     Task RemoveById(int id);
 
+    void SoftDelete(T entity);
+
     Task SoftDeleteById(int id);
 }

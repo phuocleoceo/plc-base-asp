@@ -18,4 +18,39 @@ public class ProjectController : BaseController
     {
         _projectService = projectService;
     }
+
+    [HttpPost]
+    public async Task<BaseResponse<bool>> CreateProject(
+        [FromBody] CreateProjectDTO createProjectDTO
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _projectService.CreateProject(reqUser, createProjectDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
+    [HttpPut("{projectId}")]
+    public async Task<BaseResponse<bool>> UpdateProject(
+        int projectId,
+        [FromBody] UpdateProjectDTO updateProjectDTO
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _projectService.UpdateProject(reqUser, projectId, updateProjectDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
+    [HttpDelete("{projectId}")]
+    public async Task<BaseResponse<bool>> DeleteProject(int projectId)
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _projectService.DeleteProject(reqUser, projectId))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }

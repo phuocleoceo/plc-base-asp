@@ -145,14 +145,18 @@ public class BaseRepository<T> : IBaseRepository<T>
         Remove(entity);
     }
 
-    public async Task SoftDeleteById(int id)
+    public void SoftDelete(T entity)
     {
-        T entity = await _dbSet.FindAsync(id);
-
         if (entity is ISoftDeletable softDeletableEntity)
         {
             softDeletableEntity.DeletedAt = DateTime.UtcNow;
             Update(softDeletableEntity as T);
         }
+    }
+
+    public async Task SoftDeleteById(int id)
+    {
+        T entity = await _dbSet.FindAsync(id);
+        SoftDelete(entity);
     }
 }

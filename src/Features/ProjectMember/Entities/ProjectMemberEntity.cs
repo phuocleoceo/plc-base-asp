@@ -10,12 +10,6 @@ namespace PlcBase.Features.ProjectMember.Entities;
 [Table(TableName.PROJECT_MEMBER)]
 public class ProjectMemberEntity : BaseSoftDeletableEntity
 {
-    [Column("name")]
-    public string Name { get; set; }
-
-    [Column("image")]
-    public string Image { get; set; }
-
     [ForeignKey(nameof(User))]
     [Column("user_id")]
     public int UserId { get; set; }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlcBase.Common.Data.Context;
 
@@ -10,9 +11,10 @@ using PlcBase.Common.Data.Context;
 namespace plcbase.Common.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230430131433_ProjectLeader")]
+    partial class ProjectLeader
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -376,6 +378,7 @@ namespace plcbase.Common.Data.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<int>("CreatorId")
+                        .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("int")
                         .HasColumnName("creator_id");
 
@@ -392,8 +395,9 @@ namespace plcbase.Common.Data.Migrations
                         .HasColumnName("key");
 
                     b.Property<int>("LeaderId")
+                        .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("int")
-                        .HasColumnName("leader_id");
+                        .HasColumnName("creator_id");
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext")
@@ -426,6 +430,14 @@ namespace plcbase.Common.Data.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("deleted_at");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("longtext")
+                        .HasColumnName("image");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext")
+                        .HasColumnName("name");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int")

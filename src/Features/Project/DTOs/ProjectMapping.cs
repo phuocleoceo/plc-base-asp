@@ -6,5 +6,10 @@ namespace PlcBase.Features.Project.DTOs;
 
 public class ProjectMapping : Profile
 {
-    public ProjectMapping() { }
+    public ProjectMapping()
+    {
+        CreateMap<CreateProjectDTO, ProjectEntity>();
+
+        CreateMap<UpdateProjectDTO, ProjectEntity>();
+    }
 }
