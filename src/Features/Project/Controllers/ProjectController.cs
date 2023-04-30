@@ -31,7 +31,7 @@ public class ProjectController : BaseController
         return HttpContext.Failure();
     }
 
-    [HttpPut("projectId")]
+    [HttpPut("{projectId}")]
     public async Task<BaseResponse<bool>> UpdateProject(
         int projectId,
         [FromBody] UpdateProjectDTO updateProjectDTO
@@ -40,6 +40,16 @@ public class ProjectController : BaseController
         ReqUser reqUser = HttpContext.GetRequestUser();
 
         if (await _projectService.UpdateProject(reqUser, projectId, updateProjectDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
+    [HttpDelete("{projectId}")]
+    public async Task<BaseResponse<bool>> DeleteProject(int projectId)
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _projectService.DeleteProject(reqUser, projectId))
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }

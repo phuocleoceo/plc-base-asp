@@ -36,21 +36,24 @@ public class ProjectService : IProjectService
         UpdateProjectDTO updateProjectDTO
     )
     {
-        ProjectEntity projectDb = await _uow.Project.GetOneAsync<ProjectEntity>(
-            new QueryModel<ProjectEntity>()
-            {
-                Filters =
-                {
-                    p => p.Id == projectId && p.LeaderId == reqUser.Id && p.DeletedAt == null
-                }
-            }
-        );
+        ProjectEntity projectDb = await _uow.Project.GetByIdAndOwner(reqUser, projectId);
 
         if (projectDb == null)
             throw new BaseException(HttpCode.NOT_FOUND, "project_not_found");
 
         _mapper.Map(updateProjectDTO, projectDb);
         _uow.Project.Update(projectDb);
+        return await _uow.Save() > 0;
+    }
+
+    public async Task<bool> DeleteProject(ReqUser reqUser, int projectId)
+    {
+        ProjectEntity projectDb = await _uow.Project.GetByIdAndOwner(reqUser, projectId);
+
+        if (projectDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "project_not_found");
+
+        _uow.Project.SoftDelete(projectDb);
         return await _uow.Save() > 0;
     }
 }

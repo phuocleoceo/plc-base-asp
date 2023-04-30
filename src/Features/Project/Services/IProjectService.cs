@@ -8,4 +8,6 @@ public interface IProjectService
     Task<bool> CreateProject(ReqUser reqUser, CreateProjectDTO createProjectDTO);
 
     Task<bool> UpdateProject(ReqUser reqUser, int projectId, UpdateProjectDTO updateProjectDTO);
+
+    Task<bool> DeleteProject(ReqUser reqUser, int projectId);
 }
