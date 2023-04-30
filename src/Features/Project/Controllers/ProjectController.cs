@@ -30,4 +30,17 @@ public class ProjectController : BaseController
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }
+
+    [HttpPut("projectId")]
+    public async Task<BaseResponse<bool>> UpdateProject(
+        int projectId,
+        [FromBody] UpdateProjectDTO updateProjectDTO
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _projectService.UpdateProject(reqUser, projectId, updateProjectDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }

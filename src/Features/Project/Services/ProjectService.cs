@@ -3,7 +3,9 @@ using AutoMapper;
 using PlcBase.Features.Project.Entities;
 using PlcBase.Features.Project.DTOs;
 using PlcBase.Common.Repositories;
+using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
+using PlcBase.Base.Error;
 
 namespace PlcBase.Features.Project.Services;
 
@@ -25,6 +27,30 @@ public class ProjectService : IProjectService
         projectEntity.LeaderId = reqUser.Id;
 
         _uow.Project.Add(projectEntity);
+        return await _uow.Save() > 0;
+    }
+
+    public async Task<bool> UpdateProject(
+        ReqUser reqUser,
+        int projectId,
+        UpdateProjectDTO updateProjectDTO
+    )
+    {
+        ProjectEntity projectDb = await _uow.Project.GetOneAsync<ProjectEntity>(
+            new QueryModel<ProjectEntity>()
+            {
+                Filters =
+                {
+                    p => p.Id == projectId && p.LeaderId == reqUser.Id && p.DeletedAt == null
+                }
+            }
+        );
+
+        if (projectDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "project_not_found");
+
+        _mapper.Map(updateProjectDTO, projectDb);
+        _uow.Project.Update(projectDb);
         return await _uow.Save() > 0;
     }
 }
