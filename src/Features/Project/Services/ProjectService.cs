@@ -22,6 +22,7 @@ public class ProjectService : IProjectService
     {
         ProjectEntity projectEntity = _mapper.Map<ProjectEntity>(createProjectDTO);
         projectEntity.CreatorId = reqUser.Id;
+        projectEntity.LeaderId = reqUser.Id;
 
         _uow.Project.Add(projectEntity);
         return await _uow.Save() > 0;

@@ -10,5 +10,7 @@ public class ProjectConfiguration : IEntityTypeConfiguration<ProjectEntity>
     public void Configure(EntityTypeBuilder<ProjectEntity> builder)
     {
         builder.HasIndex(c => new { c.CreatorId });
+
+        builder.HasIndex(c => new { c.LeaderId });
     }
 }

@@ -22,4 +22,9 @@ public class ProjectEntity : BaseSoftDeletableEntity
     [Column("creator_id")]
     public int CreatorId { get; set; }
     public UserAccountEntity Creator { get; set; }
+
+    [ForeignKey(nameof(Leader))]
+    [Column("leader_id")]
+    public int LeaderId { get; set; }
+    public UserAccountEntity Leader { get; set; }
 }
