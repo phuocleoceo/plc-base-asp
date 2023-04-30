@@ -6,5 +6,8 @@ namespace PlcBase.Features.Invitation.DTOs;
 
 public class InvitationMapping : Profile
 {
-    public InvitationMapping() { }
+    public InvitationMapping()
+    {
+        CreateMap<CreateInvitationDTO, InvitationEntity>();
+    }
 }
