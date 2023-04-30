@@ -18,4 +18,16 @@ public class ProjectController : BaseController
     {
         _projectService = projectService;
     }
+
+    [HttpPost]
+    public async Task<BaseResponse<bool>> CreateProject(
+        [FromBody] CreateProjectDTO createProjectDTO
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _projectService.CreateProject(reqUser, createProjectDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }
