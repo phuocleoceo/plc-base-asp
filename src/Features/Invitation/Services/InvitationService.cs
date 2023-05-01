@@ -8,6 +8,7 @@ using PlcBase.Common.Repositories;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Error;
+using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.Invitation.Services;
 
@@ -20,6 +21,40 @@ public class InvitationService : IInvitationService
     {
         _uow = uow;
         _mapper = mapper;
+    }
+
+    public async Task<PagedList<RecipientInvitationDTO>> GetInvitationsForUser(
+        ReqUser reqUser,
+        RecipientInvitationParams recipientInvitationParams
+    )
+    {
+        return await _uow.Invitation.GetPagedAsync<RecipientInvitationDTO>(
+            new QueryModel<InvitationEntity>()
+            {
+                OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
+                Filters = { i => i.RecipientId == reqUser.Id },
+                Includes = { i => i.Project, i => i.Sender.UserProfile, },
+                PageSize = recipientInvitationParams.PageSize,
+                PageNumber = recipientInvitationParams.PageNumber,
+            }
+        );
+    }
+
+    public async Task<PagedList<SenderInvitationDTO>> GetInvitationsForProject(
+        int projectId,
+        SenderInvitationParams senderInvitationParams
+    )
+    {
+        return await _uow.Invitation.GetPagedAsync<SenderInvitationDTO>(
+            new QueryModel<InvitationEntity>()
+            {
+                OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
+                Filters = { i => i.ProjectId == projectId },
+                Includes = { i => i.Recipient.UserProfile, },
+                PageSize = senderInvitationParams.PageSize,
+                PageNumber = senderInvitationParams.PageNumber,
+            }
+        );
     }
 
     public async Task<bool> CreateInvitaion(

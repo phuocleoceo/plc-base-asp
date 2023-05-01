@@ -19,6 +19,17 @@ public class InvitationController : BaseController
         _invitationService = invitationService;
     }
 
+    [HttpGet("/api/project/{projectId}/invitation")]
+    public async Task<BaseResponse<PagedList<SenderInvitationDTO>>> GetInvitationsForProject(
+        int projectId,
+        [FromQuery] SenderInvitationParams senderInvitationParams
+    )
+    {
+        return HttpContext.Success(
+            await _invitationService.GetInvitationsForProject(projectId, senderInvitationParams)
+        );
+    }
+
     [HttpPost("/api/project/{projectId}/invitation")]
     public async Task<BaseResponse<bool>> CreateInvitation(
         int projectId,
@@ -40,6 +51,18 @@ public class InvitationController : BaseController
         if (await _invitationService.DeleteInvitation(reqUser, projectId, invitationId))
             return HttpContext.Success(true);
         return HttpContext.Failure();
+    }
+
+    [HttpGet("")]
+    public async Task<BaseResponse<PagedList<RecipientInvitationDTO>>> GetInvitationsForUser(
+        [FromQuery] RecipientInvitationParams recipientInvitationParams
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        return HttpContext.Success(
+            await _invitationService.GetInvitationsForUser(reqUser, recipientInvitationParams)
+        );
     }
 
     [HttpPut("{invitationId}/accept")]
