@@ -102,6 +102,9 @@ public class InvitationService : IInvitationService
         if (invitationDb.RecipientId != reqUser.Id)
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_invitation");
 
+        if (invitationDb.AcceptedAt != null || invitationDb.DeclinedAt != null)
+            throw new BaseException(HttpCode.BAD_REQUEST, "complete_invitation");
+
         invitationDb.AcceptedAt = DateTime.UtcNow;
         invitationDb.DeclinedAt = null;
         _uow.Invitation.Update(invitationDb);
@@ -123,6 +126,9 @@ public class InvitationService : IInvitationService
 
         if (invitationDb.RecipientId != reqUser.Id)
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_invitation");
+
+        if (invitationDb.AcceptedAt != null || invitationDb.DeclinedAt != null)
+            throw new BaseException(HttpCode.BAD_REQUEST, "complete_invitation");
 
         invitationDb.AcceptedAt = null;
         invitationDb.DeclinedAt = DateTime.UtcNow;
