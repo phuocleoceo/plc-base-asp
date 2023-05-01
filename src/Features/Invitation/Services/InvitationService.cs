@@ -28,16 +28,19 @@ public class InvitationService : IInvitationService
         RecipientInvitationParams recipientInvitationParams
     )
     {
-        return await _uow.Invitation.GetPagedAsync<RecipientInvitationDTO>(
-            new QueryModel<InvitationEntity>()
-            {
-                OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
-                Filters = { i => i.RecipientId == reqUser.Id },
-                Includes = { i => i.Project, i => i.Sender.UserProfile, },
-                PageSize = recipientInvitationParams.PageSize,
-                PageNumber = recipientInvitationParams.PageNumber,
-            }
-        );
+        QueryModel<InvitationEntity> invitationQuery = new QueryModel<InvitationEntity>()
+        {
+            OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
+            Filters = { i => i.RecipientId == reqUser.Id },
+            Includes = { i => i.Project, i => i.Sender.UserProfile, },
+            PageSize = recipientInvitationParams.PageSize,
+            PageNumber = recipientInvitationParams.PageNumber,
+        };
+
+        if (recipientInvitationParams.StillValid)
+            invitationQuery.Filters.Add(i => i.AcceptedAt == null && i.DeclinedAt == null);
+
+        return await _uow.Invitation.GetPagedAsync<RecipientInvitationDTO>(invitationQuery);
     }
 
     public async Task<PagedList<SenderInvitationDTO>> GetInvitationsForProject(
@@ -45,16 +48,19 @@ public class InvitationService : IInvitationService
         SenderInvitationParams senderInvitationParams
     )
     {
-        return await _uow.Invitation.GetPagedAsync<SenderInvitationDTO>(
-            new QueryModel<InvitationEntity>()
-            {
-                OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
-                Filters = { i => i.ProjectId == projectId },
-                Includes = { i => i.Recipient.UserProfile, },
-                PageSize = senderInvitationParams.PageSize,
-                PageNumber = senderInvitationParams.PageNumber,
-            }
-        );
+        QueryModel<InvitationEntity> invitationQuery = new QueryModel<InvitationEntity>()
+        {
+            OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
+            Filters = { i => i.ProjectId == projectId },
+            Includes = { i => i.Recipient.UserProfile, },
+            PageSize = senderInvitationParams.PageSize,
+            PageNumber = senderInvitationParams.PageNumber,
+        };
+
+        if (senderInvitationParams.StillValid)
+            invitationQuery.Filters.Add(i => i.AcceptedAt == null && i.DeclinedAt == null);
+
+        return await _uow.Invitation.GetPagedAsync<SenderInvitationDTO>(invitationQuery);
     }
 
     public async Task<bool> CreateInvitaion(
