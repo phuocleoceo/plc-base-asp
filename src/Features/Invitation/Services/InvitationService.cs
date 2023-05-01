@@ -3,6 +3,7 @@ using AutoMapper;
 using PlcBase.Features.ProjectMember.Entities;
 using PlcBase.Features.Invitation.Entities;
 using PlcBase.Features.Invitation.DTOs;
+using PlcBase.Features.User.Entities;
 using PlcBase.Common.Repositories;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
@@ -27,12 +28,22 @@ public class InvitationService : IInvitationService
         CreateInvitationDTO createInvitationDTO
     )
     {
-        if (reqUser.Id == createInvitationDTO.RecipientId)
+        UserAccountEntity userAccountDb = await _uow.UserAccount.FindByEmail(
+            createInvitationDTO.RecipientEmail
+        );
+
+        if (userAccountDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "recipient_not_found");
+
+        if (reqUser.Id == userAccountDb.Id)
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_invitation");
 
-        InvitationEntity invitationEntity = _mapper.Map<InvitationEntity>(createInvitationDTO);
-        invitationEntity.ProjectId = projectId;
-        invitationEntity.SenderId = reqUser.Id;
+        InvitationEntity invitationEntity = new InvitationEntity()
+        {
+            ProjectId = projectId,
+            SenderId = reqUser.Id,
+            RecipientId = userAccountDb.Id,
+        };
 
         _uow.Invitation.Add(invitationEntity);
         return await _uow.Save();
