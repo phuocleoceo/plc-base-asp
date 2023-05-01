@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using PlcBase.Features.ProjectStatus.Services;
 using PlcBase.Features.ProjectStatus.DTOs;
-using PlcBase.Shared.Utilities;
-using PlcBase.Base.DomainModel;
 using PlcBase.Base.Controller;
 using PlcBase.Base.DTO;
 
@@ -55,6 +53,14 @@ public class ProjectStatusController : BaseController
     )
     {
         if (await _projectStatusService.UpdateStatusIndex(projectId, updateStatusIndex))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
+    [HttpDelete("/api/project/{projectId}/status/{projectStatusId}")]
+    public async Task<BaseResponse<bool>> DeleteProjectStatus(int projectId, int projectStatusId)
+    {
+        if (await _projectStatusService.DeleteProjectStatus(projectId, projectStatusId))
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }

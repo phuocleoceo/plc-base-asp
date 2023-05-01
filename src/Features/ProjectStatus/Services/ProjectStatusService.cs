@@ -81,10 +81,41 @@ public class ProjectStatusService : IProjectStatusService
             ProjectStatusEntity currentStatus = projectStatusesDb.FirstOrDefault(
                 s => s.Id == updateStatusIndexDTO.NewIndexes[i]
             );
+
+            // If have any status not match with DTO => Error
+            if (currentStatus == null)
+                throw new BaseException(HttpCode.BAD_REQUEST, "invalid_status_indexes");
+
             currentStatus.Index = i;
             _uow.ProjectStatus.Update(currentStatus);
         }
 
+        return await _uow.Save();
+    }
+
+    public async Task<bool> DeleteProjectStatus(int projectId, int projectStatusId)
+    {
+        ProjectStatusEntity currentStatus = await _uow.ProjectStatus.FindByIdAsync(projectStatusId);
+
+        if (currentStatus == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "project_status_not_found");
+
+        // Update statuses has higher index
+        List<ProjectStatusEntity> projectStatusesDb =
+            await _uow.ProjectStatus.GetManyAsync<ProjectStatusEntity>(
+                new QueryModel<ProjectStatusEntity>()
+                {
+                    Filters = { s => s.ProjectId == projectId && s.Index > currentStatus.Index }
+                }
+            );
+
+        foreach (ProjectStatusEntity projectStatus in projectStatusesDb)
+        {
+            projectStatus.Index -= 1;
+            _uow.ProjectStatus.Update(projectStatus);
+        }
+
+        _uow.ProjectStatus.Remove(currentStatus);
         return await _uow.Save();
     }
 }
