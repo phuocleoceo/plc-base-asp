@@ -3,4 +3,7 @@ using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.ProjectStatus.Repositories;
 
-public interface IProjectStatusRepository : IBaseRepository<ProjectStatusEntity> { }
+public interface IProjectStatusRepository : IBaseRepository<ProjectStatusEntity>
+{
+    Task<int> GetIndexForNewStatus(int projectId);
+}
