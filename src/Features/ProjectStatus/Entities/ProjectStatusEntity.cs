@@ -12,6 +12,9 @@ public class ProjectStatusEntity : BaseSoftDeletableEntity
     [Column("name")]
     public string Name { get; set; }
 
+    [Column("index")]
+    public int Index { get; set; }
+
     [ForeignKey(nameof(Project))]
     [Column("project_id")]
     public int ProjectId { get; set; }

@@ -6,5 +6,10 @@ namespace PlcBase.Features.ProjectStatus.DTOs;
 
 public class ProjectStatusMapping : Profile
 {
-    public ProjectStatusMapping() { }
+    public ProjectStatusMapping()
+    {
+        CreateMap<CreateProjectStatusDTO, ProjectStatusEntity>();
+
+        CreateMap<UpdateProjectStatusDTO, ProjectStatusEntity>();
+    }
 }

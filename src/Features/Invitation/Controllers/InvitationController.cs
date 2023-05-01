@@ -53,7 +53,7 @@ public class InvitationController : BaseController
         return HttpContext.Failure();
     }
 
-    [HttpGet("")]
+    [HttpGet("/api/user/personal/invitation")]
     public async Task<BaseResponse<PagedList<RecipientInvitationDTO>>> GetInvitationsForUser(
         [FromQuery] RecipientInvitationParams recipientInvitationParams
     )
@@ -65,7 +65,7 @@ public class InvitationController : BaseController
         );
     }
 
-    [HttpPut("{invitationId}/accept")]
+    [HttpPut("/api/user/personal/invitation/{invitationId}/accept")]
     public async Task<BaseResponse<bool>> AcceptInvitation(int invitationId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
@@ -75,7 +75,7 @@ public class InvitationController : BaseController
         return HttpContext.Failure();
     }
 
-    [HttpPut("{invitationId}/decline")]
+    [HttpPut("/api/user/personal/invitation/{invitationId}/decline")]
     public async Task<BaseResponse<bool>> DeclineInvitation(int invitationId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
