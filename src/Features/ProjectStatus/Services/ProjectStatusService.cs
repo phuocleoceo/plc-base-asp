@@ -62,9 +62,6 @@ public class ProjectStatusService : IProjectStatusService
         UpdateStatusIndexDTO updateStatusIndexDTO
     )
     {
-        if (updateStatusIndexDTO.StatusIds.Count != updateStatusIndexDTO.NewIndexes.Count)
-            throw new BaseException(HttpCode.BAD_REQUEST, "invalid_status_indexes");
-
         List<ProjectStatusEntity> projectStatusesDb =
             await _uow.ProjectStatus.GetManyAsync<ProjectStatusEntity>(
                 new QueryModel<ProjectStatusEntity>()
@@ -76,11 +73,16 @@ public class ProjectStatusService : IProjectStatusService
         if (projectStatusesDb.Count == 0)
             throw new BaseException(HttpCode.BAD_REQUEST, "project_statuses_not_found");
 
-        foreach (ProjectStatusEntity projectStatus in projectStatusesDb)
+        if (projectStatusesDb.Count != updateStatusIndexDTO.NewIndexes.Count)
+            throw new BaseException(HttpCode.BAD_REQUEST, "invalid_status_indexes");
+
+        for (int i = 0; i < updateStatusIndexDTO.NewIndexes.Count; i++)
         {
-            int currentStatusIdx = updateStatusIndexDTO.StatusIds.IndexOf(projectStatus.Id);
-            projectStatus.Index = updateStatusIndexDTO.NewIndexes[currentStatusIdx];
-            _uow.ProjectStatus.Update(projectStatus);
+            ProjectStatusEntity currentStatus = projectStatusesDb.FirstOrDefault(
+                s => s.Id == updateStatusIndexDTO.NewIndexes[i]
+            );
+            currentStatus.Index = i;
+            _uow.ProjectStatus.Update(currentStatus);
         }
 
         return await _uow.Save();
