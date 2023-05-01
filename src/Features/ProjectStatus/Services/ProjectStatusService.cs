@@ -1,8 +1,11 @@
 using AutoMapper;
 
-using PlcBase.Common.Repositories;
-using PlcBase.Features.ProjectStatus.DTOs;
 using PlcBase.Features.ProjectStatus.Entities;
+using PlcBase.Features.ProjectStatus.DTOs;
+using PlcBase.Common.Repositories;
+using PlcBase.Shared.Constants;
+using PlcBase.Base.DomainModel;
+using PlcBase.Base.Error;
 
 namespace PlcBase.Features.ProjectStatus.Services;
 
@@ -29,6 +32,28 @@ public class ProjectStatusService : IProjectStatusService
         projectStatusEntity.ProjectId = projectId;
 
         _uow.ProjectStatus.Add(projectStatusEntity);
+        return await _uow.Save();
+    }
+
+    public async Task<bool> UpdateProjectStatus(
+        int projectId,
+        int projectStatusId,
+        UpdateProjectStatusDTO updateProjectStatusDTO
+    )
+    {
+        ProjectStatusEntity projectStatusDb =
+            await _uow.ProjectStatus.GetOneAsync<ProjectStatusEntity>(
+                new QueryModel<ProjectStatusEntity>()
+                {
+                    Filters = { s => s.Id == projectStatusId && s.ProjectId == projectId },
+                }
+            );
+
+        if (projectStatusDb == null)
+            throw new BaseException(HttpCode.BAD_REQUEST, "project_status_not_found");
+
+        _mapper.Map(updateProjectStatusDTO, projectStatusDb);
+        _uow.ProjectStatus.Update(projectStatusDb);
         return await _uow.Save();
     }
 }

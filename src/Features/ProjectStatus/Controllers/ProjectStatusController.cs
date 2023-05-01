@@ -29,4 +29,22 @@ public class ProjectStatusController : BaseController
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }
+
+    [HttpPut("/api/project/{projectId}/status/{projectStatusId}")]
+    public async Task<BaseResponse<bool>> UpdateProjectStatus(
+        int projectId,
+        int projectStatusId,
+        [FromBody] UpdateProjectStatusDTO updateProjectStatusDTO
+    )
+    {
+        if (
+            await _projectStatusService.UpdateProjectStatus(
+                projectId,
+                projectStatusId,
+                updateProjectStatusDTO
+            )
+        )
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }
