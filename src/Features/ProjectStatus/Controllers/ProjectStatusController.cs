@@ -47,4 +47,15 @@ public class ProjectStatusController : BaseController
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }
+
+    [HttpPut("/api/project/{projectId}/status/index")]
+    public async Task<BaseResponse<bool>> UpdateStatusIndex(
+        int projectId,
+        [FromBody] UpdateStatusIndexDTO updateStatusIndex
+    )
+    {
+        if (await _projectStatusService.UpdateStatusIndex(projectId, updateStatusIndex))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }

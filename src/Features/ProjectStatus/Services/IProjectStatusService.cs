@@ -11,4 +11,6 @@ public interface IProjectStatusService
         int projectStatusId,
         UpdateProjectStatusDTO updateProjectStatusDTO
     );
+
+    Task<bool> UpdateStatusIndex(int projectId, UpdateStatusIndexDTO updateStatusIndexDTO);
 }

@@ -56,4 +56,33 @@ public class ProjectStatusService : IProjectStatusService
         _uow.ProjectStatus.Update(projectStatusDb);
         return await _uow.Save();
     }
+
+    public async Task<bool> UpdateStatusIndex(
+        int projectId,
+        UpdateStatusIndexDTO updateStatusIndexDTO
+    )
+    {
+        if (updateStatusIndexDTO.StatusIds.Count != updateStatusIndexDTO.NewIndexes.Count)
+            throw new BaseException(HttpCode.BAD_REQUEST, "invalid_status_indexes");
+
+        List<ProjectStatusEntity> projectStatusesDb =
+            await _uow.ProjectStatus.GetManyAsync<ProjectStatusEntity>(
+                new QueryModel<ProjectStatusEntity>()
+                {
+                    Filters = { s => s.ProjectId == projectId }
+                }
+            );
+
+        if (projectStatusesDb.Count == 0)
+            throw new BaseException(HttpCode.BAD_REQUEST, "project_statuses_not_found");
+
+        foreach (ProjectStatusEntity projectStatus in projectStatusesDb)
+        {
+            int currentStatusIdx = updateStatusIndexDTO.StatusIds.IndexOf(projectStatus.Id);
+            projectStatus.Index = updateStatusIndexDTO.NewIndexes[currentStatusIdx];
+            _uow.ProjectStatus.Update(projectStatus);
+        }
+
+        return await _uow.Save();
+    }
 }
