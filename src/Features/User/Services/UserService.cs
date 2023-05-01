@@ -95,7 +95,7 @@ public class UserService : IUserService
 
         _mapper.Map(userProfileUpdateDTO, userProfileDb);
         _uow.UserProfile.Update(userProfileDb);
-        return await _uow.Save() > 0;
+        return await _uow.Save();
     }
 
     public async Task<bool> UpdateUserAccount(int userId, UserAccountUpdateDTO userAccountUpdateDTO)
@@ -108,6 +108,6 @@ public class UserService : IUserService
 
         _mapper.Map(userAccountUpdateDTO, userAccountDb);
         _uow.UserAccount.Update(userAccountDb);
-        return await _uow.Save() > 0;
+        return await _uow.Save();
     }
 }

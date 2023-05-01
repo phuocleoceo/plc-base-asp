@@ -67,9 +67,9 @@ public class UnitOfWork : IUnitOfWork
         _db.Dispose();
     }
 
-    public async Task<int> Save()
+    public async Task<bool> Save()
     {
-        return await _db.SaveChangesAsync();
+        return await _db.SaveChangesAsync() > 0;
     }
 
     public async Task CreateTransaction()

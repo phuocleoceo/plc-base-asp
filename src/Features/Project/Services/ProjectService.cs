@@ -27,7 +27,7 @@ public class ProjectService : IProjectService
         projectEntity.LeaderId = reqUser.Id;
 
         _uow.Project.Add(projectEntity);
-        return await _uow.Save() > 0;
+        return await _uow.Save();
     }
 
     public async Task<bool> UpdateProject(
@@ -43,7 +43,7 @@ public class ProjectService : IProjectService
 
         _mapper.Map(updateProjectDTO, projectDb);
         _uow.Project.Update(projectDb);
-        return await _uow.Save() > 0;
+        return await _uow.Save();
     }
 
     public async Task<bool> DeleteProject(ReqUser reqUser, int projectId)
@@ -54,6 +54,6 @@ public class ProjectService : IProjectService
             throw new BaseException(HttpCode.NOT_FOUND, "project_not_found");
 
         _uow.Project.SoftDelete(projectDb);
-        return await _uow.Save() > 0;
+        return await _uow.Save();
     }
 }

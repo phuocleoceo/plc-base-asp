@@ -45,6 +45,6 @@ public class ConfigSettingService : IConfigSettingService
 
         _mapper.Map(configSettingUpdateDTO, configSettingDb);
         _uow.ConfigSetting.Update(configSettingDb);
-        return await _uow.Save() > 0;
+        return await _uow.Save();
     }
 }

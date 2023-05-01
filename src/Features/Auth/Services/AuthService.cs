@@ -144,7 +144,7 @@ public class AuthService : IAuthService
         currentUser.RefreshTokenExpiredAt = null;
 
         _uof.UserAccount.Update(currentUser);
-        return await _uof.Save() > 0;
+        return await _uof.Save();
     }
 
     #endregion
@@ -251,7 +251,7 @@ public class AuthService : IAuthService
         currentUser.SecurityCode = "";
 
         _uof.UserAccount.Update(currentUser);
-        return await _uof.Save() > 0;
+        return await _uof.Save();
     }
 
     #endregion
@@ -285,7 +285,7 @@ public class AuthService : IAuthService
         currentUser.PasswordSalt = newPasswordHash.PasswordSalt;
 
         _uof.UserAccount.Update(currentUser);
-        return await _uof.Save() > 0;
+        return await _uof.Save();
     }
 
     public async Task ForgotPassword(UserForgotPasswordDTO userForgotPasswordDTO)
@@ -365,7 +365,7 @@ public class AuthService : IAuthService
         currentUser.SecurityCode = "";
 
         _uof.UserAccount.Update(currentUser);
-        return await _uof.Save() > 0;
+        return await _uof.Save();
     }
 
     #endregion

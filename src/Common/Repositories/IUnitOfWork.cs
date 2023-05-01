@@ -31,7 +31,7 @@ public interface IUnitOfWork : IDisposable
     ISprintRepository Sprint { get; }
     IIssueRepository Issue { get; }
 
-    Task<int> Save();
+    Task<bool> Save();
     Task CreateTransaction();
     Task CommitTransaction();
     Task AbortTransaction();

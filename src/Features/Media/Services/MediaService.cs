@@ -24,7 +24,7 @@ public class MediaService : IMediaService
         MediaEntity mediaEntity = _mapper.Map<MediaEntity>(createMediaDTO);
 
         _uow.Media.Add(mediaEntity);
-        return await _uow.Save() > 0;
+        return await _uow.Save();
     }
 
     public async Task<bool> CreateManyMedia(IEnumerable<CreateMediaDTO> createMediaDTOs)
@@ -34,7 +34,7 @@ public class MediaService : IMediaService
         );
 
         _uow.Media.AddRange(mediaEntities);
-        return await _uow.Save() > 0;
+        return await _uow.Save();
     }
 
     public async Task<List<MediaDTO>> GetAllMediaOfIssue(int issueId)
