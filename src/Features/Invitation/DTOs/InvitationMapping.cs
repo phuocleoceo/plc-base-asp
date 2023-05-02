@@ -14,6 +14,10 @@ public class InvitationMapping : Profile
             .ForMember(
                 dto => dto.SenderName,
                 prop => prop.MapFrom(entity => entity.Sender.UserProfile.DisplayName)
+            )
+            .ForMember(
+                dto => dto.SenderAvatar,
+                prop => prop.MapFrom(entity => entity.Sender.UserProfile.Avatar)
             );
 
         CreateMap<InvitationEntity, SenderInvitationDTO>()
@@ -24,6 +28,10 @@ public class InvitationMapping : Profile
             .ForMember(
                 dto => dto.RecipientName,
                 prop => prop.MapFrom(entity => entity.Recipient.UserProfile.DisplayName)
+            )
+            .ForMember(
+                dto => dto.RecipientAvatar,
+                prop => prop.MapFrom(entity => entity.Recipient.UserProfile.Avatar)
             );
     }
 }
