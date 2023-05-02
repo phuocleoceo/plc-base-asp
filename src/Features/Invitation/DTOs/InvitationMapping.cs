@@ -9,6 +9,7 @@ public class InvitationMapping : Profile
     public InvitationMapping()
     {
         CreateMap<InvitationEntity, RecipientInvitationDTO>()
+            .ForMember(dto => dto.InvitationId, prop => prop.MapFrom(entity => entity.Id))
             .ForMember(dto => dto.ProjectName, prop => prop.MapFrom(entity => entity.Project.Name))
             .ForMember(dto => dto.SenderEmail, prop => prop.MapFrom(entity => entity.Sender.Email))
             .ForMember(
@@ -21,6 +22,7 @@ public class InvitationMapping : Profile
             );
 
         CreateMap<InvitationEntity, SenderInvitationDTO>()
+            .ForMember(dto => dto.InvitationId, prop => prop.MapFrom(entity => entity.Id))
             .ForMember(
                 dto => dto.RecipientEmail,
                 prop => prop.MapFrom(entity => entity.Recipient.Email)

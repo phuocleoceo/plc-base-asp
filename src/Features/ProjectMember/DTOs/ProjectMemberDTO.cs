@@ -6,4 +6,5 @@ public class ProjectMemberDTO
     public string Email { get; set; }
     public string Name { get; set; }
     public string Avatar { get; set; }
+    public int ProjectMemberId { get; set; }
 }

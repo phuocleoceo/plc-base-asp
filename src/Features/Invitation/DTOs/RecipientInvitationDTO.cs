@@ -2,6 +2,7 @@ namespace PlcBase.Features.Invitation.DTOs;
 
 public class RecipientInvitationDTO
 {
+    public int InvitationId { get; set; }
     public int SenderId { get; set; }
     public string SenderName { get; set; }
     public string SenderEmail { get; set; }

@@ -18,6 +18,7 @@ public class ProjectMemberMapping : Profile
             .ForMember(
                 dto => dto.Avatar,
                 prop => prop.MapFrom(entity => entity.User.UserProfile.Avatar)
-            );
+            )
+            .ForMember(dto => dto.ProjectMemberId, prop => prop.MapFrom(entity => entity.Id));
     }
 }
