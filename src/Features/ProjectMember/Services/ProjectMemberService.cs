@@ -1,9 +1,12 @@
 using AutoMapper;
 
 using PlcBase.Features.ProjectMember.Entities;
+using PlcBase.Features.ProjectMember.DTOs;
 using PlcBase.Common.Repositories;
 using PlcBase.Shared.Constants;
+using PlcBase.Base.DomainModel;
 using PlcBase.Base.Error;
+using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.ProjectMember.Services;
 
@@ -16,6 +19,26 @@ public class ProjectMemberService : IProjectMemberService
     {
         _uow = uow;
         _mapper = mapper;
+    }
+
+    public async Task<PagedList<ProjectMemberDTO>> GetMembersForProject(
+        int projectId,
+        ProjectMemberParams projectMemberParams
+    )
+    {
+        QueryModel<ProjectMemberEntity> memberQuery = new QueryModel<ProjectMemberEntity>()
+        {
+            OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
+            Filters = { i => i.ProjectId == projectId },
+            Includes = { i => i.User.UserProfile, },
+            PageSize = projectMemberParams.PageSize,
+            PageNumber = projectMemberParams.PageNumber,
+        };
+
+        if (!projectMemberParams.WithDeleted)
+            memberQuery.Filters.Add(i => i.DeletedAt == null);
+
+        return await _uow.ProjectMember.GetPagedAsync<ProjectMemberDTO>(memberQuery);
     }
 
     public async Task<bool> DeleteProjectMember(int projectId, int projectMemberId)

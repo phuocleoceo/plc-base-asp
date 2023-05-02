@@ -17,6 +17,17 @@ public class ProjectMemberController : BaseController
         _projectMemberService = projectMemberService;
     }
 
+    [HttpGet("/api/project/{projectId}/member")]
+    public async Task<BaseResponse<PagedList<ProjectMemberDTO>>> GetMemberForProject(
+        int projectId,
+        [FromQuery] ProjectMemberParams projectMemberParams
+    )
+    {
+        return HttpContext.Success(
+            await _projectMemberService.GetMembersForProject(projectId, projectMemberParams)
+        );
+    }
+
     [HttpDelete("/api/project/{projectId}/member/{projectMemberId}")]
     public async Task<BaseResponse<bool>> DeleteProjectMember(int projectId, int projectMemberId)
     {
