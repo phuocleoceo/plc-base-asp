@@ -58,4 +58,9 @@ public class IssueService : IIssueService
             }
         );
     }
+
+    public Task<bool> CreateIssue(ReqUser reqUser, int projectId, CreateIssueDTO createIssueDTO)
+    {
+        throw new NotImplementedException();
+    }
 }

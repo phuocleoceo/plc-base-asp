@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using PlcBase.Features.Issue.Services;
 using PlcBase.Features.Issue.DTOs;
+using PlcBase.Shared.Utilities;
+using PlcBase.Base.DomainModel;
 using PlcBase.Base.Controller;
 using PlcBase.Base.DTO;
 
@@ -27,5 +29,18 @@ public class IssueController : BaseController
     public async Task<BaseResponse<List<IssueDTO>>> GetIssuesInSprint(int projectId, int sprintId)
     {
         return HttpContext.Success(await _issueService.GetIssuesInSprint(projectId, sprintId));
+    }
+
+    [HttpPost("/api/project/{projectId}/issue")]
+    public async Task<BaseResponse<bool>> CreateIssue(
+        int projectId,
+        [FromBody] CreateIssueDTO createIssueDTO
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _issueService.CreateIssue(reqUser, projectId, createIssueDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
     }
 }

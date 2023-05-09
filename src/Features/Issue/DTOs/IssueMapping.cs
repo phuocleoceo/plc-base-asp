@@ -29,5 +29,7 @@ public class IssueMapping : Profile
                 dto => dto.ProjectStatusName,
                 prop => prop.MapFrom(entity => entity.ProjectStatus.Name)
             );
+
+        CreateMap<CreateIssueDTO, IssueEntity>();
     }
 }
