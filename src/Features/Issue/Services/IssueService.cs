@@ -1,9 +1,12 @@
 using AutoMapper;
 
+using PlcBase.Features.ProjectStatus.Entities;
 using PlcBase.Features.Issue.Entities;
 using PlcBase.Common.Repositories;
 using PlcBase.Features.Issue.DTOs;
+using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
+using PlcBase.Base.Error;
 
 namespace PlcBase.Features.Issue.Services;
 
@@ -59,8 +62,22 @@ public class IssueService : IIssueService
         );
     }
 
-    public Task<bool> CreateIssue(ReqUser reqUser, int projectId, CreateIssueDTO createIssueDTO)
+    public async Task<bool> CreateIssue(
+        ReqUser reqUser,
+        int projectId,
+        CreateIssueDTO createIssueDTO
+    )
     {
-        throw new NotImplementedException();
+        if (createIssueDTO.BacklogIndex == null && createIssueDTO.SprintId == null)
+            throw new BaseException(HttpCode.BAD_REQUEST, "issue_must_in_backlog_or_sprint");
+
+        IssueEntity issueEntity = _mapper.Map<IssueEntity>(createIssueDTO);
+
+        issueEntity.ReporterId = reqUser.Id;
+        issueEntity.ProjectId = projectId;
+        issueEntity.ProjectStatusId = await _uow.ProjectStatus.GetStatusIdForNewIssue(projectId);
+
+        _uow.Issue.Add(issueEntity);
+        return await _uow.Save();
     }
 }

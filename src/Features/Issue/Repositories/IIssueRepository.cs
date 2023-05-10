@@ -3,4 +3,7 @@ using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.Issue.Repositories;
 
-public interface IIssueRepository : IBaseRepository<IssueEntity> { }
+public interface IIssueRepository : IBaseRepository<IssueEntity>
+{
+    Task<int> GetBacklogIndexForNewIssue(int projectId);
+}

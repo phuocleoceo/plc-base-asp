@@ -9,6 +9,5 @@ public class CreateIssueDTO
     public string Type { get; set; }
     public int? BacklogIndex { get; set; }
     public int? SprintId { get; set; }
-    public int ReporterId { get; set; }
     public int? AssigneeId { get; set; }
 }
