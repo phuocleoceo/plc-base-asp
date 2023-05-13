@@ -13,7 +13,7 @@ public class ProjectStatusEntity : BaseSoftDeletableEntity
     public string Name { get; set; }
 
     [Column("index")]
-    public int Index { get; set; }
+    public double Index { get; set; }
 
     [ForeignKey(nameof(Project))]
     [Column("project_id")]

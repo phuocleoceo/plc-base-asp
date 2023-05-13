@@ -50,7 +50,7 @@ public class ProjectStatusService : IProjectStatusService
             );
 
         if (projectStatusDb == null)
-            throw new BaseException(HttpCode.BAD_REQUEST, "project_status_not_found");
+            throw new BaseException(HttpCode.NOT_FOUND, "project_status_not_found");
 
         _mapper.Map(updateProjectStatusDTO, projectStatusDb);
         _uow.ProjectStatus.Update(projectStatusDb);
