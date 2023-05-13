@@ -78,4 +78,29 @@ public class IssueService : IIssueService
         _uow.Issue.Add(issueEntity);
         return await _uow.Save();
     }
+
+    public async Task<bool> UpdateIssue(
+        ReqUser reqUser,
+        int projectId,
+        int issueId,
+        UpdateIssueDTO updateIssueDTO
+    )
+    {
+        IssueEntity issueDb = await _uow.Issue.GetOneAsync<IssueEntity>(
+            new QueryModel<IssueEntity>()
+            {
+                Filters =
+                {
+                    i => i.Id == issueId && i.ProjectId == projectId && i.ReporterId == reqUser.Id
+                },
+            }
+        );
+
+        if (issueDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "issue_not_found");
+
+        _mapper.Map(updateIssueDTO, issueDb);
+        _uow.Issue.Update(issueDb);
+        return await _uow.Save();
+    }
 }

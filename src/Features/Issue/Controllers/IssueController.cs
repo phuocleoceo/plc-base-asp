@@ -43,4 +43,18 @@ public class IssueController : BaseController
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }
+
+    [HttpPut("/api/project/{projectId}/issue/{issueId}")]
+    public async Task<BaseResponse<bool>> UpdateIssue(
+        int projectId,
+        int issueId,
+        [FromBody] UpdateIssueDTO updateIssueDTO
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _issueService.UpdateIssue(reqUser, projectId, issueId, updateIssueDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }

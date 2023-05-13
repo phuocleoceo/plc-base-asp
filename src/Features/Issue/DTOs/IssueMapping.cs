@@ -31,5 +31,7 @@ public class IssueMapping : Profile
             );
 
         CreateMap<CreateIssueDTO, IssueEntity>();
+
+        CreateMap<UpdateIssueDTO, IssueEntity>();
     }
 }
