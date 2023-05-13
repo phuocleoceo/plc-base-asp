@@ -6,4 +6,6 @@ namespace PlcBase.Features.Issue.Repositories;
 public interface IIssueRepository : IBaseRepository<IssueEntity>
 {
     double GetBacklogIndexForNewIssue(int projectId);
+
+    Task<IssueEntity> GetForUpdateAndDelete(int projectId, int reporterId, int issueId);
 }

@@ -10,7 +10,7 @@ using PlcBase.Base.Entity;
 namespace PlcBase.Features.Issue.Entities;
 
 [Table(TableName.ISSUE)]
-public class IssueEntity : BaseEntity
+public class IssueEntity : BaseSoftDeletableEntity
 {
     [Column("title")]
     public string Title { get; set; }

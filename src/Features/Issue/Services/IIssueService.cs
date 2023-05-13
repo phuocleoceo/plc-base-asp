@@ -17,4 +17,6 @@ public interface IIssueService
         int issueId,
         UpdateIssueDTO updateIssueDTO
     );
+
+    Task<bool> DeleteIssue(ReqUser reqUser, int projectId, int issueId);
 }

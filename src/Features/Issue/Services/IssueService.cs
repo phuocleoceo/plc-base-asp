@@ -29,7 +29,11 @@ public class IssueService : IIssueService
                 OrderBy = c => c.OrderBy(i => i.BacklogIndex),
                 Filters =
                 {
-                    i => i.ProjectId == projectId && i.BacklogIndex != null && i.SprintId == null
+                    i =>
+                        i.ProjectId == projectId
+                        && i.DeletedAt == null
+                        && i.BacklogIndex != null
+                        && i.SprintId == null
                 },
                 Includes =
                 {
@@ -50,7 +54,10 @@ public class IssueService : IIssueService
                 Filters =
                 {
                     i =>
-                        i.ProjectId == projectId && i.SprintId == sprintId && i.BacklogIndex == null
+                        i.ProjectId == projectId
+                        && i.DeletedAt == null
+                        && i.SprintId == sprintId
+                        && i.BacklogIndex == null
                 },
                 Includes =
                 {
@@ -86,14 +93,10 @@ public class IssueService : IIssueService
         UpdateIssueDTO updateIssueDTO
     )
     {
-        IssueEntity issueDb = await _uow.Issue.GetOneAsync<IssueEntity>(
-            new QueryModel<IssueEntity>()
-            {
-                Filters =
-                {
-                    i => i.Id == issueId && i.ProjectId == projectId && i.ReporterId == reqUser.Id
-                },
-            }
+        IssueEntity issueDb = await _uow.Issue.GetForUpdateAndDelete(
+            projectId,
+            reqUser.Id,
+            issueId
         );
 
         if (issueDb == null)
@@ -101,6 +104,21 @@ public class IssueService : IIssueService
 
         _mapper.Map(updateIssueDTO, issueDb);
         _uow.Issue.Update(issueDb);
+        return await _uow.Save();
+    }
+
+    public async Task<bool> DeleteIssue(ReqUser reqUser, int projectId, int issueId)
+    {
+        IssueEntity issueDb = await _uow.Issue.GetForUpdateAndDelete(
+            projectId,
+            reqUser.Id,
+            issueId
+        );
+
+        if (issueDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "issue_not_found");
+
+        _uow.Issue.SoftDelete(issueDb);
         return await _uow.Save();
     }
 }

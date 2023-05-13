@@ -26,4 +26,17 @@ public class IssueRepository : BaseRepository<IssueEntity>, IIssueRepository
                 .Max(i => i.BacklogIndex) + 1
             ?? 0;
     }
+
+    public async Task<IssueEntity> GetForUpdateAndDelete(int projectId, int reporterId, int issueId)
+    {
+        return await GetOneAsync<IssueEntity>(
+            new QueryModel<IssueEntity>()
+            {
+                Filters =
+                {
+                    i => i.Id == issueId && i.ProjectId == projectId && i.ReporterId == reporterId
+                },
+            }
+        );
+    }
 }

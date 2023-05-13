@@ -57,4 +57,14 @@ public class IssueController : BaseController
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }
+
+    [HttpDelete("/api/project/{projectId}/issue/{issueId}")]
+    public async Task<BaseResponse<bool>> DeleteIssue(int projectId, int issueId)
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _issueService.DeleteIssue(reqUser, projectId, issueId))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }
