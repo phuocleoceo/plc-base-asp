@@ -5,5 +5,5 @@ namespace PlcBase.Features.Issue.Repositories;
 
 public interface IIssueRepository : IBaseRepository<IssueEntity>
 {
-    Task<double> GetBacklogIndexForNewIssue(int projectId);
+    double GetBacklogIndexForNewIssue(int projectId);
 }

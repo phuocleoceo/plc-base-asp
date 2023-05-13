@@ -19,16 +19,11 @@ public class IssueRepository : BaseRepository<IssueEntity>, IIssueRepository
         _mapper = mapper;
     }
 
-    public async Task<double> GetBacklogIndexForNewIssue(int projectId)
+    public double GetBacklogIndexForNewIssue(int projectId)
     {
-        IssueEntity issue = await GetOneAsync<IssueEntity>(
-            new QueryModel<IssueEntity>()
-            {
-                OrderBy = c => c.OrderByDescending(i => i.BacklogIndex),
-                Filters = { s => s.ProjectId == projectId }
-            }
-        );
-
-        return issue?.BacklogIndex + 1 ?? 0;
+        return _dbSet
+                .Where(i => i.ProjectId == projectId && i.BacklogIndex.HasValue)
+                .Max(i => i.BacklogIndex) + 1
+            ?? 0;
     }
 }

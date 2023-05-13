@@ -39,7 +39,8 @@ public class ProjectStatusRepository : BaseRepository<ProjectStatusEntity>, IPro
         ProjectStatusEntity projectStatus = await GetOneAsync<ProjectStatusEntity>(
             new QueryModel<ProjectStatusEntity>()
             {
-                Filters = { s => s.ProjectId == projectId && s.Index == 0 },
+                OrderBy = c => c.OrderBy(s => s.Index),
+                Filters = { s => s.ProjectId == projectId },
             }
         );
 

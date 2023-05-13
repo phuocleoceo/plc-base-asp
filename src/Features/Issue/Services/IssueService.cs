@@ -68,14 +68,12 @@ public class IssueService : IIssueService
         CreateIssueDTO createIssueDTO
     )
     {
-        if (createIssueDTO.BacklogIndex == null && createIssueDTO.SprintId == null)
-            throw new BaseException(HttpCode.BAD_REQUEST, "issue_must_in_backlog_or_sprint");
-
         IssueEntity issueEntity = _mapper.Map<IssueEntity>(createIssueDTO);
 
         issueEntity.ReporterId = reqUser.Id;
         issueEntity.ProjectId = projectId;
         issueEntity.ProjectStatusId = await _uow.ProjectStatus.GetStatusIdForNewIssue(projectId);
+        issueEntity.BacklogIndex = Math.Floor(_uow.Issue.GetBacklogIndexForNewIssue(projectId));
 
         _uow.Issue.Add(issueEntity);
         return await _uow.Save();
