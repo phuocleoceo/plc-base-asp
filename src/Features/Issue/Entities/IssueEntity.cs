@@ -28,7 +28,7 @@ public class IssueEntity : BaseEntity
     public string Type { get; set; }
 
     [Column("backlog_index")]
-    public int? BacklogIndex { get; set; }
+    public double? BacklogIndex { get; set; }
 
     [ForeignKey(nameof(Sprint))]
     [Column("sprint_id")]
@@ -49,6 +49,9 @@ public class IssueEntity : BaseEntity
     [Column("project_status_id")]
     public int? ProjectStatusId { get; set; }
     public ProjectStatusEntity ProjectStatus { get; set; }
+
+    [Column("project_status_index")]
+    public double? ProjectStatusIndex { get; set; }
 
     [ForeignKey(nameof(Project))]
     [Column("project_id")]

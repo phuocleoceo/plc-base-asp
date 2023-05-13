@@ -19,7 +19,7 @@ public class IssueRepository : BaseRepository<IssueEntity>, IIssueRepository
         _mapper = mapper;
     }
 
-    public async Task<int> GetBacklogIndexForNewIssue(int projectId)
+    public async Task<double> GetBacklogIndexForNewIssue(int projectId)
     {
         IssueEntity issue = await GetOneAsync<IssueEntity>(
             new QueryModel<IssueEntity>()

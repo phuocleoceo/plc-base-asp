@@ -21,7 +21,7 @@ public class ProjectStatusRepository : BaseRepository<ProjectStatusEntity>, IPro
         _mapper = mapper;
     }
 
-    public async Task<int> GetIndexForNewStatus(int projectId)
+    public async Task<double> GetIndexForNewStatus(int projectId)
     {
         ProjectStatusEntity projectStatus = await GetOneAsync<ProjectStatusEntity>(
             new QueryModel<ProjectStatusEntity>()

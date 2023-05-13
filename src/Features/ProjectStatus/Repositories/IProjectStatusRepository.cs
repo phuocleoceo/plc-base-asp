@@ -5,7 +5,7 @@ namespace PlcBase.Features.ProjectStatus.Repositories;
 
 public interface IProjectStatusRepository : IBaseRepository<ProjectStatusEntity>
 {
-    Task<int> GetIndexForNewStatus(int projectId);
+    Task<double> GetIndexForNewStatus(int projectId);
 
     Task<int?> GetStatusIdForNewIssue(int projectId);
 }
