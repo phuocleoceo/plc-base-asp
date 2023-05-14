@@ -6,5 +6,10 @@ namespace PlcBase.Features.Sprint.DTOs;
 
 public class SprintMapping : Profile
 {
-    public SprintMapping() { }
+    public SprintMapping()
+    {
+        CreateMap<CreateSprintDTO, SprintEntity>();
+
+        CreateMap<UpdateSprintDTO, SprintEntity>();
+    }
 }
