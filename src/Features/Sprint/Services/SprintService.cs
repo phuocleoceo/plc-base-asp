@@ -1,7 +1,9 @@
 using AutoMapper;
-using PlcBase.Base.DomainModel;
-using PlcBase.Common.Repositories;
+
+using PlcBase.Features.Sprint.Entities;
 using PlcBase.Features.Sprint.DTOs;
+using PlcBase.Common.Repositories;
+using PlcBase.Base.DomainModel;
 
 namespace PlcBase.Features.Sprint.Services;
 
@@ -16,9 +18,19 @@ public class SprintService : ISprintService
         _mapper = mapper;
     }
 
-    public Task<bool> CreateSprint(ReqUser reqUser, int projectId, CreateSprintDTO createSprintDTO)
+    public async Task<bool> CreateSprint(
+        ReqUser reqUser,
+        int projectId,
+        CreateSprintDTO createSprintDTO
+    )
     {
-        throw new NotImplementedException();
+        SprintEntity sprintEntity = _mapper.Map<SprintEntity>(createSprintDTO);
+
+        sprintEntity.ProjectId = projectId;
+        sprintEntity.IsInProgress = false;
+
+        _uow.Sprint.Add(sprintEntity);
+        return await _uow.Save();
     }
 
     public Task<bool> UpdateSprint(
