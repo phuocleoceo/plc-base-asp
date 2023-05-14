@@ -4,6 +4,8 @@ using PlcBase.Features.Sprint.Entities;
 using PlcBase.Features.Sprint.DTOs;
 using PlcBase.Common.Repositories;
 using PlcBase.Base.DomainModel;
+using PlcBase.Shared.Constants;
+using PlcBase.Base.Error;
 
 namespace PlcBase.Features.Sprint.Services;
 
@@ -33,28 +35,55 @@ public class SprintService : ISprintService
         return await _uow.Save();
     }
 
-    public Task<bool> UpdateSprint(
+    public async Task<bool> UpdateSprint(
         ReqUser reqUser,
         int projectId,
         int sprintId,
         UpdateSprintDTO updateSprintDTO
     )
     {
-        throw new NotImplementedException();
+        SprintEntity sprintDb = await _uow.Sprint.GetForUpdateAndDelete(projectId, sprintId);
+
+        if (sprintDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
+
+        _mapper.Map(updateSprintDTO, sprintDb);
+        _uow.Sprint.Update(sprintDb);
+        return await _uow.Save();
     }
 
-    public Task<bool> DeleteSprint(ReqUser reqUser, int projectId, int sprintId)
+    public async Task<bool> DeleteSprint(ReqUser reqUser, int projectId, int sprintId)
     {
-        throw new NotImplementedException();
+        SprintEntity sprintDb = await _uow.Sprint.GetForUpdateAndDelete(projectId, sprintId);
+
+        if (sprintDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
+
+        _uow.Sprint.Remove(sprintDb);
+        return await _uow.Save();
     }
 
-    public Task<bool> StartSprint(ReqUser reqUser, int projectId, int sprintId)
+    public async Task<bool> StartSprint(ReqUser reqUser, int projectId, int sprintId)
     {
-        throw new NotImplementedException();
+        SprintEntity sprintDb = await _uow.Sprint.GetForUpdateAndDelete(projectId, sprintId);
+
+        if (sprintDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
+
+        sprintDb.IsInProgress = true;
+        _uow.Sprint.Update(sprintDb);
+        return await _uow.Save();
     }
 
-    public Task<bool> CompleteSprint(ReqUser reqUser, int projectId, int sprintId)
+    public async Task<bool> CompleteSprint(ReqUser reqUser, int projectId, int sprintId)
     {
-        throw new NotImplementedException();
+        SprintEntity sprintDb = await _uow.Sprint.GetForUpdateAndDelete(projectId, sprintId);
+
+        if (sprintDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
+
+        sprintDb.IsInProgress = false;
+        _uow.Sprint.Update(sprintDb);
+        return await _uow.Save();
     }
 }
