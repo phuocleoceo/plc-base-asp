@@ -22,21 +22,21 @@ public class AddressController : BaseController
         return HttpContext.Success(await _addressService.GetProvinces());
     }
 
-    [HttpGet("Province/{id}/Districs")]
-    public async Task<BaseResponse<List<DistrictDTO>>> GetDistricsOfProvince(int id)
+    [HttpGet("Provinces/{provinceId}/Districts")]
+    public async Task<BaseResponse<List<DistrictDTO>>> GetDistricsOfProvince(int provinceId)
     {
-        return HttpContext.Success(await _addressService.GetDistricsOfProvince(id));
+        return HttpContext.Success(await _addressService.GetDistricsOfProvince(provinceId));
     }
 
-    [HttpGet("District/{id}/Wards")]
-    public async Task<BaseResponse<List<WardDTO>>> GetWardsOfDistrict(int id)
+    [HttpGet("Districts/{districtId}/Wards")]
+    public async Task<BaseResponse<List<WardDTO>>> GetWardsOfDistrict(int districtId)
     {
-        return HttpContext.Success(await _addressService.GetWardsOfDistrict(id));
+        return HttpContext.Success(await _addressService.GetWardsOfDistrict(districtId));
     }
 
-    [HttpGet("Full-Address/{id}")]
-    public async Task<BaseResponse<FullAddressDTO>> GetFullAddressByWardId(int id)
+    [HttpGet("Full-Address/{wardId}")]
+    public async Task<BaseResponse<FullAddressDTO>> GetFullAddressByWardId(int wardId)
     {
-        return HttpContext.Success(await _addressService.GetFullAddressByWardId(id));
+        return HttpContext.Success(await _addressService.GetFullAddressByWardId(wardId));
     }
 }
