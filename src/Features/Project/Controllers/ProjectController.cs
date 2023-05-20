@@ -19,6 +19,14 @@ public class ProjectController : BaseController
         _projectService = projectService;
     }
 
+    [HttpGet]
+    public async Task<BaseResponse<List<ProjectDTO>>> GetProjectsForUser()
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        return HttpContext.Success(await _projectService.GetProjectsForUser(reqUser));
+    }
+
     [HttpPost]
     public async Task<BaseResponse<bool>> CreateProject(
         [FromBody] CreateProjectDTO createProjectDTO
