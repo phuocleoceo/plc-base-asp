@@ -1,5 +1,6 @@
 using AutoMapper;
 
+using PlcBase.Features.ProjectMember.Entities;
 using PlcBase.Features.Project.Entities;
 using PlcBase.Features.Project.DTOs;
 using PlcBase.Common.Repositories;
@@ -22,12 +23,30 @@ public class ProjectService : IProjectService
 
     public async Task<bool> CreateProject(ReqUser reqUser, CreateProjectDTO createProjectDTO)
     {
-        ProjectEntity projectEntity = _mapper.Map<ProjectEntity>(createProjectDTO);
-        projectEntity.CreatorId = reqUser.Id;
-        projectEntity.LeaderId = reqUser.Id;
+        try
+        {
+            ProjectEntity projectEntity = _mapper.Map<ProjectEntity>(createProjectDTO);
+            projectEntity.CreatorId = reqUser.Id;
+            projectEntity.LeaderId = reqUser.Id;
 
-        _uow.Project.Add(projectEntity);
-        return await _uow.Save();
+            await _uow.CreateTransaction();
+
+            _uow.Project.Add(projectEntity);
+            await _uow.Save();
+
+            _uow.ProjectMember.Add(
+                new ProjectMemberEntity() { UserId = reqUser.Id, ProjectId = projectEntity.Id, }
+            );
+            await _uow.Save();
+
+            await _uow.CommitTransaction();
+            return true;
+        }
+        catch (BaseException ex)
+        {
+            await _uow.AbortTransaction();
+            throw ex;
+        }
     }
 
     public async Task<bool> UpdateProject(

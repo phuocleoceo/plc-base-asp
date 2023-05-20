@@ -16,21 +16,21 @@ namespace PlcBase.Features.Auth.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IUnitOfWork _uof;
+    private readonly IUnitOfWork _uow;
     private readonly IJwtHelper _jwtHelper;
     private readonly IMapper _mapper;
     private readonly ClientAppSettings _clientAppSettings;
     private readonly ISendMailHelper _sendMailHelper;
 
     public AuthService(
-        IUnitOfWork uof,
+        IUnitOfWork uow,
         IJwtHelper jwtHelper,
         IMapper mapper,
         IOptions<ClientAppSettings> clientAppSettings,
         ISendMailHelper sendMailHelper
     )
     {
-        _uof = uof;
+        _uow = uow;
         _jwtHelper = jwtHelper;
         _mapper = mapper;
         _clientAppSettings = clientAppSettings.Value;
@@ -41,7 +41,7 @@ public class AuthService : IAuthService
 
     public async Task<UserLoginResponseDTO> Login(UserLoginDTO userLoginDTO)
     {
-        UserAccountEntity currentUser = await _uof.UserAccount.GetOneAsync<UserAccountEntity>(
+        UserAccountEntity currentUser = await _uow.UserAccount.GetOneAsync<UserAccountEntity>(
             new QueryModel<UserAccountEntity>()
             {
                 Filters = { u => u.Email == userLoginDTO.Email },
@@ -70,8 +70,8 @@ public class AuthService : IAuthService
 
         currentUser.RefreshToken = refreshToken.Token;
         currentUser.RefreshTokenExpiredAt = refreshToken.ExpiredAt;
-        _uof.UserAccount.Update(currentUser);
-        await _uof.Save();
+        _uow.UserAccount.Update(currentUser);
+        await _uow.Save();
 
         return new UserLoginResponseDTO()
         {
@@ -106,7 +106,7 @@ public class AuthService : IAuthService
         );
 
         int userId = Convert.ToInt32(principal.FindFirstValue(CustomClaimTypes.UserId));
-        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(userId);
+        UserAccountEntity currentUser = await _uow.UserAccount.FindByIdAsync(userId);
 
         if (currentUser == null)
             throw new BaseException(HttpCode.NOT_FOUND, "account_has_token_not_found");
@@ -121,8 +121,8 @@ public class AuthService : IAuthService
         TokenData refreshToken = _jwtHelper.CreateRefreshToken();
 
         currentUser.RefreshToken = refreshToken.Token;
-        _uof.UserAccount.Update(currentUser);
-        await _uof.Save();
+        _uow.UserAccount.Update(currentUser);
+        await _uow.Save();
 
         return new UserRefreshTokenResponseDTO()
         {
@@ -135,7 +135,7 @@ public class AuthService : IAuthService
 
     public async Task<bool> RevokeRefreshToken(ReqUser reqUser)
     {
-        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(reqUser.Id);
+        UserAccountEntity currentUser = await _uow.UserAccount.FindByIdAsync(reqUser.Id);
 
         if (currentUser == null)
             throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
@@ -143,8 +143,8 @@ public class AuthService : IAuthService
         currentUser.RefreshToken = null;
         currentUser.RefreshTokenExpiredAt = null;
 
-        _uof.UserAccount.Update(currentUser);
-        return await _uof.Save();
+        _uow.UserAccount.Update(currentUser);
+        return await _uow.Save();
     }
 
     #endregion
@@ -155,17 +155,17 @@ public class AuthService : IAuthService
     {
         try
         {
-            await _uof.CreateTransaction();
+            await _uow.CreateTransaction();
 
             UserAccountEntity newUserAccount = _mapper.Map<UserAccountEntity>(userRegisterDTO);
             UserProfileEntity newUserProfile = _mapper.Map<UserProfileEntity>(userRegisterDTO);
 
             // Throw exception if register unique info is exists
-            if (await _uof.UserAccount.AnyAsync(ua => ua.Email == newUserAccount.Email))
+            if (await _uow.UserAccount.AnyAsync(ua => ua.Email == newUserAccount.Email))
                 throw new BaseException(HttpCode.BAD_REQUEST, "email_existed");
 
             if (
-                await _uof.UserProfile.AnyAsync(
+                await _uow.UserProfile.AnyAsync(
                     up =>
                         up.PhoneNumber == newUserProfile.PhoneNumber
                         || up.IdentityNumber == newUserProfile.IdentityNumber
@@ -184,18 +184,18 @@ public class AuthService : IAuthService
             newUserAccount.IsActived = true;
             newUserAccount.SecurityCode = CodeSecure.CreateRandomCode();
 
-            _uof.UserAccount.Add(newUserAccount);
-            await _uof.Save();
+            _uow.UserAccount.Add(newUserAccount);
+            await _uow.Save();
 
             // Create user profile with new user account Id
             newUserProfile.CurrentCredit = 0;
             newUserProfile.UserAccountId = newUserAccount.Id;
-            _uof.UserProfile.Add(newUserProfile);
+            _uow.UserProfile.Add(newUserProfile);
 
             await SendMailConfirm(newUserAccount);
 
-            await _uof.Save();
-            await _uof.CommitTransaction();
+            await _uow.Save();
+            await _uow.CommitTransaction();
 
             return new UserRegisterResponseDTO()
             {
@@ -205,7 +205,7 @@ public class AuthService : IAuthService
         }
         catch (BaseException ex)
         {
-            await _uof.AbortTransaction();
+            await _uow.AbortTransaction();
             throw ex;
         }
     }
@@ -234,7 +234,7 @@ public class AuthService : IAuthService
 
     public async Task<bool> ConfirmEmail(UserConfirmEmailDTO userConfirmEmailDTO)
     {
-        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(
+        UserAccountEntity currentUser = await _uow.UserAccount.FindByIdAsync(
             userConfirmEmailDTO.UserId
         );
 
@@ -250,8 +250,8 @@ public class AuthService : IAuthService
         currentUser.IsVerified = true;
         currentUser.SecurityCode = "";
 
-        _uof.UserAccount.Update(currentUser);
-        return await _uof.Save();
+        _uow.UserAccount.Update(currentUser);
+        return await _uow.Save();
     }
 
     #endregion
@@ -263,7 +263,7 @@ public class AuthService : IAuthService
         UserChangePasswordDTO userChangePasswordDTO
     )
     {
-        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(reqUser.Id);
+        UserAccountEntity currentUser = await _uow.UserAccount.FindByIdAsync(reqUser.Id);
 
         if (currentUser == null)
             throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
@@ -284,15 +284,15 @@ public class AuthService : IAuthService
         currentUser.PasswordHashed = newPasswordHash.PasswordHashed;
         currentUser.PasswordSalt = newPasswordHash.PasswordSalt;
 
-        _uof.UserAccount.Update(currentUser);
-        return await _uof.Save();
+        _uow.UserAccount.Update(currentUser);
+        return await _uow.Save();
     }
 
     public async Task ForgotPassword(UserForgotPasswordDTO userForgotPasswordDTO)
     {
         string identityInformation = userForgotPasswordDTO.IdentityInformation;
 
-        UserAccountEntity currentUser = await _uof.UserAccount.GetOneAsync<UserAccountEntity>(
+        UserAccountEntity currentUser = await _uow.UserAccount.GetOneAsync<UserAccountEntity>(
             new QueryModel<UserAccountEntity>()
             {
                 Includes = { ua => ua.UserProfile },
@@ -315,8 +315,8 @@ public class AuthService : IAuthService
         string newSecurityCode = CodeSecure.CreateRandomCode();
         currentUser.SecurityCode = newSecurityCode;
 
-        _uof.UserAccount.Update(currentUser);
-        await _uof.Save();
+        _uow.UserAccount.Update(currentUser);
+        await _uow.Save();
 
         await SendMailForgotPassword(currentUser);
     }
@@ -344,7 +344,7 @@ public class AuthService : IAuthService
 
     public async Task<bool> RecoverPassword(UserRecoverPasswordDTO userRecoverPasswordDTO)
     {
-        UserAccountEntity currentUser = await _uof.UserAccount.FindByIdAsync(
+        UserAccountEntity currentUser = await _uow.UserAccount.FindByIdAsync(
             userRecoverPasswordDTO.UserId
         );
 
@@ -364,8 +364,8 @@ public class AuthService : IAuthService
         currentUser.PasswordSalt = newPasswordHash.PasswordSalt;
         currentUser.SecurityCode = "";
 
-        _uof.UserAccount.Update(currentUser);
-        return await _uof.Save();
+        _uow.UserAccount.Update(currentUser);
+        return await _uow.Save();
     }
 
     #endregion
