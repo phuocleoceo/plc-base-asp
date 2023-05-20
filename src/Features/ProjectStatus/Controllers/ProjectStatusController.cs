@@ -46,17 +46,6 @@ public class ProjectStatusController : BaseController
         return HttpContext.Failure();
     }
 
-    [HttpPut("/api/project/{projectId}/status/index")]
-    public async Task<BaseResponse<bool>> UpdateStatusIndex(
-        int projectId,
-        [FromBody] UpdateStatusIndexDTO updateStatusIndex
-    )
-    {
-        if (await _projectStatusService.UpdateStatusIndex(projectId, updateStatusIndex))
-            return HttpContext.Success(true);
-        return HttpContext.Failure();
-    }
-
     [HttpDelete("/api/project/{projectId}/status/{projectStatusId}")]
     public async Task<BaseResponse<bool>> DeleteProjectStatus(int projectId, int projectStatusId)
     {
