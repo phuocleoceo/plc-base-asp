@@ -6,4 +6,6 @@ namespace PlcBase.Features.ProjectMember.Repositories;
 public interface IProjectMemberRepository : IBaseRepository<ProjectMemberEntity>
 {
     Task<List<int>> GetProjectIdsForUser(int userId);
+
+    Task SoftDeleteMemberForProject(int projectId);
 }

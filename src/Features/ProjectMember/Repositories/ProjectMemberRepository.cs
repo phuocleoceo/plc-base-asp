@@ -26,4 +26,11 @@ public class ProjectMemberRepository : BaseRepository<ProjectMemberEntity>, IPro
             .Select(m => m.ProjectId)
             .ToListAsync();
     }
+
+    public async Task SoftDeleteMemberForProject(int projectId)
+    {
+        await _dbSet
+            .Where(m => m.ProjectId == projectId && m.DeletedAt == null)
+            .ForEachAsync(m => SoftDelete(m));
+    }
 }

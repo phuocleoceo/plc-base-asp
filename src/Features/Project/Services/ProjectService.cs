@@ -92,6 +92,8 @@ public class ProjectService : IProjectService
             _uow.Project.SoftDelete(projectDb);
             await _uow.Save();
 
+            await _uow.ProjectMember.SoftDeleteMemberForProject(projectId);
+
             await _uow.CommitTransaction();
             return true;
         }
