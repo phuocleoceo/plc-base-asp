@@ -1,12 +1,13 @@
 using System.Linq.Expressions;
 
 using PlcBase.Base.DomainModel;
+using PlcBase.Base.Entity;
 using PlcBase.Base.DTO;
 
 namespace PlcBase.Base.Repository;
 
 public interface IBaseRepository<T>
-    where T : class
+    where T : BaseEntity
 {
     Task<List<U>> GetManyAsync<U>(QueryModel<T> queryModel = null)
         where U : class;
@@ -38,4 +39,6 @@ public interface IBaseRepository<T>
     void SoftDelete(T entity);
 
     Task SoftDeleteById(int id);
+
+    Task SoftDeleteByIds(IEnumerable<int> ids);
 }

@@ -11,7 +11,7 @@ using PlcBase.Base.DTO;
 namespace PlcBase.Base.Repository;
 
 public class BaseRepository<T> : IBaseRepository<T>
-    where T : class
+    where T : BaseEntity
 {
     private readonly DataContext _db;
     private readonly IMapper _mapper;
@@ -158,5 +158,12 @@ public class BaseRepository<T> : IBaseRepository<T>
     {
         T entity = await _dbSet.FindAsync(id);
         SoftDelete(entity);
+    }
+
+    public async Task SoftDeleteByIds(IEnumerable<int> ids)
+    {
+        await _dbSet
+            .Where(entity => ids.Contains(entity.Id))
+            .ForEachAsync(entity => SoftDelete(entity));
     }
 }

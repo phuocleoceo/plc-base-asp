@@ -8,6 +8,8 @@ public class ProjectMapping : Profile
 {
     public ProjectMapping()
     {
+        CreateMap<ProjectEntity, ProjectDTO>();
+
         CreateMap<CreateProjectDTO, ProjectEntity>();
 
         CreateMap<UpdateProjectDTO, ProjectEntity>();

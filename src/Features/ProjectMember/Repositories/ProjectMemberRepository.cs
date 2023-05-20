@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 
 using PlcBase.Features.ProjectMember.Entities;
@@ -16,5 +17,20 @@ public class ProjectMemberRepository : BaseRepository<ProjectMemberEntity>, IPro
     {
         _db = db;
         _mapper = mapper;
+    }
+
+    public async Task<List<int>> GetProjectIdsForUser(int userId)
+    {
+        return await _dbSet
+            .Where(m => m.UserId == userId && m.DeletedAt == null)
+            .Select(m => m.ProjectId)
+            .ToListAsync();
+    }
+
+    public async Task SoftDeleteMemberForProject(int projectId)
+    {
+        await _dbSet
+            .Where(m => m.ProjectId == projectId && m.DeletedAt == null)
+            .ForEachAsync(m => SoftDelete(m));
     }
 }

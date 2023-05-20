@@ -1,5 +1,6 @@
 using AutoMapper;
 
+using PlcBase.Features.ProjectMember.Entities;
 using PlcBase.Features.Project.Entities;
 using PlcBase.Features.Project.DTOs;
 using PlcBase.Common.Repositories;
@@ -20,14 +21,45 @@ public class ProjectService : IProjectService
         _mapper = mapper;
     }
 
+    public async Task<List<ProjectDTO>> GetProjectsForUser(ReqUser reqUser)
+    {
+        List<int> projectIds = await _uow.ProjectMember.GetProjectIdsForUser(reqUser.Id);
+
+        return await _uow.Project.GetManyAsync<ProjectDTO>(
+            new QueryModel<ProjectEntity>()
+            {
+                OrderBy = c => c.OrderByDescending(p => p.CreatedAt),
+                Filters = { p => projectIds.Contains(p.Id) && p.DeletedAt == null },
+            }
+        );
+    }
+
     public async Task<bool> CreateProject(ReqUser reqUser, CreateProjectDTO createProjectDTO)
     {
-        ProjectEntity projectEntity = _mapper.Map<ProjectEntity>(createProjectDTO);
-        projectEntity.CreatorId = reqUser.Id;
-        projectEntity.LeaderId = reqUser.Id;
+        try
+        {
+            ProjectEntity projectEntity = _mapper.Map<ProjectEntity>(createProjectDTO);
+            projectEntity.CreatorId = reqUser.Id;
+            projectEntity.LeaderId = reqUser.Id;
 
-        _uow.Project.Add(projectEntity);
-        return await _uow.Save();
+            await _uow.CreateTransaction();
+
+            _uow.Project.Add(projectEntity);
+            await _uow.Save();
+
+            _uow.ProjectMember.Add(
+                new ProjectMemberEntity() { UserId = reqUser.Id, ProjectId = projectEntity.Id, }
+            );
+            await _uow.Save();
+
+            await _uow.CommitTransaction();
+            return true;
+        }
+        catch (BaseException ex)
+        {
+            await _uow.AbortTransaction();
+            throw ex;
+        }
     }
 
     public async Task<bool> UpdateProject(
@@ -48,12 +80,27 @@ public class ProjectService : IProjectService
 
     public async Task<bool> DeleteProject(ReqUser reqUser, int projectId)
     {
-        ProjectEntity projectDb = await _uow.Project.GetByIdAndOwner(reqUser, projectId);
+        try
+        {
+            ProjectEntity projectDb = await _uow.Project.GetByIdAndOwner(reqUser, projectId);
 
-        if (projectDb == null)
-            throw new BaseException(HttpCode.NOT_FOUND, "project_not_found");
+            if (projectDb == null)
+                throw new BaseException(HttpCode.NOT_FOUND, "project_not_found");
 
-        _uow.Project.SoftDelete(projectDb);
-        return await _uow.Save();
+            await _uow.CreateTransaction();
+
+            _uow.Project.SoftDelete(projectDb);
+            await _uow.Save();
+
+            await _uow.ProjectMember.SoftDeleteMemberForProject(projectId);
+
+            await _uow.CommitTransaction();
+            return true;
+        }
+        catch (BaseException ex)
+        {
+            await _uow.AbortTransaction();
+            throw ex;
+        }
     }
 }
