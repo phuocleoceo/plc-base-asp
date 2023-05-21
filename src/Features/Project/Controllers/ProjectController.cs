@@ -27,6 +27,14 @@ public class ProjectController : BaseController
         return HttpContext.Success(await _projectService.GetProjectsForUser(reqUser));
     }
 
+    [HttpGet("{projectId}")]
+    public async Task<BaseResponse<ProjectDTO>> GetProjectById(int projectId)
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        return HttpContext.Success(await _projectService.GetProjectById(reqUser, projectId));
+    }
+
     [HttpPost]
     public async Task<BaseResponse<bool>> CreateProject(
         [FromBody] CreateProjectDTO createProjectDTO

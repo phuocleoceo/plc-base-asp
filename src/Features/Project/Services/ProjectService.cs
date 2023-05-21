@@ -34,6 +34,33 @@ public class ProjectService : IProjectService
         );
     }
 
+    public async Task<ProjectDTO> GetProjectById(ReqUser reqUser, int projectId)
+    {
+        ProjectMemberEntity projectMember =
+            await _uow.ProjectMember.GetOneAsync<ProjectMemberEntity>(
+                new QueryModel<ProjectMemberEntity>()
+                {
+                    Filters =
+                    {
+                        m =>
+                            m.UserId == reqUser.Id
+                            && m.ProjectId == projectId
+                            && m.DeletedAt == null
+                    }
+                }
+            );
+
+        if (projectMember == null)
+            throw new BaseException(HttpCode.BAD_REQUEST, "unreachable_project");
+
+        return await _uow.Project.GetOneAsync<ProjectDTO>(
+            new QueryModel<ProjectEntity>()
+            {
+                Filters = { m => m.Id == projectId && m.DeletedAt == null }
+            }
+        );
+    }
+
     public async Task<bool> CreateProject(ReqUser reqUser, CreateProjectDTO createProjectDTO)
     {
         try
