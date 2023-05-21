@@ -30,6 +30,7 @@ public class ProjectService : IProjectService
             {
                 OrderBy = c => c.OrderByDescending(p => p.CreatedAt),
                 Filters = { p => projectIds.Contains(p.Id) && p.DeletedAt == null },
+                Includes = { p => p.Leader.UserProfile },
             }
         );
     }
@@ -46,7 +47,7 @@ public class ProjectService : IProjectService
                             m.UserId == reqUser.Id
                             && m.ProjectId == projectId
                             && m.DeletedAt == null
-                    }
+                    },
                 }
             );
 
@@ -56,7 +57,8 @@ public class ProjectService : IProjectService
         return await _uow.Project.GetOneAsync<ProjectDTO>(
             new QueryModel<ProjectEntity>()
             {
-                Filters = { m => m.Id == projectId && m.DeletedAt == null }
+                Filters = { m => m.Id == projectId && m.DeletedAt == null },
+                Includes = { p => p.Leader.UserProfile },
             }
         );
     }
