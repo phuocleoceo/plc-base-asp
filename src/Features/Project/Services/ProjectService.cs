@@ -21,18 +21,29 @@ public class ProjectService : IProjectService
         _mapper = mapper;
     }
 
-    public async Task<List<ProjectDTO>> GetProjectsForUser(ReqUser reqUser)
+    public async Task<List<ProjectDTO>> GetProjectsForUser(
+        ReqUser reqUser,
+        ProjectParams projectParams
+    )
     {
         List<int> projectIds = await _uow.ProjectMember.GetProjectIdsForUser(reqUser.Id);
 
-        return await _uow.Project.GetManyAsync<ProjectDTO>(
-            new QueryModel<ProjectEntity>()
-            {
-                OrderBy = c => c.OrderByDescending(p => p.CreatedAt),
-                Filters = { p => projectIds.Contains(p.Id) && p.DeletedAt == null },
-                Includes = { p => p.Leader.UserProfile },
-            }
-        );
+        QueryModel<ProjectEntity> projectQuery = new QueryModel<ProjectEntity>()
+        {
+            OrderBy = c => c.OrderByDescending(p => p.CreatedAt),
+            Filters = { p => projectIds.Contains(p.Id) && p.DeletedAt == null },
+            Includes = { p => p.Leader.UserProfile },
+        };
+
+        if (!string.IsNullOrWhiteSpace(projectParams.Search))
+        {
+            string searchValue = projectParams.Search;
+            projectQuery.Filters.Add(
+                p => p.Name.ToLower().Contains(searchValue) || p.Key.ToLower().Contains(searchValue)
+            );
+        }
+
+        return await _uow.Project.GetManyAsync<ProjectDTO>(projectQuery);
     }
 
     public async Task<ProjectDTO> GetProjectById(ReqUser reqUser, int projectId)

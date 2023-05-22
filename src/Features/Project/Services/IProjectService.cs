@@ -5,7 +5,7 @@ namespace PlcBase.Features.Project.Services;
 
 public interface IProjectService
 {
-    Task<List<ProjectDTO>> GetProjectsForUser(ReqUser reqUser);
+    Task<List<ProjectDTO>> GetProjectsForUser(ReqUser reqUser, ProjectParams projectParams);
 
     Task<ProjectDTO> GetProjectById(ReqUser reqUser, int projectId);
 
