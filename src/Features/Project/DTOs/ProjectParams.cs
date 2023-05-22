@@ -2,5 +2,5 @@ namespace PlcBase.Features.Project.DTOs;
 
 public class ProjectParams
 {
-    public string Search { get; set; }
+    public string SearchValue { get; set; }
 }

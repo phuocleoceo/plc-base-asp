@@ -35,11 +35,12 @@ public class ProjectService : IProjectService
             Includes = { p => p.Leader.UserProfile },
         };
 
-        if (!string.IsNullOrWhiteSpace(projectParams.Search))
+        if (!string.IsNullOrWhiteSpace(projectParams.SearchValue))
         {
-            string searchValue = projectParams.Search;
             projectQuery.Filters.Add(
-                p => p.Name.ToLower().Contains(searchValue) || p.Key.ToLower().Contains(searchValue)
+                p =>
+                    p.Name.ToLower().Contains(projectParams.SearchValue)
+                    || p.Key.ToLower().Contains(projectParams.SearchValue)
             );
         }
 
