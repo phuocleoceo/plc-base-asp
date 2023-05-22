@@ -20,11 +20,15 @@ public class ProjectController : BaseController
     }
 
     [HttpGet]
-    public async Task<BaseResponse<List<ProjectDTO>>> GetProjectsForUser()
+    public async Task<BaseResponse<List<ProjectDTO>>> GetProjectsForUser(
+        [FromQuery] ProjectParams projectParams
+    )
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 
-        return HttpContext.Success(await _projectService.GetProjectsForUser(reqUser));
+        return HttpContext.Success(
+            await _projectService.GetProjectsForUser(reqUser, projectParams)
+        );
     }
 
     [HttpGet("{projectId}")]
