@@ -1,8 +1,8 @@
-using PlcBase.Base.DomainModel;
-
 namespace PlcBase.Features.ProjectMember.DTOs;
 
-public class ProjectMemberParams : ReqParam
+public class ProjectMemberParams
 {
+    public string SearchValue { get; set; }
+
     public bool WithDeleted { get; set; } = false;
 }

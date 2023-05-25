@@ -1,11 +1,10 @@
 using PlcBase.Features.ProjectMember.DTOs;
-using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.ProjectMember.Services;
 
 public interface IProjectMemberService
 {
-    Task<PagedList<ProjectMemberDTO>> GetMembersForProject(
+    Task<List<ProjectMemberDTO>> GetMembersForProject(
         int projectId,
         ProjectMemberParams projectMemberParams
     );

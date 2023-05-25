@@ -18,7 +18,7 @@ public class ProjectMemberController : BaseController
     }
 
     [HttpGet("/api/project/{projectId}/member")]
-    public async Task<BaseResponse<PagedList<ProjectMemberDTO>>> GetMemberForProject(
+    public async Task<BaseResponse<List<ProjectMemberDTO>>> GetMemberForProject(
         int projectId,
         [FromQuery] ProjectMemberParams projectMemberParams
     )
