@@ -31,8 +31,17 @@ public class UserMapping : Profile
                 prop => prop.MapFrom(entity => entity.AddressWard.Name)
             )
             .ForMember(
+                dto => dto.AddressDistrictId,
+                prop => prop.MapFrom(entity => entity.AddressWard.AddressDistrict.Id)
+            )
+            .ForMember(
                 dto => dto.AddressDistrict,
                 prop => prop.MapFrom(entity => entity.AddressWard.AddressDistrict.Name)
+            )
+            .ForMember(
+                dto => dto.AddressProvinceId,
+                prop =>
+                    prop.MapFrom(entity => entity.AddressWard.AddressDistrict.AddressProvince.Id)
             )
             .ForMember(
                 dto => dto.AddressProvince,

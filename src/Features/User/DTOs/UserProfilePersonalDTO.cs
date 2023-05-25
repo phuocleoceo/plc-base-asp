@@ -13,6 +13,8 @@ public class UserProfilePersonalDTO
     public string Address { get; set; }
     public int AddressWardId { get; set; }
     public string AddressWard { get; set; }
+    public int AddressDistrictId { get; set; }
     public string AddressDistrict { get; set; }
+    public int AddressProvinceId { get; set; }
     public string AddressProvince { get; set; }
 }
