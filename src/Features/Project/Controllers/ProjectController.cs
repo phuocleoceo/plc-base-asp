@@ -20,7 +20,7 @@ public class ProjectController : BaseController
     }
 
     [HttpGet]
-    public async Task<BaseResponse<List<ProjectDTO>>> GetProjectsForUser(
+    public async Task<BaseResponse<PagedList<ProjectDTO>>> GetProjectsForUser(
         [FromQuery] ProjectParams projectParams
     )
     {

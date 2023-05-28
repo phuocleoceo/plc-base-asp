@@ -7,6 +7,7 @@ using PlcBase.Common.Repositories;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Error;
+using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.Project.Services;
 
@@ -21,7 +22,7 @@ public class ProjectService : IProjectService
         _mapper = mapper;
     }
 
-    public async Task<List<ProjectDTO>> GetProjectsForUser(
+    public async Task<PagedList<ProjectDTO>> GetProjectsForUser(
         ReqUser reqUser,
         ProjectParams projectParams
     )
@@ -33,6 +34,8 @@ public class ProjectService : IProjectService
             OrderBy = c => c.OrderByDescending(p => p.CreatedAt),
             Filters = { p => projectIds.Contains(p.Id) && p.DeletedAt == null },
             Includes = { p => p.Leader.UserProfile },
+            PageSize = projectParams.PageSize,
+            PageNumber = projectParams.PageNumber
         };
 
         if (!string.IsNullOrWhiteSpace(projectParams.SearchValue))
@@ -44,7 +47,7 @@ public class ProjectService : IProjectService
             );
         }
 
-        return await _uow.Project.GetManyAsync<ProjectDTO>(projectQuery);
+        return await _uow.Project.GetPagedAsync<ProjectDTO>(projectQuery);
     }
 
     public async Task<ProjectDTO> GetProjectById(ReqUser reqUser, int projectId)
