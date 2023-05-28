@@ -6,6 +6,7 @@ using PlcBase.Common.Repositories;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Error;
+using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.ProjectMember.Services;
 
@@ -20,7 +21,7 @@ public class ProjectMemberService : IProjectMemberService
         _mapper = mapper;
     }
 
-    public async Task<List<ProjectMemberDTO>> GetMembersForProject(
+    public async Task<PagedList<ProjectMemberDTO>> GetMembersForProject(
         int projectId,
         ProjectMemberParams projectMemberParams
     )
@@ -30,6 +31,8 @@ public class ProjectMemberService : IProjectMemberService
             OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
             Filters = { i => i.ProjectId == projectId },
             Includes = { i => i.User.UserProfile, },
+            PageSize = projectMemberParams.PageSize,
+            PageNumber = projectMemberParams.PageNumber
         };
 
         if (!projectMemberParams.WithDeleted)
@@ -48,7 +51,18 @@ public class ProjectMemberService : IProjectMemberService
             );
         }
 
-        return await _uow.ProjectMember.GetManyAsync<ProjectMemberDTO>(memberQuery);
+        return await _uow.ProjectMember.GetPagedAsync<ProjectMemberDTO>(memberQuery);
+    }
+
+    public async Task<List<ProjectMemberSelectDTO>> GetMembersForSelect(int projectId)
+    {
+        return await _uow.ProjectMember.GetManyAsync<ProjectMemberSelectDTO>(
+            new QueryModel<ProjectMemberEntity>()
+            {
+                Filters = { i => i.ProjectId == projectId && i.DeletedAt == null },
+                Includes = { i => i.User.UserProfile, },
+            }
+        );
     }
 
     public async Task<bool> DeleteProjectMember(int projectId, int projectMemberId)

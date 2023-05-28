@@ -18,7 +18,7 @@ public class ProjectMemberController : BaseController
     }
 
     [HttpGet("/api/project/{projectId}/member")]
-    public async Task<BaseResponse<List<ProjectMemberDTO>>> GetMemberForProject(
+    public async Task<BaseResponse<PagedList<ProjectMemberDTO>>> GetMemberForProject(
         int projectId,
         [FromQuery] ProjectMemberParams projectMemberParams
     )
@@ -26,6 +26,12 @@ public class ProjectMemberController : BaseController
         return HttpContext.Success(
             await _projectMemberService.GetMembersForProject(projectId, projectMemberParams)
         );
+    }
+
+    [HttpGet("/api/project/{projectId}/member/select")]
+    public async Task<BaseResponse<List<ProjectMemberSelectDTO>>> GetMemberForSelect(int projectId)
+    {
+        return HttpContext.Success(await _projectMemberService.GetMembersForSelect(projectId));
     }
 
     [HttpDelete("/api/project/{projectId}/member/{projectMemberId}")]
