@@ -9,6 +9,7 @@ public class RecipientInvitationDTO
     public string SenderAvatar { get; set; }
     public int ProjectId { get; set; }
     public string ProjectName { get; set; }
+    public string ProjectImage { get; set; }
     public DateTime? AcceptedAt { get; set; }
     public DateTime? DeclinedAt { get; set; }
 }
