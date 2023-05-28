@@ -40,6 +40,18 @@ public class InvitationService : IInvitationService
         if (recipientInvitationParams.StillValid)
             invitationQuery.Filters.Add(i => i.AcceptedAt == null && i.DeclinedAt == null);
 
+        if (!string.IsNullOrWhiteSpace(recipientInvitationParams.SearchValue))
+        {
+            string searchValue = recipientInvitationParams.SearchValue.ToLower();
+            invitationQuery.Filters.Add(
+                i =>
+                    i.Sender.Email.ToLower().Contains(searchValue)
+                    || i.Sender.UserProfile.DisplayName.ToLower().Contains(searchValue)
+                    || i.Project.Name.ToLower().Contains(searchValue)
+                    || i.Project.Key.ToLower().Contains(searchValue)
+            );
+        }
+
         return await _uow.Invitation.GetPagedAsync<RecipientInvitationDTO>(invitationQuery);
     }
 
@@ -59,6 +71,16 @@ public class InvitationService : IInvitationService
 
         if (senderInvitationParams.StillValid)
             invitationQuery.Filters.Add(i => i.AcceptedAt == null && i.DeclinedAt == null);
+
+        if (!string.IsNullOrWhiteSpace(senderInvitationParams.SearchValue))
+        {
+            string searchValue = senderInvitationParams.SearchValue.ToLower();
+            invitationQuery.Filters.Add(
+                i =>
+                    i.Recipient.Email.ToLower().Contains(searchValue)
+                    || i.Recipient.UserProfile.DisplayName.ToLower().Contains(searchValue)
+            );
+        }
 
         return await _uow.Invitation.GetPagedAsync<SenderInvitationDTO>(invitationQuery);
     }

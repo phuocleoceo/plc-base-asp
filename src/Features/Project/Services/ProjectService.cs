@@ -40,10 +40,9 @@ public class ProjectService : IProjectService
 
         if (!string.IsNullOrWhiteSpace(projectParams.SearchValue))
         {
+            string searchValue = projectParams.SearchValue.ToLower();
             projectQuery.Filters.Add(
-                p =>
-                    p.Name.ToLower().Contains(projectParams.SearchValue)
-                    || p.Key.ToLower().Contains(projectParams.SearchValue)
+                p => p.Name.ToLower().Contains(searchValue) || p.Key.ToLower().Contains(searchValue)
             );
         }
 

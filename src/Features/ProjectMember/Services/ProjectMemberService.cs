@@ -42,12 +42,11 @@ public class ProjectMemberService : IProjectMemberService
 
         if (!string.IsNullOrWhiteSpace(projectMemberParams.SearchValue))
         {
+            string searchValue = projectMemberParams.SearchValue.ToLower();
             memberQuery.Filters.Add(
                 i =>
-                    i.User.Email.ToLower().Contains(projectMemberParams.SearchValue)
-                    || i.User.UserProfile.DisplayName
-                        .ToLower()
-                        .Contains(projectMemberParams.SearchValue)
+                    i.User.Email.ToLower().Contains(searchValue)
+                    || i.User.UserProfile.DisplayName.ToLower().Contains(searchValue)
             );
         }
 
