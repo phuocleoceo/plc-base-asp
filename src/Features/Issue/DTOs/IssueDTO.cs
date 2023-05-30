@@ -8,7 +8,7 @@ public class IssueDTO
     public double StoryPoint { get; set; }
     public string Priority { get; set; }
     public string Type { get; set; }
-    public int? BacklogIndex { get; set; }
+    public double? BacklogIndex { get; set; }
     public int? SprintId { get; set; }
 
     public int ReporterId { get; set; }

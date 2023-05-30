@@ -28,4 +28,14 @@ public class SprintRepository : BaseRepository<SprintEntity>, ISprintRepository
             }
         );
     }
+
+    public async Task<SprintEntity> GetInProgressSprint(int projectId)
+    {
+        return await GetOneAsync<SprintEntity>(
+            new QueryModel<SprintEntity>()
+            {
+                Filters = { i => i.ProjectId == projectId && i.IsInProgress == true },
+            }
+        );
+    }
 }
