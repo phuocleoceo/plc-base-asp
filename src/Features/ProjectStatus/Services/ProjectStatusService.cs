@@ -20,6 +20,16 @@ public class ProjectStatusService : IProjectStatusService
         _mapper = mapper;
     }
 
+    public async Task<List<ProjectStatusDTO>> GetProjectStatusForProject(int projectId)
+    {
+        return await _uow.ProjectStatus.GetManyAsync<ProjectStatusDTO>(
+            new QueryModel<ProjectStatusEntity>()
+            {
+                Filters = { s => s.ProjectId == projectId && s.DeletedAt == null },
+            }
+        );
+    }
+
     public async Task<bool> CreateProjectStatus(
         int projectId,
         CreateProjectStatusDTO createProjectStatusDTO

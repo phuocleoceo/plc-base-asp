@@ -4,6 +4,8 @@ namespace PlcBase.Features.ProjectStatus.Services;
 
 public interface IProjectStatusService
 {
+    Task<List<ProjectStatusDTO>> GetProjectStatusForProject(int projectId);
+
     Task<bool> CreateProjectStatus(int projectId, CreateProjectStatusDTO createProjectStatusDTO);
 
     Task<bool> UpdateProjectStatus(

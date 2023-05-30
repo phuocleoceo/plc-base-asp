@@ -8,6 +8,8 @@ public class ProjectStatusMapping : Profile
 {
     public ProjectStatusMapping()
     {
+        CreateMap<ProjectStatusEntity, ProjectStatusDTO>();
+
         CreateMap<CreateProjectStatusDTO, ProjectStatusEntity>();
 
         CreateMap<UpdateProjectStatusDTO, ProjectStatusEntity>();

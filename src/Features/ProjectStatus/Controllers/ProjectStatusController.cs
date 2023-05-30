@@ -17,6 +17,16 @@ public class ProjectStatusController : BaseController
         _projectStatusService = projectStatusService;
     }
 
+    [HttpGet("/api/project/{projectId}/status")]
+    public async Task<BaseResponse<List<ProjectStatusDTO>>> GetProjectStatusForProject(
+        int projectId
+    )
+    {
+        return HttpContext.Success(
+            await _projectStatusService.GetProjectStatusForProject(projectId)
+        );
+    }
+
     [HttpPost("/api/project/{projectId}/status")]
     public async Task<BaseResponse<bool>> CreateProjectStatus(
         int projectId,

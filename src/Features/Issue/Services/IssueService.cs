@@ -29,7 +29,7 @@ public class IssueService : IIssueService
         if (sprintEntity == null)
             throw new BaseException(HttpCode.NOT_FOUND, "no_sprint_in_progress");
 
-        return await _uow.Issue.GetManyAsync<IssueDTO>(
+        List<IssueDTO> issueDTOs = await _uow.Issue.GetManyAsync<IssueDTO>(
             new QueryModel<IssueEntity>()
             {
                 OrderBy = c => c.OrderByDescending(i => i.CreatedAt),
@@ -49,6 +49,8 @@ public class IssueService : IIssueService
                 },
             }
         );
+
+        return issueDTOs;
     }
 
     public async Task<List<IssueDTO>> GetIssuesInBacklog(int projectId)
