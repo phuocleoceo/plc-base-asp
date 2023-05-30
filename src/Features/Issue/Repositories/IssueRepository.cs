@@ -1,7 +1,6 @@
 using AutoMapper;
 
 using PlcBase.Features.Issue.Entities;
-using Microsoft.EntityFrameworkCore;
 using PlcBase.Common.Data.Context;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Repository;
@@ -39,27 +38,5 @@ public class IssueRepository : BaseRepository<IssueEntity>, IIssueRepository
                 },
             }
         );
-    }
-
-    public async Task<Dictionary<int, List<IssueEntity>>> GetIssuesGroupedByStatus(
-        int projectId,
-        int sprintId
-    )
-    {
-        return (
-            await _dbSet
-                .Include(i => i.Reporter.UserProfile)
-                .Include(i => i.Assignee.UserProfile)
-                .Where(
-                    i =>
-                        i.ProjectId == projectId
-                        && i.DeletedAt == null
-                        && i.SprintId == sprintId
-                        && i.BacklogIndex == null
-                )
-                .ToListAsync()
-        )
-            .GroupBy(i => i.ProjectStatusId.Value)
-            .ToDictionary(ig => ig.Key, ig => ig.ToList());
     }
 }

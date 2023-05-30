@@ -17,5 +17,6 @@ public class IssueBoardDTO
     public string AssigneeName { get; set; }
     public string AssigneeAvatar { get; set; }
 
+    public int? ProjectStatusId { get; set; }
     public double? ProjectStatusIndex { get; set; }
 }

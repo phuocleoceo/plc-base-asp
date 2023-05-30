@@ -29,10 +29,23 @@ public class IssueService : IIssueService
         if (sprintEntity == null)
             throw new BaseException(HttpCode.NOT_FOUND, "no_sprint_in_progress");
 
-        return (await _uow.Issue.GetIssuesGroupedByStatus(projectId, sprintEntity.Id)).ToDictionary(
-            ig => ig.Key,
-            ig => ig.Value.Select(i => _mapper.Map<IssueBoardDTO>(i)).ToList()
-        );
+        return (
+            await _uow.Issue.GetManyAsync<IssueBoardDTO>(
+                new QueryModel<IssueEntity>()
+                {
+                    OrderBy = c => c.OrderBy(i => i.ProjectStatusIndex),
+                    Filters =
+                    {
+                        i =>
+                            i.ProjectId == projectId
+                            && i.DeletedAt == null
+                            && i.SprintId == sprintEntity.Id
+                            && i.BacklogIndex == null
+                    },
+                    Includes = { i => i.Assignee.UserProfile, i => i.Reporter.UserProfile, },
+                }
+            )
+        ).GroupBy(i => i.ProjectStatusId.Value).ToDictionary(ig => ig.Key, ig => ig.ToList());
     }
 
     public async Task<List<IssueDTO>> GetIssuesInBacklog(int projectId)
