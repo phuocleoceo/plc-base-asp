@@ -5,7 +5,7 @@ namespace PlcBase.Features.Issue.Services;
 
 public interface IIssueService
 {
-    Task<List<IssueDTO>> GetIssuesForBoard(int projectId);
+    Task<Dictionary<int, List<IssueBoardDTO>>> GetIssuesForBoard(int projectId);
 
     Task<List<IssueDTO>> GetIssuesInBacklog(int projectId);
 

@@ -22,35 +22,17 @@ public class IssueService : IIssueService
         _mapper = mapper;
     }
 
-    public async Task<List<IssueDTO>> GetIssuesForBoard(int projectId)
+    public async Task<Dictionary<int, List<IssueBoardDTO>>> GetIssuesForBoard(int projectId)
     {
         SprintEntity sprintEntity = await _uow.Sprint.GetInProgressSprint(projectId);
 
         if (sprintEntity == null)
             throw new BaseException(HttpCode.NOT_FOUND, "no_sprint_in_progress");
 
-        List<IssueDTO> issueDTOs = await _uow.Issue.GetManyAsync<IssueDTO>(
-            new QueryModel<IssueEntity>()
-            {
-                OrderBy = c => c.OrderByDescending(i => i.CreatedAt),
-                Filters =
-                {
-                    i =>
-                        i.ProjectId == projectId
-                        && i.DeletedAt == null
-                        && i.SprintId == sprintEntity.Id
-                        && i.BacklogIndex == null
-                },
-                Includes =
-                {
-                    i => i.Assignee.UserProfile,
-                    i => i.Reporter.UserProfile,
-                    i => i.ProjectStatus
-                },
-            }
+        return (await _uow.Issue.GetIssuesGroupedByStatus(projectId, sprintEntity.Id)).ToDictionary(
+            ig => ig.Key,
+            ig => ig.Value.Select(i => _mapper.Map<IssueBoardDTO>(i)).ToList()
         );
-
-        return issueDTOs;
     }
 
     public async Task<List<IssueDTO>> GetIssuesInBacklog(int projectId)

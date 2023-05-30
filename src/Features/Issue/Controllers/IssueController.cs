@@ -20,7 +20,9 @@ public class IssueController : BaseController
     }
 
     [HttpGet("/api/project/{projectId}/board/issue")]
-    public async Task<BaseResponse<List<IssueDTO>>> GetIssuesForBoard(int projectId)
+    public async Task<BaseResponse<Dictionary<int, List<IssueBoardDTO>>>> GetIssuesForBoard(
+        int projectId
+    )
     {
         return HttpContext.Success(await _issueService.GetIssuesForBoard(projectId));
     }
