@@ -19,16 +19,24 @@ public class IssueController : BaseController
         _issueService = issueService;
     }
 
+    [HttpGet("/api/project/{projectId}/board/issue")]
+    public async Task<BaseResponse<Dictionary<int, List<IssueBoardDTO>>>> GetIssuesForBoard(
+        int projectId
+    )
+    {
+        return HttpContext.Success(await _issueService.GetIssuesForBoard(projectId));
+    }
+
     [HttpGet("/api/project/{projectId}/backlog/issue")]
     public async Task<BaseResponse<List<IssueDTO>>> GetIssuesInBacklog(int projectId)
     {
         return HttpContext.Success(await _issueService.GetIssuesInBacklog(projectId));
     }
 
-    [HttpGet("/api/project/{projectId}/sprint/{sprintId}/issue")]
-    public async Task<BaseResponse<List<IssueDTO>>> GetIssuesInSprint(int projectId, int sprintId)
+    [HttpGet("/api/project/{projectId}/sprint/issue")]
+    public async Task<BaseResponse<List<IssueDTO>>> GetIssuesInSprint(int projectId)
     {
-        return HttpContext.Success(await _issueService.GetIssuesInSprint(projectId, sprintId));
+        return HttpContext.Success(await _issueService.GetIssuesInSprint(projectId));
     }
 
     [HttpPost("/api/project/{projectId}/issue")]

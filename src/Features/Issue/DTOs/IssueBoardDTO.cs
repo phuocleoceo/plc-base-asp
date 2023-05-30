@@ -1,6 +1,6 @@
 namespace PlcBase.Features.Issue.DTOs;
 
-public class IssueDTO
+public class IssueBoardDTO
 {
     public int Id { get; set; }
     public string Title { get; set; }
@@ -8,8 +8,6 @@ public class IssueDTO
     public double StoryPoint { get; set; }
     public string Priority { get; set; }
     public string Type { get; set; }
-    public double? BacklogIndex { get; set; }
-    public int? SprintId { get; set; }
 
     public int ReporterId { get; set; }
     public string ReporterName { get; set; }
@@ -20,5 +18,5 @@ public class IssueDTO
     public string AssigneeAvatar { get; set; }
 
     public int? ProjectStatusId { get; set; }
-    public string ProjectStatusName { get; set; }
+    public double? ProjectStatusIndex { get; set; }
 }

@@ -1,6 +1,7 @@
 using AutoMapper;
 
 using PlcBase.Features.ProjectStatus.Entities;
+using PlcBase.Features.Sprint.Entities;
 using PlcBase.Features.Issue.Entities;
 using PlcBase.Common.Repositories;
 using PlcBase.Features.Issue.DTOs;
@@ -19,6 +20,32 @@ public class IssueService : IIssueService
     {
         _uow = uow;
         _mapper = mapper;
+    }
+
+    public async Task<Dictionary<int, List<IssueBoardDTO>>> GetIssuesForBoard(int projectId)
+    {
+        SprintEntity sprintEntity = await _uow.Sprint.GetInProgressSprint(projectId);
+
+        if (sprintEntity == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "no_sprint_in_progress");
+
+        return (
+            await _uow.Issue.GetManyAsync<IssueBoardDTO>(
+                new QueryModel<IssueEntity>()
+                {
+                    OrderBy = c => c.OrderBy(i => i.ProjectStatusIndex),
+                    Filters =
+                    {
+                        i =>
+                            i.ProjectId == projectId
+                            && i.DeletedAt == null
+                            && i.SprintId == sprintEntity.Id
+                            && i.BacklogIndex == null
+                    },
+                    Includes = { i => i.Assignee.UserProfile, i => i.Reporter.UserProfile, },
+                }
+            )
+        ).GroupBy(i => i.ProjectStatusId.Value).ToDictionary(ig => ig.Key, ig => ig.ToList());
     }
 
     public async Task<List<IssueDTO>> GetIssuesInBacklog(int projectId)
@@ -45,8 +72,13 @@ public class IssueService : IIssueService
         );
     }
 
-    public async Task<List<IssueDTO>> GetIssuesInSprint(int projectId, int sprintId)
+    public async Task<List<IssueDTO>> GetIssuesInSprint(int projectId)
     {
+        SprintEntity sprintEntity = await _uow.Sprint.GetInProgressSprint(projectId);
+
+        if (sprintEntity == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "no_sprint_in_progress");
+
         return await _uow.Issue.GetManyAsync<IssueDTO>(
             new QueryModel<IssueEntity>()
             {
@@ -56,7 +88,7 @@ public class IssueService : IIssueService
                     i =>
                         i.ProjectId == projectId
                         && i.DeletedAt == null
-                        && i.SprintId == sprintId
+                        && i.SprintId == sprintEntity.Id
                         && i.BacklogIndex == null
                 },
                 Includes =
@@ -80,6 +112,9 @@ public class IssueService : IIssueService
         issueEntity.ReporterId = reqUser.Id;
         issueEntity.ProjectId = projectId;
         issueEntity.ProjectStatusId = await _uow.ProjectStatus.GetStatusIdForNewIssue(projectId);
+        issueEntity.ProjectStatusIndex = Math.Floor(
+            _uow.Issue.GetStatusIndexForNewIssue(projectId, issueEntity.ProjectStatusId.Value)
+        );
         issueEntity.BacklogIndex = Math.Floor(_uow.Issue.GetBacklogIndexForNewIssue(projectId));
 
         _uow.Issue.Add(issueEntity);

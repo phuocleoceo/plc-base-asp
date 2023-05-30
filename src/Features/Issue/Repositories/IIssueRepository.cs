@@ -7,5 +7,7 @@ public interface IIssueRepository : IBaseRepository<IssueEntity>
 {
     double GetBacklogIndexForNewIssue(int projectId);
 
+    double GetStatusIndexForNewIssue(int projectId, int projectStatusId);
+
     Task<IssueEntity> GetForUpdateAndDelete(int projectId, int reporterId, int issueId);
 }
