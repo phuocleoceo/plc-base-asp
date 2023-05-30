@@ -22,7 +22,7 @@ public class IssueService : IIssueService
         _mapper = mapper;
     }
 
-    public async Task<Dictionary<int, List<IssueBoardDTO>>> GetIssuesForBoard(int projectId)
+    public async Task<IEnumerable<IssueBoardGroupDTO>> GetIssuesForBoard(int projectId)
     {
         SprintEntity sprintEntity = await _uow.Sprint.GetInProgressSprint(projectId);
 
@@ -45,7 +45,7 @@ public class IssueService : IIssueService
                     Includes = { i => i.Assignee.UserProfile, i => i.Reporter.UserProfile, },
                 }
             )
-        ).GroupBy(i => i.ProjectStatusId.Value).ToDictionary(ig => ig.Key, ig => ig.ToList());
+        ).GroupBy(i => i.ProjectStatusId.Value).Select(ig => new IssueBoardGroupDTO() { ProjectStatusId = ig.Key, Issues = ig.AsEnumerable() });
     }
 
     public async Task<List<IssueDTO>> GetIssuesInBacklog(int projectId)
@@ -90,6 +90,25 @@ public class IssueService : IIssueService
                         && i.DeletedAt == null
                         && i.SprintId == sprintEntity.Id
                         && i.BacklogIndex == null
+                },
+                Includes =
+                {
+                    i => i.Assignee.UserProfile,
+                    i => i.Reporter.UserProfile,
+                    i => i.ProjectStatus
+                },
+            }
+        );
+    }
+
+    public async Task<IssueDTO> GetIssueById(int projectId, int issueId)
+    {
+        return await _uow.Issue.GetOneAsync<IssueDTO>(
+            new QueryModel<IssueEntity>()
+            {
+                Filters =
+                {
+                    i => i.Id == issueId && i.ProjectId == projectId && i.DeletedAt == null
                 },
                 Includes =
                 {

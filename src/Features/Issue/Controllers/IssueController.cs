@@ -20,7 +20,7 @@ public class IssueController : BaseController
     }
 
     [HttpGet("/api/project/{projectId}/board/issue")]
-    public async Task<BaseResponse<Dictionary<int, List<IssueBoardDTO>>>> GetIssuesForBoard(
+    public async Task<BaseResponse<IEnumerable<IssueBoardGroupDTO>>> GetIssuesForBoard(
         int projectId
     )
     {
@@ -37,6 +37,12 @@ public class IssueController : BaseController
     public async Task<BaseResponse<List<IssueDTO>>> GetIssuesInSprint(int projectId)
     {
         return HttpContext.Success(await _issueService.GetIssuesInSprint(projectId));
+    }
+
+    [HttpGet("/api/project/{projectId}/issue/{issueId}")]
+    public async Task<BaseResponse<IssueDTO>> GetIssueById(int projectId, int issueId)
+    {
+        return HttpContext.Success(await _issueService.GetIssueById(projectId, issueId));
     }
 
     [HttpPost("/api/project/{projectId}/issue")]

@@ -5,11 +5,13 @@ namespace PlcBase.Features.Issue.Services;
 
 public interface IIssueService
 {
-    Task<Dictionary<int, List<IssueBoardDTO>>> GetIssuesForBoard(int projectId);
+    Task<IEnumerable<IssueBoardGroupDTO>> GetIssuesForBoard(int projectId);
 
     Task<List<IssueDTO>> GetIssuesInBacklog(int projectId);
 
     Task<List<IssueDTO>> GetIssuesInSprint(int projectId);
+
+    Task<IssueDTO> GetIssueById(int projectId, int issueId);
 
     Task<bool> CreateIssue(ReqUser reqUser, int projectId, CreateIssueDTO createIssueDTO);
 

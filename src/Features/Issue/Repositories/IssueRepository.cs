@@ -42,7 +42,11 @@ public class IssueRepository : BaseRepository<IssueEntity>, IIssueRepository
             {
                 Filters =
                 {
-                    i => i.Id == issueId && i.ProjectId == projectId && i.ReporterId == reporterId
+                    i =>
+                        i.Id == issueId
+                        && i.ProjectId == projectId
+                        && i.ReporterId == reporterId
+                        && i.DeletedAt == null
                 },
             }
         );
