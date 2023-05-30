@@ -112,6 +112,9 @@ public class IssueService : IIssueService
         issueEntity.ReporterId = reqUser.Id;
         issueEntity.ProjectId = projectId;
         issueEntity.ProjectStatusId = await _uow.ProjectStatus.GetStatusIdForNewIssue(projectId);
+        issueEntity.ProjectStatusIndex = Math.Floor(
+            _uow.Issue.GetStatusIndexForNewIssue(projectId, issueEntity.ProjectStatusId.Value)
+        );
         issueEntity.BacklogIndex = Math.Floor(_uow.Issue.GetBacklogIndexForNewIssue(projectId));
 
         _uow.Issue.Add(issueEntity);

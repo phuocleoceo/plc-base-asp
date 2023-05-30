@@ -27,6 +27,14 @@ public class IssueRepository : BaseRepository<IssueEntity>, IIssueRepository
             ?? 0;
     }
 
+    public double GetStatusIndexForNewIssue(int projectId, int projectStatusId)
+    {
+        return _dbSet
+                .Where(i => i.ProjectId == projectId && i.ProjectStatusId == projectStatusId)
+                .Max(i => i.ProjectStatusIndex) + 1
+            ?? 0;
+    }
+
     public async Task<IssueEntity> GetForUpdateAndDelete(int projectId, int reporterId, int issueId)
     {
         return await GetOneAsync<IssueEntity>(
