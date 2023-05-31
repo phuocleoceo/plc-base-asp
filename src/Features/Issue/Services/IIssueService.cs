@@ -1,3 +1,4 @@
+using PlcBase.Features.Invitation.DTOs;
 using PlcBase.Features.Issue.DTOs;
 using PlcBase.Base.DomainModel;
 
@@ -5,7 +6,10 @@ namespace PlcBase.Features.Issue.Services;
 
 public interface IIssueService
 {
-    Task<IEnumerable<IssueBoardGroupDTO>> GetIssuesForBoard(int projectId);
+    Task<IEnumerable<IssueBoardGroupDTO>> GetIssuesForBoard(
+        int projectId,
+        IssueBoardParams issueParams
+    );
 
     Task<List<IssueDTO>> GetIssuesInBacklog(int projectId);
 

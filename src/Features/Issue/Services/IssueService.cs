@@ -1,7 +1,7 @@
 using AutoMapper;
 
-using PlcBase.Features.ProjectStatus.Entities;
 using PlcBase.Features.Sprint.Entities;
+using PlcBase.Features.Invitation.DTOs;
 using PlcBase.Features.Issue.Entities;
 using PlcBase.Common.Repositories;
 using PlcBase.Features.Issue.DTOs;
@@ -22,30 +22,58 @@ public class IssueService : IIssueService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<IssueBoardGroupDTO>> GetIssuesForBoard(int projectId)
+    public async Task<IEnumerable<IssueBoardGroupDTO>> GetIssuesForBoard(
+        int projectId,
+        IssueBoardParams issueParams
+    )
     {
         SprintEntity sprintEntity = await _uow.Sprint.GetInProgressSprint(projectId);
 
         if (sprintEntity == null)
             throw new BaseException(HttpCode.NOT_FOUND, "no_sprint_in_progress");
 
-        return (
-            await _uow.Issue.GetManyAsync<IssueBoardDTO>(
-                new QueryModel<IssueEntity>()
-                {
-                    OrderBy = c => c.OrderBy(i => i.ProjectStatusIndex),
-                    Filters =
+        QueryModel<IssueEntity> issueQuery = new QueryModel<IssueEntity>()
+        {
+            OrderBy = c => c.OrderBy(i => i.ProjectStatusIndex),
+            Filters =
+            {
+                i =>
+                    i.ProjectId == projectId
+                    && i.DeletedAt == null
+                    && i.SprintId == sprintEntity.Id
+                    && i.BacklogIndex == null
+            },
+            Includes = { i => i.Assignee.UserProfile, i => i.Reporter.UserProfile, },
+        };
+
+        if (!String.IsNullOrEmpty(issueParams.Assignees))
+        {
+            IEnumerable<int> assignees = issueParams.Assignees
+                .Split(",")
+                .Select(c => Convert.ToInt32(c));
+            issueQuery.Filters.Add(i => assignees.Contains(i.AssigneeId.Value));
+        }
+
+        if (!string.IsNullOrWhiteSpace(issueParams.SearchValue))
+        {
+            string searchValue = issueParams.SearchValue.ToLower();
+            issueQuery.Filters.Add(
+                i =>
+                    i.Title.ToLower().Contains(searchValue)
+                    || i.Description.ToLower().Contains(searchValue)
+            );
+        }
+
+        return (await _uow.Issue.GetManyAsync<IssueBoardDTO>(issueQuery))
+            .GroupBy(i => i.ProjectStatusId.Value)
+            .Select(
+                ig =>
+                    new IssueBoardGroupDTO()
                     {
-                        i =>
-                            i.ProjectId == projectId
-                            && i.DeletedAt == null
-                            && i.SprintId == sprintEntity.Id
-                            && i.BacklogIndex == null
-                    },
-                    Includes = { i => i.Assignee.UserProfile, i => i.Reporter.UserProfile, },
-                }
-            )
-        ).GroupBy(i => i.ProjectStatusId.Value).Select(ig => new IssueBoardGroupDTO() { ProjectStatusId = ig.Key, Issues = ig.AsEnumerable() });
+                        ProjectStatusId = ig.Key,
+                        Issues = ig.AsEnumerable()
+                    }
+            );
     }
 
     public async Task<List<IssueDTO>> GetIssuesInBacklog(int projectId)

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using PlcBase.Features.Invitation.DTOs;
 using PlcBase.Features.Issue.Services;
 using PlcBase.Features.Issue.DTOs;
 using PlcBase.Shared.Utilities;
@@ -21,10 +22,11 @@ public class IssueController : BaseController
 
     [HttpGet("/api/project/{projectId}/board/issue")]
     public async Task<BaseResponse<IEnumerable<IssueBoardGroupDTO>>> GetIssuesForBoard(
-        int projectId
+        int projectId,
+        [FromQuery] IssueBoardParams issueParams
     )
     {
-        return HttpContext.Success(await _issueService.GetIssuesForBoard(projectId));
+        return HttpContext.Success(await _issueService.GetIssuesForBoard(projectId, issueParams));
     }
 
     [HttpGet("/api/project/{projectId}/backlog/issue")]
