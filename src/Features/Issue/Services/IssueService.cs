@@ -43,7 +43,7 @@ public class IssueService : IIssueService
                     && i.SprintId == sprintEntity.Id
                     && i.BacklogIndex == null
             },
-            Includes = { i => i.Assignee.UserProfile, i => i.Reporter.UserProfile, },
+            Includes = { i => i.Assignee.UserProfile, },
         };
 
         if (!String.IsNullOrEmpty(issueParams.Assignees))
@@ -60,7 +60,7 @@ public class IssueService : IIssueService
             issueQuery.Filters.Add(
                 i =>
                     i.Title.ToLower().Contains(searchValue)
-                    || i.Description.ToLower().Contains(searchValue)
+                    || i.StoryPoint.ToString().ToLower().Contains(searchValue)
             );
         }
 
@@ -76,7 +76,7 @@ public class IssueService : IIssueService
             );
     }
 
-    public async Task<List<IssueDTO>> GetIssuesInBacklog(
+    public async Task<List<IssueBacklogDTO>> GetIssuesInBacklog(
         int projectId,
         IssueBacklogParams issueParams
     )
@@ -92,12 +92,7 @@ public class IssueService : IIssueService
                     && i.BacklogIndex != null
                     && i.SprintId == null
             },
-            Includes =
-            {
-                i => i.Assignee.UserProfile,
-                i => i.Reporter.UserProfile,
-                i => i.ProjectStatus
-            },
+            Includes = { i => i.Assignee.UserProfile, },
         };
 
         if (!String.IsNullOrEmpty(issueParams.Assignees))
@@ -114,45 +109,16 @@ public class IssueService : IIssueService
             issueQuery.Filters.Add(
                 i =>
                     i.Title.ToLower().Contains(searchValue)
-                    || i.Description.ToLower().Contains(searchValue)
+                    || i.StoryPoint.ToString().ToLower().Contains(searchValue)
             );
         }
 
-        return await _uow.Issue.GetManyAsync<IssueDTO>(issueQuery);
+        return await _uow.Issue.GetManyAsync<IssueBacklogDTO>(issueQuery);
     }
 
-    public async Task<List<IssueDTO>> GetIssuesInSprint(int projectId)
+    public async Task<IssueDetailDTO> GetIssueById(int projectId, int issueId)
     {
-        SprintEntity sprintEntity = await _uow.Sprint.GetInProgressSprint(projectId);
-
-        if (sprintEntity == null)
-            throw new BaseException(HttpCode.NOT_FOUND, "no_sprint_in_progress");
-
-        return await _uow.Issue.GetManyAsync<IssueDTO>(
-            new QueryModel<IssueEntity>()
-            {
-                OrderBy = c => c.OrderByDescending(i => i.CreatedAt),
-                Filters =
-                {
-                    i =>
-                        i.ProjectId == projectId
-                        && i.DeletedAt == null
-                        && i.SprintId == sprintEntity.Id
-                        && i.BacklogIndex == null
-                },
-                Includes =
-                {
-                    i => i.Assignee.UserProfile,
-                    i => i.Reporter.UserProfile,
-                    i => i.ProjectStatus
-                },
-            }
-        );
-    }
-
-    public async Task<IssueDTO> GetIssueById(int projectId, int issueId)
-    {
-        return await _uow.Issue.GetOneAsync<IssueDTO>(
+        return await _uow.Issue.GetOneAsync<IssueDetailDTO>(
             new QueryModel<IssueEntity>()
             {
                 Filters =

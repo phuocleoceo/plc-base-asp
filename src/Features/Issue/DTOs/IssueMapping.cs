@@ -8,7 +8,27 @@ public class IssueMapping : Profile
 {
     public IssueMapping()
     {
-        CreateMap<IssueEntity, IssueDTO>()
+        CreateMap<IssueEntity, IssueBoardDTO>()
+            .ForMember(
+                dto => dto.AssigneeName,
+                prop => prop.MapFrom(entity => entity.Assignee.UserProfile.DisplayName)
+            )
+            .ForMember(
+                dto => dto.AssigneeAvatar,
+                prop => prop.MapFrom(entity => entity.Assignee.UserProfile.Avatar)
+            );
+
+        CreateMap<IssueEntity, IssueBacklogDTO>()
+            .ForMember(
+                dto => dto.AssigneeName,
+                prop => prop.MapFrom(entity => entity.Assignee.UserProfile.DisplayName)
+            )
+            .ForMember(
+                dto => dto.AssigneeAvatar,
+                prop => prop.MapFrom(entity => entity.Assignee.UserProfile.Avatar)
+            );
+
+        CreateMap<IssueEntity, IssueDetailDTO>()
             .ForMember(
                 dto => dto.ReporterName,
                 prop => prop.MapFrom(entity => entity.Reporter.UserProfile.DisplayName)
@@ -28,24 +48,6 @@ public class IssueMapping : Profile
             .ForMember(
                 dto => dto.ProjectStatusName,
                 prop => prop.MapFrom(entity => entity.ProjectStatus.Name)
-            );
-
-        CreateMap<IssueEntity, IssueBoardDTO>()
-            .ForMember(
-                dto => dto.ReporterName,
-                prop => prop.MapFrom(entity => entity.Reporter.UserProfile.DisplayName)
-            )
-            .ForMember(
-                dto => dto.ReporterAvatar,
-                prop => prop.MapFrom(entity => entity.Reporter.UserProfile.Avatar)
-            )
-            .ForMember(
-                dto => dto.AssigneeName,
-                prop => prop.MapFrom(entity => entity.Assignee.UserProfile.DisplayName)
-            )
-            .ForMember(
-                dto => dto.AssigneeAvatar,
-                prop => prop.MapFrom(entity => entity.Assignee.UserProfile.Avatar)
             );
 
         CreateMap<CreateIssueDTO, IssueEntity>();

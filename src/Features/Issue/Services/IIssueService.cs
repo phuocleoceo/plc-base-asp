@@ -11,11 +11,9 @@ public interface IIssueService
         IssueBoardParams issueParams
     );
 
-    Task<List<IssueDTO>> GetIssuesInBacklog(int projectId, IssueBacklogParams issueParams);
+    Task<List<IssueBacklogDTO>> GetIssuesInBacklog(int projectId, IssueBacklogParams issueParams);
 
-    Task<List<IssueDTO>> GetIssuesInSprint(int projectId);
-
-    Task<IssueDTO> GetIssueById(int projectId, int issueId);
+    Task<IssueDetailDTO> GetIssueById(int projectId, int issueId);
 
     Task<bool> CreateIssue(ReqUser reqUser, int projectId, CreateIssueDTO createIssueDTO);
 

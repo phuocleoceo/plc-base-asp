@@ -30,7 +30,7 @@ public class IssueController : BaseController
     }
 
     [HttpGet("/api/project/{projectId}/backlog/issue")]
-    public async Task<BaseResponse<List<IssueDTO>>> GetIssuesInBacklog(
+    public async Task<BaseResponse<List<IssueBacklogDTO>>> GetIssuesInBacklog(
         int projectId,
         [FromQuery] IssueBacklogParams issueParams
     )
@@ -38,14 +38,8 @@ public class IssueController : BaseController
         return HttpContext.Success(await _issueService.GetIssuesInBacklog(projectId, issueParams));
     }
 
-    [HttpGet("/api/project/{projectId}/sprint/issue")]
-    public async Task<BaseResponse<List<IssueDTO>>> GetIssuesInSprint(int projectId)
-    {
-        return HttpContext.Success(await _issueService.GetIssuesInSprint(projectId));
-    }
-
     [HttpGet("/api/project/{projectId}/issue/{issueId}")]
-    public async Task<BaseResponse<IssueDTO>> GetIssueById(int projectId, int issueId)
+    public async Task<BaseResponse<IssueDetailDTO>> GetIssueById(int projectId, int issueId)
     {
         return HttpContext.Success(await _issueService.GetIssueById(projectId, issueId));
     }
