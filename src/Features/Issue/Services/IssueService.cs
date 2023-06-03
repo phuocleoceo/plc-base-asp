@@ -22,6 +22,7 @@ public class IssueService : IIssueService
         _mapper = mapper;
     }
 
+    #region Board
     public async Task<IEnumerable<IssueBoardGroupDTO>> GetIssuesForBoard(
         int projectId,
         IssueBoardParams issueParams
@@ -76,6 +77,37 @@ public class IssueService : IIssueService
             );
     }
 
+    public async Task<bool> UpdateBoardIssue(
+        int projectId,
+        int issueId,
+        UpdateBoardIssueDTO updateBoardIssueDTO
+    )
+    {
+        IssueEntity issueDb = await _uow.Issue.GetOneAsync<IssueEntity>(
+            new QueryModel<IssueEntity>()
+            {
+                Filters =
+                {
+                    i =>
+                        i.Id == issueId
+                        && i.ProjectId == projectId
+                        && i.DeletedAt == null
+                        && i.SprintId == updateBoardIssueDTO.SprintId
+                        && i.BacklogIndex == null
+                },
+            }
+        );
+
+        if (issueDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "board_issue_not_found");
+
+        _mapper.Map(updateBoardIssueDTO, issueDb);
+        _uow.Issue.Update(issueDb);
+        return await _uow.Save();
+    }
+    #endregion
+
+    #region Backlog
     public async Task<List<IssueBacklogDTO>> GetIssuesInBacklog(
         int projectId,
         IssueBacklogParams issueParams
@@ -116,6 +148,37 @@ public class IssueService : IIssueService
         return await _uow.Issue.GetManyAsync<IssueBacklogDTO>(issueQuery);
     }
 
+    public async Task<bool> UpdateBacklogIssue(
+        int projectId,
+        int issueId,
+        UpdateBacklogIssueDTO updateBacklogIssueDTO
+    )
+    {
+        IssueEntity issueDb = await _uow.Issue.GetOneAsync<IssueEntity>(
+            new QueryModel<IssueEntity>()
+            {
+                Filters =
+                {
+                    i =>
+                        i.Id == issueId
+                        && i.ProjectId == projectId
+                        && i.DeletedAt == null
+                        && i.BacklogIndex != null
+                        && i.SprintId == null
+                },
+            }
+        );
+
+        if (issueDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "backlog_issue_not_found");
+
+        _mapper.Map(updateBacklogIssueDTO, issueDb);
+        _uow.Issue.Update(issueDb);
+        return await _uow.Save();
+    }
+    #endregion
+
+    #region Detail
     public async Task<IssueDetailDTO> GetIssueById(int projectId, int issueId)
     {
         return await _uow.Issue.GetOneAsync<IssueDetailDTO>(
@@ -190,4 +253,5 @@ public class IssueService : IIssueService
         _uow.Issue.SoftDelete(issueDb);
         return await _uow.Save();
     }
+    #endregion
 }

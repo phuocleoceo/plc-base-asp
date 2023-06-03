@@ -20,6 +20,7 @@ public class IssueController : BaseController
         _issueService = issueService;
     }
 
+    // Board
     [HttpGet("/api/project/{projectId}/board/issue")]
     public async Task<BaseResponse<IEnumerable<IssueBoardGroupDTO>>> GetIssuesForBoard(
         int projectId,
@@ -29,6 +30,19 @@ public class IssueController : BaseController
         return HttpContext.Success(await _issueService.GetIssuesForBoard(projectId, issueParams));
     }
 
+    [HttpPut("/api/project/{projectId}/board/issue/{issueId}")]
+    public async Task<BaseResponse<bool>> UpdateBoardIssue(
+        int projectId,
+        int issueId,
+        [FromBody] UpdateBoardIssueDTO updateBoardIssueDTO
+    )
+    {
+        if (await _issueService.UpdateBoardIssue(projectId, issueId, updateBoardIssueDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
+    // Backlog
     [HttpGet("/api/project/{projectId}/backlog/issue")]
     public async Task<BaseResponse<List<IssueBacklogDTO>>> GetIssuesInBacklog(
         int projectId,
@@ -38,6 +52,19 @@ public class IssueController : BaseController
         return HttpContext.Success(await _issueService.GetIssuesInBacklog(projectId, issueParams));
     }
 
+    [HttpPut("/api/project/{projectId}/backlog/issue/{issueId}")]
+    public async Task<BaseResponse<bool>> UpdateBacklogIssue(
+        int projectId,
+        int issueId,
+        [FromBody] UpdateBacklogIssueDTO updateBacklogIssueDTO
+    )
+    {
+        if (await _issueService.UpdateBacklogIssue(projectId, issueId, updateBacklogIssueDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
+    // Detail
     [HttpGet("/api/project/{projectId}/issue/{issueId}")]
     public async Task<BaseResponse<IssueDetailDTO>> GetIssueById(int projectId, int issueId)
     {
