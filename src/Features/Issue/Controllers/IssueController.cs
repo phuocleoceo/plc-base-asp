@@ -38,6 +38,18 @@ public class IssueController : BaseController
         return HttpContext.Success(await _issueService.GetIssuesInBacklog(projectId, issueParams));
     }
 
+    [HttpPut("/api/project/{projectId}/backlog/issue/{issueId}")]
+    public async Task<BaseResponse<bool>> UpdateIssue(
+        int projectId,
+        int issueId,
+        [FromBody] UpdateBacklogIssueDTO updateBacklogIssueDTO
+    )
+    {
+        if (await _issueService.UpdateBacklogIssue(projectId, issueId, updateBacklogIssueDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
     [HttpGet("/api/project/{projectId}/issue/{issueId}")]
     public async Task<BaseResponse<IssueDetailDTO>> GetIssueById(int projectId, int issueId)
     {
