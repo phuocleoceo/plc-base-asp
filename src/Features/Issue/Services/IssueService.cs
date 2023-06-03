@@ -76,28 +76,49 @@ public class IssueService : IIssueService
             );
     }
 
-    public async Task<List<IssueDTO>> GetIssuesInBacklog(int projectId)
+    public async Task<List<IssueDTO>> GetIssuesInBacklog(
+        int projectId,
+        IssueBacklogParams issueParams
+    )
     {
-        return await _uow.Issue.GetManyAsync<IssueDTO>(
-            new QueryModel<IssueEntity>()
+        QueryModel<IssueEntity> issueQuery = new QueryModel<IssueEntity>()
+        {
+            OrderBy = c => c.OrderBy(i => i.BacklogIndex),
+            Filters =
             {
-                OrderBy = c => c.OrderBy(i => i.BacklogIndex),
-                Filters =
-                {
-                    i =>
-                        i.ProjectId == projectId
-                        && i.DeletedAt == null
-                        && i.BacklogIndex != null
-                        && i.SprintId == null
-                },
-                Includes =
-                {
-                    i => i.Assignee.UserProfile,
-                    i => i.Reporter.UserProfile,
-                    i => i.ProjectStatus
-                },
-            }
-        );
+                i =>
+                    i.ProjectId == projectId
+                    && i.DeletedAt == null
+                    && i.BacklogIndex != null
+                    && i.SprintId == null
+            },
+            Includes =
+            {
+                i => i.Assignee.UserProfile,
+                i => i.Reporter.UserProfile,
+                i => i.ProjectStatus
+            },
+        };
+
+        if (!String.IsNullOrEmpty(issueParams.Assignees))
+        {
+            IEnumerable<int> assignees = issueParams.Assignees
+                .Split(",")
+                .Select(c => Convert.ToInt32(c));
+            issueQuery.Filters.Add(i => assignees.Contains(i.AssigneeId.Value));
+        }
+
+        if (!string.IsNullOrWhiteSpace(issueParams.SearchValue))
+        {
+            string searchValue = issueParams.SearchValue.ToLower();
+            issueQuery.Filters.Add(
+                i =>
+                    i.Title.ToLower().Contains(searchValue)
+                    || i.Description.ToLower().Contains(searchValue)
+            );
+        }
+
+        return await _uow.Issue.GetManyAsync<IssueDTO>(issueQuery);
     }
 
     public async Task<List<IssueDTO>> GetIssuesInSprint(int projectId)

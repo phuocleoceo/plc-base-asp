@@ -30,9 +30,12 @@ public class IssueController : BaseController
     }
 
     [HttpGet("/api/project/{projectId}/backlog/issue")]
-    public async Task<BaseResponse<List<IssueDTO>>> GetIssuesInBacklog(int projectId)
+    public async Task<BaseResponse<List<IssueDTO>>> GetIssuesInBacklog(
+        int projectId,
+        [FromQuery] IssueBacklogParams issueParams
+    )
     {
-        return HttpContext.Success(await _issueService.GetIssuesInBacklog(projectId));
+        return HttpContext.Success(await _issueService.GetIssuesInBacklog(projectId, issueParams));
     }
 
     [HttpGet("/api/project/{projectId}/sprint/issue")]
