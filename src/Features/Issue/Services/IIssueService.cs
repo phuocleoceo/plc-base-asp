@@ -11,6 +11,12 @@ public interface IIssueService
         int projectId,
         IssueBoardParams issueParams
     );
+
+    Task<bool> UpdateBoardIssue(
+        int projectId,
+        int issueId,
+        UpdateBoardIssueDTO updateBoardIssueDTO
+    );
     #endregion
 
     #region Backlog

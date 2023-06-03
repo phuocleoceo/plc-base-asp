@@ -55,5 +55,7 @@ public class IssueMapping : Profile
         CreateMap<UpdateIssueDTO, IssueEntity>();
 
         CreateMap<UpdateBacklogIssueDTO, IssueEntity>();
+
+        CreateMap<UpdateBoardIssueDTO, IssueEntity>();
     }
 }

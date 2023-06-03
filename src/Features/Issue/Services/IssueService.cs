@@ -76,6 +76,35 @@ public class IssueService : IIssueService
                     }
             );
     }
+
+    public async Task<bool> UpdateBoardIssue(
+        int projectId,
+        int issueId,
+        UpdateBoardIssueDTO updateBoardIssueDTO
+    )
+    {
+        IssueEntity issueDb = await _uow.Issue.GetOneAsync<IssueEntity>(
+            new QueryModel<IssueEntity>()
+            {
+                Filters =
+                {
+                    i =>
+                        i.Id == issueId
+                        && i.ProjectId == projectId
+                        && i.DeletedAt == null
+                        && i.SprintId == updateBoardIssueDTO.SprintId
+                        && i.BacklogIndex == null
+                },
+            }
+        );
+
+        if (issueDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "board_issue_not_found");
+
+        _mapper.Map(updateBoardIssueDTO, issueDb);
+        _uow.Issue.Update(issueDb);
+        return await _uow.Save();
+    }
     #endregion
 
     #region Backlog
