@@ -25,6 +25,7 @@ public class ProjectStatusService : IProjectStatusService
         return await _uow.ProjectStatus.GetManyAsync<ProjectStatusDTO>(
             new QueryModel<ProjectStatusEntity>()
             {
+                OrderBy = c => c.OrderBy(s => s.Index),
                 Filters = { s => s.ProjectId == projectId && s.DeletedAt == null },
             }
         );
