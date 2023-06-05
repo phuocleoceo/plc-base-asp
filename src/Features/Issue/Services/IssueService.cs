@@ -92,7 +92,6 @@ public class IssueService : IIssueService
                         i.Id == issueId
                         && i.ProjectId == projectId
                         && i.DeletedAt == null
-                        && i.SprintId == updateBoardIssueDTO.SprintId
                         && i.BacklogIndex == null
                 },
             }
