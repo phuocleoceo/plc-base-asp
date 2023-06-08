@@ -1,7 +1,6 @@
 using AutoMapper;
 
 using PlcBase.Features.Sprint.Entities;
-using PlcBase.Features.Invitation.DTOs;
 using PlcBase.Features.Issue.Entities;
 using PlcBase.Common.Repositories;
 using PlcBase.Features.Issue.DTOs;

@@ -27,5 +27,6 @@ public static class ServiceDIExtension
         services.AddScoped<IInvitationService, InvitationService>();
         services.AddScoped<ISprintService, SprintService>();
         services.AddScoped<IIssueService, IssueService>();
+        services.AddScoped<IIssueCommentService, IssueCommentService>();
     }
 }

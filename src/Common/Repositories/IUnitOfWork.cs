@@ -30,6 +30,7 @@ public interface IUnitOfWork : IDisposable
     IInvitationRepository Invitation { get; }
     ISprintRepository Sprint { get; }
     IIssueRepository Issue { get; }
+    IIssueCommentRepository IssueComment { get; }
 
     Task<bool> Save();
     Task CreateTransaction();

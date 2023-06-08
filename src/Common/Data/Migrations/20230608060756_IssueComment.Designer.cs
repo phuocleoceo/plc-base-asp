@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlcBase.Common.Data.Context;
 
@@ -10,9 +11,10 @@ using PlcBase.Common.Data.Context;
 namespace plcbase.Common.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230608060756_IssueComment")]
+    partial class IssueComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,6 +273,10 @@ namespace plcbase.Common.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("issue_id");
 
+                    b.Property<int?>("RepliedCommentId")
+                        .HasColumnType("int")
+                        .HasColumnName("replied_comment_id");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("updated_at");
@@ -282,6 +288,8 @@ namespace plcbase.Common.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IssueId");
+
+                    b.HasIndex("RepliedCommentId");
 
                     b.HasIndex("UserId");
 
@@ -765,6 +773,10 @@ namespace plcbase.Common.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PlcBase.Features.Issue.Entities.IssueCommentEntity", "RepliedComment")
+                        .WithMany()
+                        .HasForeignKey("RepliedCommentId");
+
                     b.HasOne("PlcBase.Features.User.Entities.UserAccountEntity", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -772,6 +784,8 @@ namespace plcbase.Common.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Issue");
+
+                    b.Navigation("RepliedComment");
 
                     b.Navigation("User");
                 });

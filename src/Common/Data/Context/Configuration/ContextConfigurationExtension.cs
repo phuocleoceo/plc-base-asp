@@ -21,5 +21,6 @@ public static class ContextConfigurationExtension
         modelBuilder.ApplyConfiguration(new InvitationConfiguration());
         modelBuilder.ApplyConfiguration(new SprintConfiguration());
         modelBuilder.ApplyConfiguration(new IssueConfiguration());
+        modelBuilder.ApplyConfiguration(new IssueCommentConfiguration());
     }
 }
