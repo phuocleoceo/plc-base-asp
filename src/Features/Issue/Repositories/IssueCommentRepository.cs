@@ -19,12 +19,16 @@ public class IssueCommentRepository : BaseRepository<IssueCommentEntity>, IIssue
         _mapper = mapper;
     }
 
-    public async Task<IssueCommentEntity> GetForUpdateAndDelete(int userId, int issueId)
+    public async Task<IssueCommentEntity> GetForUpdateAndDelete(
+        int userId,
+        int issueId,
+        int commentId
+    )
     {
         return await GetOneAsync<IssueCommentEntity>(
             new QueryModel<IssueCommentEntity>()
             {
-                Filters = { i => i.Id == issueId && i.UserId == userId },
+                Filters = { i => i.Id == commentId && i.IssueId == issueId && i.UserId == userId },
             }
         );
     }

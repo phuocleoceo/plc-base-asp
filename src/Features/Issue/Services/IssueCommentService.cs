@@ -1,7 +1,5 @@
 using AutoMapper;
 
-using PlcBase.Features.Sprint.Entities;
-using PlcBase.Features.Invitation.DTOs;
 using PlcBase.Features.Issue.Entities;
 using PlcBase.Common.Repositories;
 using PlcBase.Features.Issue.DTOs;
@@ -32,7 +30,7 @@ public class IssueCommentService : IIssueCommentService
             new QueryModel<IssueCommentEntity>()
             {
                 OrderBy = p => p.OrderByDescending(c => c.CreatedAt),
-                Filters = { c => c.Id == issueId },
+                Filters = { c => c.IssueId == issueId },
                 Includes = { c => c.User.UserProfile },
                 PageSize = issueCommentParams.PageSize,
                 PageNumber = issueCommentParams.PageNumber
@@ -40,27 +38,56 @@ public class IssueCommentService : IIssueCommentService
         );
     }
 
-    public Task<bool> CreateIssueComment(
+    public async Task<bool> CreateIssueComment(
         ReqUser reqUser,
         int issueId,
         CreateIssueCommentDTO createIssueCommentDTO
     )
     {
-        throw new NotImplementedException();
+        IssueCommentEntity issueCommentEntity = _mapper.Map<IssueCommentEntity>(
+            createIssueCommentDTO
+        );
+
+        issueCommentEntity.UserId = reqUser.Id;
+        issueCommentEntity.IssueId = issueId;
+
+        _uow.IssueComment.Add(issueCommentEntity);
+        return await _uow.Save();
     }
 
-    public Task<bool> UpdateIssueComment(
+    public async Task<bool> UpdateIssueComment(
         ReqUser reqUser,
         int issueId,
         int commentId,
         UpdateIssueCommentDTO updateIssueCommentDTO
     )
     {
-        throw new NotImplementedException();
+        IssueCommentEntity issueCommentDb = await _uow.IssueComment.GetForUpdateAndDelete(
+            reqUser.Id,
+            issueId,
+            commentId
+        );
+
+        if (issueCommentDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "issue_comment_not_found");
+
+        _mapper.Map(updateIssueCommentDTO, issueCommentDb);
+        _uow.IssueComment.Update(issueCommentDb);
+        return await _uow.Save();
     }
 
-    public Task<bool> DeleteIssueComment(ReqUser reqUser, int issueId, int commentId)
+    public async Task<bool> DeleteIssueComment(ReqUser reqUser, int issueId, int commentId)
     {
-        throw new NotImplementedException();
+        IssueCommentEntity issueCommentDb = await _uow.IssueComment.GetForUpdateAndDelete(
+            reqUser.Id,
+            issueId,
+            commentId
+        );
+
+        if (issueCommentDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "issue_comment_not_found");
+
+        _uow.IssueComment.Remove(issueCommentDb);
+        return await _uow.Save();
     }
 }
