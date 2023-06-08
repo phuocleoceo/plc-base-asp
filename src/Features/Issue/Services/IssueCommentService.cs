@@ -21,4 +21,33 @@ public class IssueCommentService : IIssueCommentService
         _uow = uow;
         _mapper = mapper;
     }
+
+    public Task<List<IssueCommentDTO>> GetCommentsForIssue(int issueId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> CreateIssueComment(
+        ReqUser reqUser,
+        int issueId,
+        CreateIssueCommentDTO createIssueCommentDTO
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> UpdateIssueComment(
+        ReqUser reqUser,
+        int issueId,
+        int commentId,
+        UpdateIssueCommentDTO updateIssueCommentDTO
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> DeleteIssueComment(ReqUser reqUser, int issueId, int commentId)
+    {
+        throw new NotImplementedException();
+    }
 }

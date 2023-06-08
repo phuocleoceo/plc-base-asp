@@ -6,5 +6,12 @@ namespace PlcBase.Features.Issue.DTOs;
 
 public class IssueCommentMapping : Profile
 {
-    public IssueCommentMapping() { }
+    public IssueCommentMapping()
+    {
+        CreateMap<IssueCommentEntity, IssueCommentDTO>();
+
+        CreateMap<CreateIssueCommentDTO, IssueCommentEntity>();
+
+        CreateMap<UpdateIssueCommentDTO, IssueCommentEntity>();
+    }
 }
