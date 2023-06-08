@@ -43,6 +43,7 @@ public class UnitOfWork : IUnitOfWork
         Invitation = new InvitationRepository(_db, _mapper);
         Sprint = new SprintRepository(_db, _mapper);
         Issue = new IssueRepository(_db, _mapper);
+        IssueComment = new IssueCommentRepository(_db, _mapper);
     }
 
     public IDapperContainer DapperContainer { get; private set; }
@@ -61,6 +62,7 @@ public class UnitOfWork : IUnitOfWork
     public IInvitationRepository Invitation { get; private set; }
     public ISprintRepository Sprint { get; private set; }
     public IIssueRepository Issue { get; private set; }
+    public IIssueCommentRepository IssueComment { get; private set; }
 
     public void Dispose()
     {

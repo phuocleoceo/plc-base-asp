@@ -60,4 +60,5 @@ public class DataContext : DbContext
     public DbSet<InvitationEntity> Invitations { get; set; }
     public DbSet<SprintEntity> Sprints { get; set; }
     public DbSet<IssueEntity> Issues { get; set; }
+    public DbSet<IssueCommentEntity> IssueComments { get; set; }
 }

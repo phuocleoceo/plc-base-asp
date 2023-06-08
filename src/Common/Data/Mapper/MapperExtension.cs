@@ -29,7 +29,8 @@ public static class MapperExtension
             typeof(ProjectStatusMapping),
             typeof(InvitationMapping),
             typeof(SprintMapping),
-            typeof(IssueMapping)
+            typeof(IssueMapping),
+            typeof(IssueCommentMapping)
         );
     }
 }
