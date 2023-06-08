@@ -31,8 +31,9 @@ public class IssueCommentService : IIssueCommentService
         return await _uow.IssueComment.GetPagedAsync<IssueCommentDTO>(
             new QueryModel<IssueCommentEntity>()
             {
-                OrderBy = c => c.OrderByDescending(c => c.CreatedAt),
+                OrderBy = p => p.OrderByDescending(c => c.CreatedAt),
                 Filters = { c => c.Id == issueId },
+                Includes = { c => c.User.UserProfile },
                 PageSize = issueCommentParams.PageSize,
                 PageNumber = issueCommentParams.PageNumber
             }
