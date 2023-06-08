@@ -3,6 +3,9 @@ namespace PlcBase.Features.Issue.DTOs;
 public class IssueDetailDTO
 {
     public int Id { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+
     public string Title { get; set; }
     public string Description { get; set; }
     public double StoryPoint { get; set; }
