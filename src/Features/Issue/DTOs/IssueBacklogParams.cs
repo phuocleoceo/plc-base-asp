@@ -1,4 +1,4 @@
-namespace PlcBase.Features.Invitation.DTOs;
+namespace PlcBase.Features.Issue.DTOs;
 
 public class IssueBacklogParams
 {

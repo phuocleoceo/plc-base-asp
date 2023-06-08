@@ -1,11 +1,15 @@
 using PlcBase.Features.Issue.DTOs;
 using PlcBase.Base.DomainModel;
+using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.Issue.Services;
 
 public interface IIssueCommentService
 {
-    Task<List<IssueCommentDTO>> GetCommentsForIssue(int issueId);
+    Task<PagedList<IssueCommentDTO>> GetCommentsForIssue(
+        int issueId,
+        IssueCommentParams issueCommentParams
+    );
 
     Task<bool> CreateIssueComment(
         ReqUser reqUser,

@@ -21,9 +21,14 @@ public class IssueCommentController : BaseController
     }
 
     [HttpGet("/api/issue/{issueId}/comment")]
-    public async Task<BaseResponse<List<IssueCommentDTO>>> GetCommentsForIssue(int issueId)
+    public async Task<BaseResponse<PagedList<IssueCommentDTO>>> GetCommentsForIssue(
+        int issueId,
+        [FromQuery] IssueCommentParams issueCommentParams
+    )
     {
-        return HttpContext.Success(await _issueCommentService.GetCommentsForIssue(issueId));
+        return HttpContext.Success(
+            await _issueCommentService.GetCommentsForIssue(issueId, issueCommentParams)
+        );
     }
 
     [HttpPost("/api/issue/{issueId}/comment")]

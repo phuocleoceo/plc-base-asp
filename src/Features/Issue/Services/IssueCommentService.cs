@@ -8,6 +8,7 @@ using PlcBase.Features.Issue.DTOs;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Error;
+using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.Issue.Services;
 
@@ -22,9 +23,20 @@ public class IssueCommentService : IIssueCommentService
         _mapper = mapper;
     }
 
-    public Task<List<IssueCommentDTO>> GetCommentsForIssue(int issueId)
+    public async Task<PagedList<IssueCommentDTO>> GetCommentsForIssue(
+        int issueId,
+        IssueCommentParams issueCommentParams
+    )
     {
-        throw new NotImplementedException();
+        return await _uow.IssueComment.GetPagedAsync<IssueCommentDTO>(
+            new QueryModel<IssueCommentEntity>()
+            {
+                OrderBy = c => c.OrderByDescending(c => c.CreatedAt),
+                Filters = { c => c.Id == issueId },
+                PageSize = issueCommentParams.PageSize,
+                PageNumber = issueCommentParams.PageNumber
+            }
+        );
     }
 
     public Task<bool> CreateIssueComment(
