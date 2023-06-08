@@ -15,8 +15,10 @@ public class IssueCommentEntity : BaseEntity
     [Column("content")]
     public string Content { get; set; }
 
+    [ForeignKey(nameof(RepliedComment))]
     [Column("replied_comment_id")]
     public int? RepliedCommentId { get; set; }
+    public IssueCommentEntity RepliedComment { get; set; }
 
     [ForeignKey(nameof(User))]
     [Column("user_id")]
