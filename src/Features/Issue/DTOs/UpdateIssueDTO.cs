@@ -7,10 +7,6 @@ public class UpdateIssueDTO
     public double StoryPoint { get; set; }
     public string Priority { get; set; }
     public string Type { get; set; }
-    public double? BacklogIndex { get; set; }
     public int ReporterId { get; set; }
     public int? AssigneeId { get; set; }
-    public int? ProjectStatusId { get; set; }
-    public double? ProjectStatusIndex { get; set; }
-    public int? SprintId { get; set; }
 }
