@@ -1,3 +1,4 @@
+using PlcBase.Features.AccessControl.Services;
 using PlcBase.Features.ConfigSetting.Services;
 using PlcBase.Features.ProjectMember.Services;
 using PlcBase.Features.ProjectStatus.Services;
@@ -16,6 +17,7 @@ public static class ServiceDIExtension
 {
     public static void ConfigureServiceDI(this IServiceCollection services)
     {
+        services.AddScoped<IAccessControlService, AccessControlService>();
         services.AddScoped<IAddressService, AddressService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();

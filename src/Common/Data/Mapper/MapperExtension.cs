@@ -21,7 +21,7 @@ public static class MapperExtension
             typeof(AuthMapping),
             typeof(UserMapping),
             typeof(AddressMapping),
-            typeof(RolePermissionMapping),
+            typeof(AccessControlMapping),
             typeof(ConfigSettingMapping),
             typeof(MediaMapping),
             typeof(ProjectMapping),
