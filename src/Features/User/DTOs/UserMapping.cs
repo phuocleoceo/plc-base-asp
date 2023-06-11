@@ -65,8 +65,7 @@ public class UserMapping : Profile
                     prop.MapFrom(entity => entity.AddressWard.AddressDistrict.AddressProvince.Name)
             );
 
-        CreateMap<UserAccountEntity, UserAccountDTO>()
-            .ForMember(dto => dto.RoleName, prop => prop.MapFrom(entity => entity.Role.Name));
+        CreateMap<UserAccountEntity, UserAccountDTO>();
 
         CreateMap<UserProfileUpdateDTO, UserProfileEntity>();
 

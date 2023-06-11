@@ -71,11 +71,7 @@ public class UserService : IUserService
     public async Task<UserAccountDTO> GetUserAccountById(int userId)
     {
         return await _uow.UserAccount.GetOneAsync<UserAccountDTO>(
-                new QueryModel<UserAccountEntity>()
-                {
-                    Includes = { ua => ua.Role, },
-                    Filters = { ua => ua.Id == userId },
-                }
+                new QueryModel<UserAccountEntity>() { Filters = { ua => ua.Id == userId }, }
             ) ?? throw new BaseException(HttpCode.NOT_FOUND, "account_not_found");
     }
 

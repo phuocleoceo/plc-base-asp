@@ -9,6 +9,4 @@ public class UserAccountDTO
     public bool IsActived { get; set; }
 
     public int RoleId { get; set; }
-
-    public string RoleName { get; set; }
 }
