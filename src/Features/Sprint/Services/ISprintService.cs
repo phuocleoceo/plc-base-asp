@@ -5,6 +5,8 @@ namespace PlcBase.Features.Sprint.Services;
 
 public interface ISprintService
 {
+    Task<SprintDTO> GetAvailableSprint(int projectId);
+
     Task<bool> CreateSprint(ReqUser reqUser, int projectId, CreateSprintDTO createSprintDTO);
 
     Task<bool> UpdateSprint(

@@ -8,6 +8,8 @@ public class SprintMapping : Profile
 {
     public SprintMapping()
     {
+        CreateMap<SprintEntity, SprintDTO>();
+
         CreateMap<CreateSprintDTO, SprintEntity>();
 
         CreateMap<UpdateSprintDTO, SprintEntity>();

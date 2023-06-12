@@ -19,6 +19,12 @@ public class SprintController : BaseController
         _sprintService = sprintService;
     }
 
+    [HttpGet("/api/project/{projectId}/sprint")]
+    public async Task<BaseResponse<SprintDTO>> GetAvailableSprint(int projectId)
+    {
+        return HttpContext.Success(await _sprintService.GetAvailableSprint(projectId));
+    }
+
     [HttpPost("/api/project/{projectId}/sprint")]
     public async Task<BaseResponse<bool>> CreateSprint(
         int projectId,

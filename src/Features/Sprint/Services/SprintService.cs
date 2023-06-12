@@ -20,6 +20,16 @@ public class SprintService : ISprintService
         _mapper = mapper;
     }
 
+    public async Task<SprintDTO> GetAvailableSprint(int projectId)
+    {
+        return await _uow.Sprint.GetOneAsync<SprintDTO>(
+            new QueryModel<SprintEntity>()
+            {
+                Filters = { i => i.ProjectId == projectId && i.IsInProgress == true },
+            }
+        );
+    }
+
     public async Task<bool> CreateSprint(
         ReqUser reqUser,
         int projectId,
