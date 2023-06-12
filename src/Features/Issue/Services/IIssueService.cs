@@ -8,6 +8,7 @@ public interface IIssueService
     #region Board
     Task<IEnumerable<IssueBoardGroupDTO>> GetIssuesForBoard(
         int projectId,
+        int sprintId,
         IssueBoardParams issueParams
     );
 

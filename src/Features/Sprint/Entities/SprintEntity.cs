@@ -15,14 +15,17 @@ public class SprintEntity : BaseEntity
     [Column("goal")]
     public string Goal { get; set; }
 
-    [Column("start_time")]
-    public DateTime? StartTime { get; set; }
+    [Column("from_date")]
+    public DateTime? FromDate { get; set; }
 
-    [Column("end_time")]
-    public DateTime? EndTime { get; set; }
+    [Column("to_date")]
+    public DateTime? ToDate { get; set; }
 
-    [Column("is_in_progress")]
-    public bool IsInProgress { get; set; }
+    [Column("started_at")]
+    public DateTime? StartedAt { get; set; }
+
+    [Column("completed_at")]
+    public DateTime? CompletedAt { get; set; }
 
     [ForeignKey(nameof(Project))]
     [Column("project_id")]
