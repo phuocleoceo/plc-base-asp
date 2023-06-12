@@ -20,6 +20,16 @@ public class SprintService : ISprintService
         _mapper = mapper;
     }
 
+    public async Task<SprintDTO> GetAvailableSprint(int projectId)
+    {
+        return await _uow.Sprint.GetOneAsync<SprintDTO>(
+            new QueryModel<SprintEntity>()
+            {
+                Filters = { i => i.ProjectId == projectId && i.CompletedAt == null },
+            }
+        );
+    }
+
     public async Task<bool> CreateSprint(
         ReqUser reqUser,
         int projectId,
@@ -27,9 +37,7 @@ public class SprintService : ISprintService
     )
     {
         SprintEntity sprintEntity = _mapper.Map<SprintEntity>(createSprintDTO);
-
         sprintEntity.ProjectId = projectId;
-        sprintEntity.IsInProgress = false;
 
         _uow.Sprint.Add(sprintEntity);
         return await _uow.Save();
@@ -70,7 +78,7 @@ public class SprintService : ISprintService
         if (sprintDb == null)
             throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
 
-        sprintDb.IsInProgress = true;
+        sprintDb.StartedAt = DateTime.UtcNow;
         _uow.Sprint.Update(sprintDb);
         return await _uow.Save();
     }
@@ -82,7 +90,7 @@ public class SprintService : ISprintService
         if (sprintDb == null)
             throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
 
-        sprintDb.IsInProgress = false;
+        sprintDb.CompletedAt = DateTime.UtcNow;
         _uow.Sprint.Update(sprintDb);
         return await _uow.Save();
     }

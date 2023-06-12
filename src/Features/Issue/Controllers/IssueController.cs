@@ -20,13 +20,16 @@ public class IssueController : BaseController
     }
 
     // Board
-    [HttpGet("/api/project/{projectId}/board/issue")]
+    [HttpGet("/api/project/{projectId}/board/{sprintId}/issue")]
     public async Task<BaseResponse<IEnumerable<IssueBoardGroupDTO>>> GetIssuesForBoard(
         int projectId,
+        int sprintId,
         [FromQuery] IssueBoardParams issueParams
     )
     {
-        return HttpContext.Success(await _issueService.GetIssuesForBoard(projectId, issueParams));
+        return HttpContext.Success(
+            await _issueService.GetIssuesForBoard(projectId, sprintId, issueParams)
+        );
     }
 
     [HttpPut("/api/project/{projectId}/board/issue/{issueId}")]

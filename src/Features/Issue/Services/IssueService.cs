@@ -24,14 +24,10 @@ public class IssueService : IIssueService
     #region Board
     public async Task<IEnumerable<IssueBoardGroupDTO>> GetIssuesForBoard(
         int projectId,
+        int sprintId,
         IssueBoardParams issueParams
     )
     {
-        SprintEntity sprintEntity = await _uow.Sprint.GetInProgressSprint(projectId);
-
-        if (sprintEntity == null)
-            throw new BaseException(HttpCode.NOT_FOUND, "no_sprint_in_progress");
-
         QueryModel<IssueEntity> issueQuery = new QueryModel<IssueEntity>()
         {
             OrderBy = c => c.OrderBy(i => i.ProjectStatusIndex),
@@ -40,7 +36,7 @@ public class IssueService : IIssueService
                 i =>
                     i.ProjectId == projectId
                     && i.DeletedAt == null
-                    && i.SprintId == sprintEntity.Id
+                    && i.SprintId == sprintId
                     && i.BacklogIndex == null
             },
             Includes = { i => i.Assignee.UserProfile, },
