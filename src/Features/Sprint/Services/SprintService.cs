@@ -95,7 +95,7 @@ public class SprintService : ISprintService
         {
             if (
                 completeSprintDTO.MoveType != "backlog"
-                || completeSprintDTO.MoveType != "next_sprint"
+                && completeSprintDTO.MoveType != "next_sprint"
             )
                 throw new BaseException(HttpCode.BAD_REQUEST, "invalid_move_type");
 
