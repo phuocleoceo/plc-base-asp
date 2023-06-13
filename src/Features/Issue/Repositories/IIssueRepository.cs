@@ -10,4 +10,6 @@ public interface IIssueRepository : IBaseRepository<IssueEntity>
     double GetStatusIndexForNewIssue(int projectId, int projectStatusId);
 
     Task<IssueEntity> GetForUpdateAndDelete(int projectId, int reporterId, int issueId);
+
+    Task<List<IssueEntity>> GetByIds(List<int> ids);
 }

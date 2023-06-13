@@ -22,7 +22,13 @@ public class IssueRepository : BaseRepository<IssueEntity>, IIssueRepository
     public double GetBacklogIndexForNewIssue(int projectId)
     {
         return _dbSet
-                .Where(i => i.ProjectId == projectId && i.BacklogIndex.HasValue)
+                .Where(
+                    i =>
+                        i.ProjectId == projectId
+                        && i.DeletedAt == null
+                        && i.BacklogIndex.HasValue
+                        && !i.SprintId.HasValue
+                )
                 .Max(i => i.BacklogIndex) + 1
             ?? 0;
     }
@@ -49,6 +55,13 @@ public class IssueRepository : BaseRepository<IssueEntity>, IIssueRepository
                         && i.DeletedAt == null
                 },
             }
+        );
+    }
+
+    public async Task<List<IssueEntity>> GetByIds(List<int> ids)
+    {
+        return await GetManyAsync<IssueEntity>(
+            new QueryModel<IssueEntity>() { Filters = { i => ids.Contains(i.Id) } }
         );
     }
 }

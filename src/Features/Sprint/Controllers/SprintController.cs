@@ -73,11 +73,15 @@ public class SprintController : BaseController
     }
 
     [HttpPut("/api/project/{projectId}/sprint/{sprintId}/complete")]
-    public async Task<BaseResponse<bool>> CompleteSprint(int projectId, int sprintId)
+    public async Task<BaseResponse<bool>> CompleteSprint(
+        int projectId,
+        int sprintId,
+        [FromBody] CompleteSprintDTO completeSprintDTO
+    )
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 
-        if (await _sprintService.CompleteSprint(reqUser, projectId, sprintId))
+        if (await _sprintService.CompleteSprint(reqUser, projectId, sprintId, completeSprintDTO))
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }

@@ -20,5 +20,10 @@ public interface ISprintService
 
     Task<bool> StartSprint(ReqUser reqUser, int projectId, int sprintId);
 
-    Task<bool> CompleteSprint(ReqUser reqUser, int projectId, int sprintId);
+    Task<bool> CompleteSprint(
+        ReqUser reqUser,
+        int projectId,
+        int sprintId,
+        CompleteSprintDTO completeSprintDTO
+    );
 }
