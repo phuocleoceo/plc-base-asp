@@ -122,19 +122,9 @@ public class SprintService : ISprintService
             });
             await _uow.Save();
 
-            List<IssueEntity> unCompletedIssues = await _uow.Issue.GetByIds(
-                completeSprintDTO.UnCompletedIssues
-            );
-
             if (completeSprintDTO.MoveType == "backlog")
             {
-                double backlogIndex = _uow.Issue.GetBacklogIndexForNewIssue(projectId);
-                unCompletedIssues.ForEach(i =>
-                {
-                    i.SprintId = null;
-                    i.BacklogIndex = backlogIndex++;
-                    _uow.Issue.Update(i);
-                });
+                await _uow.Issue.MoveIssueToBacklog(completeSprintDTO.UnCompletedIssues, projectId);
                 await _uow.Save();
             }
 
@@ -150,12 +140,10 @@ public class SprintService : ISprintService
                 _uow.Sprint.Add(nextSprint);
                 await _uow.Save();
 
-                unCompletedIssues.ForEach(i =>
-                {
-                    i.SprintId = nextSprint.Id;
-                    i.BacklogIndex = null;
-                    _uow.Issue.Update(i);
-                });
+                await _uow.Issue.MoveIssueToSprint(
+                    completeSprintDTO.UnCompletedIssues,
+                    nextSprint.Id
+                );
                 await _uow.Save();
             }
 

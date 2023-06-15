@@ -99,6 +99,16 @@ public class IssueService : IIssueService
         _uow.Issue.Update(issueDb);
         return await _uow.Save();
     }
+
+    public async Task<bool> MoveIssueToBacklog(
+        ReqUser reqUser,
+        int projectId,
+        MoveIssueDTO moveIssueDTO
+    )
+    {
+        await _uow.Issue.MoveIssueToBacklog(moveIssueDTO.Issues, projectId);
+        return await _uow.Save();
+    }
     #endregion
 
     #region Backlog
@@ -170,6 +180,22 @@ public class IssueService : IIssueService
         _uow.Issue.Update(issueDb);
         return await _uow.Save();
     }
+
+    public async Task<bool> MoveIssueToSprint(
+        ReqUser reqUser,
+        int projectId,
+        MoveIssueDTO moveIssueDTO
+    )
+    {
+        SprintEntity availableSprint = await _uow.Sprint.GetAvailableSprint(projectId);
+
+        if (availableSprint == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "no_available_sprint");
+
+        await _uow.Issue.MoveIssueToSprint(moveIssueDTO.Issues, availableSprint.Id);
+        return await _uow.Save();
+    }
+
     #endregion
 
     #region Detail

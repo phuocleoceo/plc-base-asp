@@ -64,4 +64,29 @@ public class IssueRepository : BaseRepository<IssueEntity>, IIssueRepository
             new QueryModel<IssueEntity>() { Filters = { i => ids.Contains(i.Id) } }
         );
     }
+
+    public async Task MoveIssueToBacklog(List<int> issueIds, int projectId)
+    {
+        List<IssueEntity> issues = await GetByIds(issueIds);
+
+        double backlogIndex = GetBacklogIndexForNewIssue(projectId);
+        issues.ForEach(i =>
+        {
+            i.SprintId = null;
+            i.BacklogIndex = backlogIndex++;
+            Update(i);
+        });
+    }
+
+    public async Task MoveIssueToSprint(List<int> issueIds, int sprintId)
+    {
+        List<IssueEntity> issues = await GetByIds(issueIds);
+
+        issues.ForEach(i =>
+        {
+            i.SprintId = sprintId;
+            i.BacklogIndex = null;
+            Update(i);
+        });
+    }
 }
