@@ -100,21 +100,13 @@ public class IssueService : IIssueService
         return await _uow.Save();
     }
 
-    public async Task<bool> MoveBoardIssueToBacklog(
+    public async Task<bool> MoveIssueToBacklog(
         ReqUser reqUser,
         int projectId,
         MoveIssueDTO moveIssueDTO
     )
     {
-        List<IssueEntity> issues = await _uow.Issue.GetByIds(moveIssueDTO.Issues);
-        double backlogIndex = _uow.Issue.GetBacklogIndexForNewIssue(projectId);
-        issues.ForEach(i =>
-        {
-            i.SprintId = null;
-            i.BacklogIndex = backlogIndex++;
-            _uow.Issue.Update(i);
-        });
-
+        await _uow.Issue.MoveIssueToBacklog(moveIssueDTO.Issues, projectId);
         return await _uow.Save();
     }
     #endregion
@@ -189,7 +181,7 @@ public class IssueService : IIssueService
         return await _uow.Save();
     }
 
-    public async Task<bool> MoveBacklogIssueToSprint(
+    public async Task<bool> MoveIssueToSprint(
         ReqUser reqUser,
         int projectId,
         MoveIssueDTO moveIssueDTO
@@ -200,14 +192,7 @@ public class IssueService : IIssueService
         if (availableSprint == null)
             throw new BaseException(HttpCode.NOT_FOUND, "no_available_sprint");
 
-        List<IssueEntity> issues = await _uow.Issue.GetByIds(moveIssueDTO.Issues);
-        issues.ForEach(i =>
-        {
-            i.SprintId = availableSprint.Id;
-            i.BacklogIndex = null;
-            _uow.Issue.Update(i);
-        });
-
+        await _uow.Issue.MoveIssueToSprint(moveIssueDTO.Issues, availableSprint.Id);
         return await _uow.Save();
     }
 

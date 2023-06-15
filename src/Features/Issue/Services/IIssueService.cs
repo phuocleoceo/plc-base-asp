@@ -18,7 +18,7 @@ public interface IIssueService
         UpdateBoardIssueDTO updateBoardIssueDTO
     );
 
-    Task<bool> MoveBoardIssueToBacklog(ReqUser reqUser, int projectId, MoveIssueDTO moveIssueDTO);
+    Task<bool> MoveIssueToBacklog(ReqUser reqUser, int projectId, MoveIssueDTO moveIssueDTO);
     #endregion
 
     #region Backlog
@@ -30,7 +30,7 @@ public interface IIssueService
         UpdateBacklogIssueDTO updateBacklogIssueDTO
     );
 
-    Task<bool> MoveBacklogIssueToSprint(ReqUser reqUser, int projectId, MoveIssueDTO moveIssueDTO);
+    Task<bool> MoveIssueToSprint(ReqUser reqUser, int projectId, MoveIssueDTO moveIssueDTO);
     #endregion
 
     #region Detail

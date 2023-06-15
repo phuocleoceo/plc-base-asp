@@ -12,4 +12,8 @@ public interface IIssueRepository : IBaseRepository<IssueEntity>
     Task<IssueEntity> GetForUpdateAndDelete(int projectId, int reporterId, int issueId);
 
     Task<List<IssueEntity>> GetByIds(List<int> ids);
+
+    Task MoveIssueToBacklog(List<int> issueIds, int projectId);
+
+    Task MoveIssueToSprint(List<int> issueIds, int sprintId);
 }

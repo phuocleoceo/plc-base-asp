@@ -52,7 +52,7 @@ public class IssueController : BaseController
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 
-        if (await _issueService.MoveBoardIssueToBacklog(reqUser, projectId, moveIssueDTO))
+        if (await _issueService.MoveIssueToBacklog(reqUser, projectId, moveIssueDTO))
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }
@@ -87,7 +87,7 @@ public class IssueController : BaseController
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 
-        if (await _issueService.MoveBacklogIssueToSprint(reqUser, projectId, moveIssueDTO))
+        if (await _issueService.MoveIssueToSprint(reqUser, projectId, moveIssueDTO))
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }
