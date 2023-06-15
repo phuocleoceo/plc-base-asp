@@ -44,6 +44,19 @@ public class IssueController : BaseController
         return HttpContext.Failure();
     }
 
+    [HttpPut("/api/project/{projectId}/board/issue/move-to-backlog")]
+    public async Task<BaseResponse<bool>> MoveBoardIssueToBacklog(
+        int projectId,
+        [FromBody] MoveIssueDTO moveIssueDTO
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _issueService.MoveBoardIssueToBacklog(reqUser, projectId, moveIssueDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
     // Backlog
     [HttpGet("/api/project/{projectId}/backlog/issue")]
     public async Task<BaseResponse<List<IssueBacklogDTO>>> GetIssuesInBacklog(
@@ -62,6 +75,19 @@ public class IssueController : BaseController
     )
     {
         if (await _issueService.UpdateBacklogIssue(projectId, issueId, updateBacklogIssueDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
+    [HttpPut("/api/project/{projectId}/backlog/issue/move-to-sprint")]
+    public async Task<BaseResponse<bool>> MoveBacklogIssueToSprint(
+        int projectId,
+        [FromBody] MoveIssueDTO moveIssueDTO
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _issueService.MoveBacklogIssueToSprint(reqUser, projectId, moveIssueDTO))
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }
