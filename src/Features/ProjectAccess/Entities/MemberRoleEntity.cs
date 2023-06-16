@@ -1,4 +1,3 @@
-namespace PlcBase.Features.ProjectAccess.Entities
-{
-    public class ProjectMemberRole { }
-}
+namespace PlcBase.Features.ProjectAccess.Entities;
+
+public class MemberRoleEntity { }
