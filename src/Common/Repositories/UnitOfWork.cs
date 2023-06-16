@@ -4,6 +4,7 @@ using AutoMapper;
 using PlcBase.Features.AccessControl.Repositories;
 using PlcBase.Features.ConfigSetting.Repositories;
 using PlcBase.Features.ProjectMember.Repositories;
+using PlcBase.Features.ProjectAccess.Repositories;
 using PlcBase.Features.ProjectStatus.Repositories;
 using PlcBase.Features.Invitation.Repositories;
 using PlcBase.Features.Address.Repositories;
@@ -44,6 +45,8 @@ public class UnitOfWork : IUnitOfWork
         Sprint = new SprintRepository(_db, _mapper);
         Issue = new IssueRepository(_db, _mapper);
         IssueComment = new IssueCommentRepository(_db, _mapper);
+        ProjectRole = new ProjectRoleRepository(_db, _mapper);
+        ProjectPermission = new ProjectPermissionRepository(_db, _mapper);
     }
 
     public IDapperContainer DapperContainer { get; private set; }
@@ -63,6 +66,8 @@ public class UnitOfWork : IUnitOfWork
     public ISprintRepository Sprint { get; private set; }
     public IIssueRepository Issue { get; private set; }
     public IIssueCommentRepository IssueComment { get; private set; }
+    public IProjectRoleRepository ProjectRole { get; private set; }
+    public IProjectPermissionRepository ProjectPermission { get; private set; }
 
     public void Dispose()
     {

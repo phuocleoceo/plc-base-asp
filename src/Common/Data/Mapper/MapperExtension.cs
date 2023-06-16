@@ -1,5 +1,6 @@
 using PlcBase.Features.AccessControl.DTOs;
 using PlcBase.Features.ConfigSetting.DTOs;
+using PlcBase.Features.ProjectAccess.DTOs;
 using PlcBase.Features.ProjectMember.DTOs;
 using PlcBase.Features.ProjectStatus.DTOs;
 using PlcBase.Features.Invitation.DTOs;
@@ -30,7 +31,9 @@ public static class MapperExtension
             typeof(InvitationMapping),
             typeof(SprintMapping),
             typeof(IssueMapping),
-            typeof(IssueCommentMapping)
+            typeof(IssueCommentMapping),
+            typeof(ProjectRoleMapping),
+            typeof(ProjectPermissionMapping)
         );
     }
 }
