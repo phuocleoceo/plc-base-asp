@@ -18,4 +18,6 @@ public static class TableName
     public const string SPRINT = "sprint";
     public const string ISSUE = "issue";
     public const string ISSUE_COMMENT = "issue_comment";
+    public const string PROJECT_ROLE = "project_role";
+    public const string PROJECT_PERMISSION = "project_permission";
 }
