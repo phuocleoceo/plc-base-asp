@@ -23,19 +23,37 @@ public class UserService : IUserService
 
     public async Task<PagedList<UserDTO>> GetAllUsers(UserParams userParams)
     {
-        return await _uow.UserProfile.GetPagedAsync<UserDTO>(
-            new QueryModel<UserProfileEntity>()
+        QueryModel<UserProfileEntity> userQuery = new QueryModel<UserProfileEntity>()
+        {
+            OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
+            Includes =
             {
-                OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
-                Includes =
-                {
-                    up => up.UserAccount,
-                    up => up.AddressWard.AddressDistrict.AddressProvince,
-                },
-                PageSize = userParams.PageSize,
-                PageNumber = userParams.PageNumber,
-            }
-        );
+                up => up.UserAccount,
+                up => up.AddressWard.AddressDistrict.AddressProvince,
+            },
+            PageSize = userParams.PageSize,
+            PageNumber = userParams.PageNumber,
+        };
+
+        if (!string.IsNullOrWhiteSpace(userParams.SearchValue))
+        {
+            string searchValue = userParams.SearchValue.ToLower();
+            userQuery.Filters.Add(
+                u =>
+                    u.DisplayName.ToLower().Contains(searchValue)
+                    || u.PhoneNumber.ToLower().Contains(searchValue)
+                    || u.IdentityNumber.ToLower().Contains(searchValue)
+                    || u.Address.ToLower().Contains(searchValue)
+                    || u.AddressWard.Name.ToLower().Contains(searchValue)
+                    || u.AddressWard.AddressDistrict.Name.ToLower().Contains(searchValue)
+                    || u.AddressWard.AddressDistrict.AddressProvince.Name
+                        .ToLower()
+                        .Contains(searchValue)
+                    || u.UserAccount.Email.ToLower().Contains(searchValue)
+            );
+        }
+
+        return await _uow.UserProfile.GetPagedAsync<UserDTO>(userQuery);
     }
 
     public async Task<UserProfilePersonalDTO> GetUserProfilePersonal(ReqUser reqUser)
