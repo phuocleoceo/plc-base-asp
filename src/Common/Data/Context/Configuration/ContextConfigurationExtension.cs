@@ -22,5 +22,7 @@ public static class ContextConfigurationExtension
         modelBuilder.ApplyConfiguration(new SprintConfiguration());
         modelBuilder.ApplyConfiguration(new IssueConfiguration());
         modelBuilder.ApplyConfiguration(new IssueCommentConfiguration());
+        modelBuilder.ApplyConfiguration(new ProjectRoleConfiguration());
+        modelBuilder.ApplyConfiguration(new ProjectPermissionConfiguration());
     }
 }

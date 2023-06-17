@@ -1,6 +1,7 @@
 using PlcBase.Features.AccessControl.Repositories;
 using PlcBase.Features.ConfigSetting.Repositories;
 using PlcBase.Features.ProjectMember.Repositories;
+using PlcBase.Features.ProjectAccess.Repositories;
 using PlcBase.Features.ProjectStatus.Repositories;
 using PlcBase.Features.Invitation.Repositories;
 using PlcBase.Features.Address.Repositories;
@@ -31,6 +32,8 @@ public interface IUnitOfWork : IDisposable
     ISprintRepository Sprint { get; }
     IIssueRepository Issue { get; }
     IIssueCommentRepository IssueComment { get; }
+    IProjectRoleRepository ProjectRole { get; }
+    IProjectPermissionRepository ProjectPermission { get; }
 
     Task<bool> Save();
     Task CreateTransaction();

@@ -1,5 +1,6 @@
 using PlcBase.Features.AccessControl.Services;
 using PlcBase.Features.ConfigSetting.Services;
+using PlcBase.Features.ProjectAccess.Services;
 using PlcBase.Features.ProjectMember.Services;
 using PlcBase.Features.ProjectStatus.Services;
 using PlcBase.Features.Invitation.Services;
@@ -30,5 +31,6 @@ public static class ServiceDIExtension
         services.AddScoped<ISprintService, SprintService>();
         services.AddScoped<IIssueService, IssueService>();
         services.AddScoped<IIssueCommentService, IssueCommentService>();
+        services.AddScoped<IProjectRoleService, ProjectRoleService>();
     }
 }

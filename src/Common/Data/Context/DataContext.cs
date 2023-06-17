@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PlcBase.Common.Data.Context.Configuration;
 using PlcBase.Features.AccessControl.Entities;
 using PlcBase.Features.ConfigSetting.Entities;
+using PlcBase.Features.ProjectAccess.Entities;
 using PlcBase.Features.ProjectMember.Entities;
 using PlcBase.Features.ProjectStatus.Entities;
 using PlcBase.Features.Invitation.Entities;
@@ -61,4 +62,6 @@ public class DataContext : DbContext
     public DbSet<SprintEntity> Sprints { get; set; }
     public DbSet<IssueEntity> Issues { get; set; }
     public DbSet<IssueCommentEntity> IssueComments { get; set; }
+    public DbSet<ProjectRoleEntity> ProjectRoles { get; set; }
+    public DbSet<ProjectPermissionEntity> ProjectPermissions { get; set; }
 }
