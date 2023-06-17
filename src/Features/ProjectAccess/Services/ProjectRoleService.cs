@@ -76,4 +76,15 @@ public class ProjectRoleService : IProjectRoleService
         _uow.ProjectRole.Update(projectRoleDb);
         return await _uow.Save();
     }
+
+    public async Task<bool> DeleteProjectRole(int projectRoleId)
+    {
+        ProjectRoleEntity projectRoleDb = await _uow.ProjectRole.FindByIdAsync(projectRoleId);
+
+        if (projectRoleDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "project_role_not_found");
+
+        _uow.ProjectRole.Remove(projectRoleDb);
+        return await _uow.Save();
+    }
 }

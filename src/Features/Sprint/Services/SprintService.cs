@@ -31,6 +31,16 @@ public class SprintService : ISprintService
         );
     }
 
+    public async Task<SprintDTO> GetSprintById(int projectId, int sprintId)
+    {
+        return await _uow.Sprint.GetOneAsync<SprintDTO>(
+            new QueryModel<SprintEntity>()
+            {
+                Filters = { i => i.Id == sprintId && i.ProjectId == projectId },
+            }
+        );
+    }
+
     public async Task<bool> CreateSprint(
         ReqUser reqUser,
         int projectId,

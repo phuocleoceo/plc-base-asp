@@ -57,4 +57,12 @@ public class ProjectRoleController : BaseController
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }
+
+    [HttpDelete("/api/project-role/{projectRoleId}")]
+    public async Task<BaseResponse<bool>> DeleteProjectRole(int projectRoleId)
+    {
+        if (await _projectRoleService.DeleteProjectRole(projectRoleId))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
 }

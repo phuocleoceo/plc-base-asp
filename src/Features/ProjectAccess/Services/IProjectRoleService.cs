@@ -14,4 +14,6 @@ public interface IProjectRoleService
     Task<bool> CreateProjectRole(CreateProjectRoleDTO createRoleDTO);
 
     Task<bool> UpdateProjectRole(int projectRoleId, UpdateProjectRoleDTO updateRoleDTO);
+
+    Task<bool> DeleteProjectRole(int projectRoleId);
 }

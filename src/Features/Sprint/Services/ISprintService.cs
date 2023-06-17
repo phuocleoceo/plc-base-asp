@@ -7,6 +7,8 @@ public interface ISprintService
 {
     Task<SprintDTO> GetAvailableSprint(int projectId);
 
+    Task<SprintDTO> GetSprintById(int projectId, int sprintId);
+
     Task<bool> CreateSprint(ReqUser reqUser, int projectId, CreateSprintDTO createSprintDTO);
 
     Task<bool> UpdateSprint(
