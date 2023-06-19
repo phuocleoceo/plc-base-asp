@@ -34,6 +34,7 @@ public interface IUnitOfWork : IDisposable
     IIssueCommentRepository IssueComment { get; }
     IProjectRoleRepository ProjectRole { get; }
     IProjectPermissionRepository ProjectPermission { get; }
+    IMemberRoleRepository MemberRole { get; }
 
     Task<bool> Save();
     Task CreateTransaction();

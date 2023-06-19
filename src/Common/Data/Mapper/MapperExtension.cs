@@ -33,7 +33,8 @@ public static class MapperExtension
             typeof(IssueMapping),
             typeof(IssueCommentMapping),
             typeof(ProjectRoleMapping),
-            typeof(ProjectPermissionMapping)
+            typeof(ProjectPermissionMapping),
+            typeof(MemberRoleMapping)
         );
     }
 }
