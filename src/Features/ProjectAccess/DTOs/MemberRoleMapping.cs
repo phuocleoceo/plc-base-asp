@@ -6,5 +6,10 @@ namespace PlcBase.Features.ProjectAccess.DTOs;
 
 public class MemberRoleMapping : Profile
 {
-    public MemberRoleMapping() { }
+    public MemberRoleMapping()
+    {
+        CreateMap<MemberRoleEntity, MemberRoleDTO>();
+
+        CreateMap<CreateMemberRoleDTO, MemberRoleEntity>();
+    }
 }
