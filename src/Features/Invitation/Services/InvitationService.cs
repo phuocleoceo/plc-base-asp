@@ -131,7 +131,7 @@ public class InvitationService : IInvitationService
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_invitation");
 
         if (invitationDb.AcceptedAt != null || invitationDb.DeclinedAt != null)
-            throw new BaseException(HttpCode.BAD_REQUEST, "complete_invitation");
+            throw new BaseException(HttpCode.BAD_REQUEST, "completed_invitation");
 
         invitationDb.AcceptedAt = DateTime.UtcNow;
         invitationDb.DeclinedAt = null;
@@ -156,7 +156,7 @@ public class InvitationService : IInvitationService
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_invitation");
 
         if (invitationDb.AcceptedAt != null || invitationDb.DeclinedAt != null)
-            throw new BaseException(HttpCode.BAD_REQUEST, "complete_invitation");
+            throw new BaseException(HttpCode.BAD_REQUEST, "completed_invitation");
 
         invitationDb.AcceptedAt = null;
         invitationDb.DeclinedAt = DateTime.UtcNow;

@@ -64,4 +64,5 @@ public class DataContext : DbContext
     public DbSet<IssueCommentEntity> IssueComments { get; set; }
     public DbSet<ProjectRoleEntity> ProjectRoles { get; set; }
     public DbSet<ProjectPermissionEntity> ProjectPermissions { get; set; }
+    public DbSet<MemberRoleEntity> MemberRoles { get; set; }
 }

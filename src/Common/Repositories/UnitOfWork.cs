@@ -47,6 +47,7 @@ public class UnitOfWork : IUnitOfWork
         IssueComment = new IssueCommentRepository(_db, _mapper);
         ProjectRole = new ProjectRoleRepository(_db, _mapper);
         ProjectPermission = new ProjectPermissionRepository(_db, _mapper);
+        MemberRole = new MemberRoleRepository(_db, _mapper);
     }
 
     public IDapperContainer DapperContainer { get; private set; }
@@ -68,6 +69,7 @@ public class UnitOfWork : IUnitOfWork
     public IIssueCommentRepository IssueComment { get; private set; }
     public IProjectRoleRepository ProjectRole { get; private set; }
     public IProjectPermissionRepository ProjectPermission { get; private set; }
+    public IMemberRoleRepository MemberRole { get; private set; }
 
     public void Dispose()
     {
