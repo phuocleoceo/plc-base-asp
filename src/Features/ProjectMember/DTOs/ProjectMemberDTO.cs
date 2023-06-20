@@ -7,4 +7,5 @@ public class ProjectMemberDTO
     public string Name { get; set; }
     public string Avatar { get; set; }
     public int ProjectMemberId { get; set; }
+    public IEnumerable<string> MemberRoles { get; set; }
 }

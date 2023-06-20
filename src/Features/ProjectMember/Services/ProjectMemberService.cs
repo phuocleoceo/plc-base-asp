@@ -1,5 +1,6 @@
 using AutoMapper;
 
+using PlcBase.Features.ProjectAccess.Entities;
 using PlcBase.Features.ProjectMember.Entities;
 using PlcBase.Features.ProjectMember.DTOs;
 using PlcBase.Common.Repositories;
@@ -28,9 +29,9 @@ public class ProjectMemberService : IProjectMemberService
     {
         QueryModel<ProjectMemberEntity> memberQuery = new QueryModel<ProjectMemberEntity>()
         {
-            OrderBy = c => c.OrderByDescending(up => up.CreatedAt),
-            Filters = { i => i.ProjectId == projectId },
-            Includes = { i => i.User.UserProfile, },
+            OrderBy = c => c.OrderByDescending(pm => pm.CreatedAt),
+            Filters = { pm => pm.ProjectId == projectId },
+            Includes = { pm => pm.User.UserProfile },
             PageSize = projectMemberParams.PageSize,
             PageNumber = projectMemberParams.PageNumber
         };
@@ -50,7 +51,22 @@ public class ProjectMemberService : IProjectMemberService
             );
         }
 
-        return await _uow.ProjectMember.GetPagedAsync<ProjectMemberDTO>(memberQuery);
+        PagedList<ProjectMemberDTO> projectMembers =
+            await _uow.ProjectMember.GetPagedAsync<ProjectMemberDTO>(memberQuery);
+
+        // Member roles
+        IEnumerable<int> memberIds = projectMembers.Records.Select(pm => pm.ProjectMemberId);
+        List<MemberRoleEntity> memberRoles = await _uow.MemberRole.GetByProjectMemberIds(memberIds);
+
+        foreach (ProjectMemberDTO projectMember in projectMembers.Records)
+        {
+            projectMember.MemberRoles = memberRoles
+                .Where(mr => mr.ProjectMemberId == projectMember.ProjectMemberId)
+                .OrderBy(mr => mr.ProjectRoleId)
+                .Select(mr => mr.ProjectRole.Name);
+        }
+
+        return projectMembers;
     }
 
     public async Task<List<ProjectMemberSelectDTO>> GetMembersForSelect(int projectId)
