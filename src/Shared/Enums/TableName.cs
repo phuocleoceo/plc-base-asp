@@ -21,4 +21,5 @@ public static class TableName
     public const string PROJECT_ROLE = "project_role";
     public const string PROJECT_PERMISSION = "project_permission";
     public const string MEMBER_ROLE = "member_role";
+    public const string EVENT = "event";
 }
