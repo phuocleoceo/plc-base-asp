@@ -7,6 +7,7 @@ using PlcBase.Features.Invitation.DTOs;
 using PlcBase.Features.Address.DTOs;
 using PlcBase.Features.Project.DTOs;
 using PlcBase.Features.Sprint.DTOs;
+using PlcBase.Features.Event.DTOs;
 using PlcBase.Features.Issue.DTOs;
 using PlcBase.Features.Media.DTOs;
 using PlcBase.Features.Auth.DTOs;
@@ -34,7 +35,8 @@ public static class MapperExtension
             typeof(IssueCommentMapping),
             typeof(ProjectRoleMapping),
             typeof(ProjectPermissionMapping),
-            typeof(MemberRoleMapping)
+            typeof(MemberRoleMapping),
+            typeof(EventMapping)
         );
     }
 }

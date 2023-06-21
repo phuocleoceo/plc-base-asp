@@ -25,5 +25,7 @@ public static class ContextConfigurationExtension
         modelBuilder.ApplyConfiguration(new ProjectRoleConfiguration());
         modelBuilder.ApplyConfiguration(new ProjectPermissionConfiguration());
         modelBuilder.ApplyConfiguration(new MemberRoleConfiguration());
+        modelBuilder.ApplyConfiguration(new EventConfiguration());
+        modelBuilder.ApplyConfiguration(new EventAttendeeConfiguration());
     }
 }

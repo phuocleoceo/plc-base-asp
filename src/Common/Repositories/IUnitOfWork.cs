@@ -7,6 +7,7 @@ using PlcBase.Features.Invitation.Repositories;
 using PlcBase.Features.Address.Repositories;
 using PlcBase.Features.Project.Repositories;
 using PlcBase.Features.Sprint.Repositories;
+using PlcBase.Features.Event.Repositories;
 using PlcBase.Features.Issue.Repositories;
 using PlcBase.Features.Media.Repositories;
 using PlcBase.Features.User.Repositories;
@@ -35,6 +36,8 @@ public interface IUnitOfWork : IDisposable
     IProjectRoleRepository ProjectRole { get; }
     IProjectPermissionRepository ProjectPermission { get; }
     IMemberRoleRepository MemberRole { get; }
+    IEventRepository Event { get; }
+    IEventAttendeeRepository EventAttendee { get; }
 
     Task<bool> Save();
     Task CreateTransaction();

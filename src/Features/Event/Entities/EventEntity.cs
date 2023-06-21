@@ -31,4 +31,11 @@ public class EventEntity : BaseEntity
     [Column("project_id")]
     public int ProjectId { get; set; }
     public ProjectEntity Project { get; set; }
+
+    public ICollection<EventAttendeeEntity> EventAttendees { get; set; }
+
+    public EventEntity()
+    {
+        EventAttendees = new List<EventAttendeeEntity>();
+    }
 }

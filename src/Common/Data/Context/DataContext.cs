@@ -11,6 +11,7 @@ using PlcBase.Features.Invitation.Entities;
 using PlcBase.Features.Address.Entities;
 using PlcBase.Features.Project.Entities;
 using PlcBase.Features.Sprint.Entities;
+using PlcBase.Features.Event.Entities;
 using PlcBase.Features.Issue.Entities;
 using PlcBase.Features.Media.Entities;
 using PlcBase.Features.User.Entities;
@@ -65,4 +66,6 @@ public class DataContext : DbContext
     public DbSet<ProjectRoleEntity> ProjectRoles { get; set; }
     public DbSet<ProjectPermissionEntity> ProjectPermissions { get; set; }
     public DbSet<MemberRoleEntity> MemberRoles { get; set; }
+    public DbSet<EventEntity> Events { get; set; }
+    public DbSet<EventAttendeeEntity> EventAttendees { get; set; }
 }

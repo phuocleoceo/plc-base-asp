@@ -7,6 +7,7 @@ using PlcBase.Features.Invitation.Services;
 using PlcBase.Features.Address.Services;
 using PlcBase.Features.Project.Services;
 using PlcBase.Features.Sprint.Services;
+using PlcBase.Features.Event.Services;
 using PlcBase.Features.Issue.Services;
 using PlcBase.Features.Media.Services;
 using PlcBase.Features.Auth.Services;
@@ -33,5 +34,6 @@ public static class ServiceDIExtension
         services.AddScoped<IIssueCommentService, IssueCommentService>();
         services.AddScoped<IProjectRoleService, ProjectRoleService>();
         services.AddScoped<IMemberRoleService, MemberRoleService>();
+        services.AddScoped<IEventService, EventService>();
     }
 }
