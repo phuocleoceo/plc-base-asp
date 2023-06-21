@@ -6,5 +6,8 @@ namespace PlcBase.Features.Event.DTOs;
 
 public class EventMapping : Profile
 {
-    public EventMapping() { }
+    public EventMapping()
+    {
+        CreateMap<CreateEventDTO, EventEntity>();
+    }
 }

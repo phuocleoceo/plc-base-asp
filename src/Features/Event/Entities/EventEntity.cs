@@ -32,10 +32,10 @@ public class EventEntity : BaseEntity
     public int ProjectId { get; set; }
     public ProjectEntity Project { get; set; }
 
-    public ICollection<EventAttendeeEntity> EventAttendees { get; set; }
+    public ICollection<EventAttendeeEntity> Attendees { get; set; }
 
     public EventEntity()
     {
-        EventAttendees = new List<EventAttendeeEntity>();
+        Attendees = new List<EventAttendeeEntity>();
     }
 }
