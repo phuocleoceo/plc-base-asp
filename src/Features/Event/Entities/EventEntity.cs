@@ -13,8 +13,8 @@ public class EventEntity : BaseEntity
     [Column("title")]
     public string Title { get; set; }
 
-    [Column("note")]
-    public string Note { get; set; }
+    [Column("description")]
+    public string Description { get; set; }
 
     [Column("start_time")]
     public DateTime StartTime { get; set; }
