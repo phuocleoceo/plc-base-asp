@@ -43,9 +43,17 @@ public class EventService : IEventService
         return await _uow.Event.GetManyAsync<EventDTO>(eventQuery);
     }
 
-    public Task<EventDetailDTO> GetEventDetail(ReqUser reqUser, int projectId, int eventId)
+    public async Task<EventDetailDTO> GetEventDetail(ReqUser reqUser, int projectId, int eventId)
     {
-        throw new NotImplementedException();
+        return await _uow.Event.GetOneAsync<EventDetailDTO>(
+            new QueryModel<EventEntity>()
+            {
+                Filters =
+                {
+                    e => e.Id == eventId && e.ProjectId == projectId && e.CreatorId == reqUser.Id
+                }
+            }
+        );
     }
 
     public async Task<bool> CreateEvent(
@@ -75,25 +83,46 @@ public class EventService : IEventService
             await _uow.CommitTransaction();
             return true;
         }
-        catch (Exception ex)
+        catch (BaseException ex)
         {
             await _uow.AbortTransaction();
             throw ex;
         }
     }
 
-    public Task<bool> UpdateEvent(
+    public async Task<bool> UpdateEvent(
         ReqUser reqUser,
         int projectId,
         int eventId,
         UpdateEventDTO updateEventDTO
     )
     {
-        throw new NotImplementedException();
+        EventEntity eventDb = await _uow.Event.GetForUpdateAndDelete(
+            reqUser.Id,
+            projectId,
+            eventId
+        );
+
+        if (eventDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "event_not_found");
+
+        _mapper.Map(updateEventDTO, eventDb);
+        _uow.Event.Update(eventDb);
+        return await _uow.Save();
     }
 
-    public Task<bool> DeleteEvent(ReqUser reqUser, int projectId, int eventId)
+    public async Task<bool> DeleteEvent(ReqUser reqUser, int projectId, int eventId)
     {
-        throw new NotImplementedException();
+        EventEntity eventDb = await _uow.Event.GetForUpdateAndDelete(
+            reqUser.Id,
+            projectId,
+            eventId
+        );
+
+        if (eventDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "event_not_found");
+
+        _uow.Event.Remove(eventDb);
+        return await _uow.Save();
     }
 }
