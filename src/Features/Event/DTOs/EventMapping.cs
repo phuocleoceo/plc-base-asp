@@ -8,6 +8,12 @@ public class EventMapping : Profile
 {
     public EventMapping()
     {
+        CreateMap<EventEntity, EventDTO>();
+
+        CreateMap<EventEntity, EventDetailDTO>();
+
         CreateMap<CreateEventDTO, EventEntity>();
+
+        CreateMap<UpdateEventDTO, EventEntity>();
     }
 }
