@@ -36,6 +36,8 @@ public interface IBaseRepository<T>
 
     Task RemoveById(int id);
 
+    Task RemoveRangeById(IEnumerable<int> ids);
+
     void SoftDelete(T entity);
 
     Task SoftDeleteById(int id);

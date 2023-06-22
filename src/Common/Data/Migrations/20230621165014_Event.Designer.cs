@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlcBase.Common.Data.Context;
 
@@ -10,9 +11,10 @@ using PlcBase.Common.Data.Context;
 namespace plcbase.Common.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230621165014_Event")]
+    partial class Event
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -911,7 +913,7 @@ namespace plcbase.Common.Data.Migrations
             modelBuilder.Entity("PlcBase.Features.Event.Entities.EventAttendeeEntity", b =>
                 {
                     b.HasOne("PlcBase.Features.Event.Entities.EventEntity", "Event")
-                        .WithMany("Attendees")
+                        .WithMany("EventAttendees")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1051,7 +1053,7 @@ namespace plcbase.Common.Data.Migrations
             modelBuilder.Entity("PlcBase.Features.ProjectAccess.Entities.MemberRoleEntity", b =>
                 {
                     b.HasOne("PlcBase.Features.ProjectMember.Entities.ProjectMemberEntity", "ProjectMember")
-                        .WithMany("MemberRoles")
+                        .WithMany()
                         .HasForeignKey("ProjectMemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1168,12 +1170,7 @@ namespace plcbase.Common.Data.Migrations
 
             modelBuilder.Entity("PlcBase.Features.Event.Entities.EventEntity", b =>
                 {
-                    b.Navigation("Attendees");
-                });
-
-            modelBuilder.Entity("PlcBase.Features.ProjectMember.Entities.ProjectMemberEntity", b =>
-                {
-                    b.Navigation("MemberRoles");
+                    b.Navigation("EventAttendees");
                 });
 
             modelBuilder.Entity("PlcBase.Features.User.Entities.UserAccountEntity", b =>

@@ -145,6 +145,15 @@ public class BaseRepository<T> : IBaseRepository<T>
         Remove(entity);
     }
 
+    public async Task RemoveRangeById(IEnumerable<int> ids)
+    {
+        IEnumerable<T> entities = await _dbSet
+            .Where(entity => ids.Contains(entity.Id))
+            .ToListAsync();
+
+        RemoveRange(entities);
+    }
+
     public void SoftDelete(T entity)
     {
         if (entity is ISoftDeletable softDeletableEntity)

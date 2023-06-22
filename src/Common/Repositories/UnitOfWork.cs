@@ -10,6 +10,7 @@ using PlcBase.Features.Invitation.Repositories;
 using PlcBase.Features.Address.Repositories;
 using PlcBase.Features.Project.Repositories;
 using PlcBase.Features.Sprint.Repositories;
+using PlcBase.Features.Event.Repositories;
 using PlcBase.Features.Issue.Repositories;
 using PlcBase.Features.Media.Repositories;
 using PlcBase.Features.User.Repositories;
@@ -48,6 +49,8 @@ public class UnitOfWork : IUnitOfWork
         ProjectRole = new ProjectRoleRepository(_db, _mapper);
         ProjectPermission = new ProjectPermissionRepository(_db, _mapper);
         MemberRole = new MemberRoleRepository(_db, _mapper);
+        Event = new EventRepository(_db, _mapper);
+        EventAttendee = new EventAttendeeRepository(_db, _mapper);
     }
 
     public IDapperContainer DapperContainer { get; private set; }
@@ -70,6 +73,8 @@ public class UnitOfWork : IUnitOfWork
     public IProjectRoleRepository ProjectRole { get; private set; }
     public IProjectPermissionRepository ProjectPermission { get; private set; }
     public IMemberRoleRepository MemberRole { get; private set; }
+    public IEventRepository Event { get; private set; }
+    public IEventAttendeeRepository EventAttendee { get; private set; }
 
     public void Dispose()
     {

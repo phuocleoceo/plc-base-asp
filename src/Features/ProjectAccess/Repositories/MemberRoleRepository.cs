@@ -2,7 +2,6 @@ using AutoMapper;
 
 using PlcBase.Features.ProjectAccess.Entities;
 using PlcBase.Common.Data.Context;
-using PlcBase.Base.DomainModel;
 using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.ProjectAccess.Repositories;
@@ -17,18 +16,5 @@ public class MemberRoleRepository : BaseRepository<MemberRoleEntity>, IMemberRol
     {
         _db = db;
         _mapper = mapper;
-    }
-
-    public async Task<List<MemberRoleEntity>> GetByProjectMemberIds(
-        IEnumerable<int> projectMemberIds
-    )
-    {
-        return await GetManyAsync<MemberRoleEntity>(
-            new QueryModel<MemberRoleEntity>()
-            {
-                Filters = { mr => projectMemberIds.Contains(mr.ProjectMemberId) },
-                Includes = { mr => mr.ProjectRole }
-            }
-        );
     }
 }
