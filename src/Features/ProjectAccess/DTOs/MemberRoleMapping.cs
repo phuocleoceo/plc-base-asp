@@ -10,6 +10,8 @@ public class MemberRoleMapping : Profile
     {
         CreateMap<MemberRoleEntity, MemberRoleDTO>();
 
+        CreateMap<MemberRoleEntity, String>().ConvertUsing(entity => entity.ProjectRole.Name);
+
         CreateMap<CreateMemberRoleDTO, MemberRoleEntity>();
     }
 }

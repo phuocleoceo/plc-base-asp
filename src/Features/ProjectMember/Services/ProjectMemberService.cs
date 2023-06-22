@@ -51,22 +51,7 @@ public class ProjectMemberService : IProjectMemberService
             );
         }
 
-        PagedList<ProjectMemberDTO> projectMembers =
-            await _uow.ProjectMember.GetPagedAsync<ProjectMemberDTO>(memberQuery);
-
-        // Member roles
-        IEnumerable<int> memberIds = projectMembers.Records.Select(pm => pm.ProjectMemberId);
-        List<MemberRoleEntity> memberRoles = await _uow.MemberRole.GetByProjectMemberIds(memberIds);
-
-        foreach (ProjectMemberDTO projectMember in projectMembers.Records)
-        {
-            projectMember.MemberRoles = memberRoles
-                .Where(mr => mr.ProjectMemberId == projectMember.ProjectMemberId)
-                .OrderBy(mr => mr.ProjectRoleId)
-                .Select(mr => mr.ProjectRole.Name);
-        }
-
-        return projectMembers;
+        return await _uow.ProjectMember.GetPagedAsync<ProjectMemberDTO>(memberQuery);
     }
 
     public async Task<List<ProjectMemberSelectDTO>> GetMembersForSelect(int projectId)

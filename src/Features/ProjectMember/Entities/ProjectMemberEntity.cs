@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
+using PlcBase.Features.ProjectAccess.Entities;
 using PlcBase.Features.Project.Entities;
 using PlcBase.Features.User.Entities;
 using PlcBase.Shared.Enums;
@@ -19,4 +20,11 @@ public class ProjectMemberEntity : BaseSoftDeletableEntity
     [Column("project_id")]
     public int ProjectId { get; set; }
     public ProjectEntity Project { get; set; }
+
+    public ICollection<MemberRoleEntity> MemberRoles { get; set; }
+
+    public ProjectMemberEntity()
+    {
+        MemberRoles = new List<MemberRoleEntity>();
+    }
 }
