@@ -97,18 +97,50 @@ public class EventService : IEventService
         UpdateEventDTO updateEventDTO
     )
     {
-        EventEntity eventDb = await _uow.Event.GetForUpdateAndDelete(
-            reqUser.Id,
-            projectId,
-            eventId
-        );
+        try
+        {
+            await _uow.CreateTransaction();
 
-        if (eventDb == null)
-            throw new BaseException(HttpCode.NOT_FOUND, "event_not_found");
+            EventEntity eventDb = await _uow.Event.GetForUpdateAndDelete(
+                reqUser.Id,
+                projectId,
+                eventId
+            );
 
-        _mapper.Map(updateEventDTO, eventDb);
-        _uow.Event.Update(eventDb);
-        return await _uow.Save();
+            if (eventDb == null)
+                throw new BaseException(HttpCode.NOT_FOUND, "event_not_found");
+
+            _mapper.Map(updateEventDTO, eventDb);
+            _uow.Event.Update(eventDb);
+
+            HashSet<int> currentAttendees = await _uow.EventAttendee.GetAttendeeIdsForEvent(
+                eventId
+            );
+
+            // Những userId Db không có, update data có => thêm mới
+            IEnumerable<int> createAttendees = updateEventDTO.AttendeeIds.Except(currentAttendees);
+            // Những userId DB có, update data không có => gỡ đi
+            IEnumerable<int> removeAttendees = currentAttendees.Except(updateEventDTO.AttendeeIds);
+            // Những userId cả Db và update data có thì giữ nguyên
+
+            _uow.EventAttendee.AddRange(
+                createAttendees.Select(
+                    attendeeId =>
+                        new EventAttendeeEntity() { UserId = attendeeId, EventId = eventId }
+                )
+            );
+
+            await _uow.EventAttendee.RemoveAttendeesByUserIds(removeAttendees);
+
+            await _uow.Save();
+            await _uow.CommitTransaction();
+            return true;
+        }
+        catch (BaseException ex)
+        {
+            await _uow.AbortTransaction();
+            throw ex;
+        }
     }
 
     public async Task<bool> DeleteEvent(ReqUser reqUser, int projectId, int eventId)
