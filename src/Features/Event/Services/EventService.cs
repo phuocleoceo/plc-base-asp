@@ -77,6 +77,12 @@ public class EventService : IEventService
                 ea => new EventAttendeeEntity() { UserId = ea, EventId = eventEntity.Id }
             );
 
+            // Mặc định creator luôn luôn là người có tham dự
+            if (!(createEventDTO.AttendeeIds.Contains(reqUser.Id)))
+                eventAttendees.Append(
+                    new EventAttendeeEntity() { UserId = reqUser.Id, EventId = eventEntity.Id }
+                );
+
             _uow.EventAttendee.AddRange(eventAttendees);
             await _uow.Save();
 
@@ -119,8 +125,10 @@ public class EventService : IEventService
 
             // Những userId Db không có, update data có => thêm mới
             IEnumerable<int> createAttendees = updateEventDTO.AttendeeIds.Except(currentAttendees);
-            // Những userId DB có, update data không có => gỡ đi
-            IEnumerable<int> removeAttendees = currentAttendees.Except(updateEventDTO.AttendeeIds);
+            // Những userId DB có, update data không có => gỡ đi , không gỡ đi creator của event
+            IEnumerable<int> removeAttendees = currentAttendees
+                .Except(updateEventDTO.AttendeeIds)
+                .Where(a => a != eventDb.CreatorId);
             // Những userId cả Db và update data có thì giữ nguyên
 
             _uow.EventAttendee.AddRange(
