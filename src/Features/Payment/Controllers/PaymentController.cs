@@ -26,12 +26,15 @@ public class PaymentController : BaseController
         return HttpContext.Success(_paymentService.CreatePayment(reqUser, createPaymentDTO));
     }
 
-    [HttpGet("callback")]
-    public async Task<BaseResponse<PaymentReturnDTO>> PaymentCallBack(
-        [FromQuery] PaymentReturnDTO paymentReturnDTO
+    [HttpPut]
+    public async Task<BaseResponse<bool>> SubmitPayment(
+        [FromQuery] SubmitPaymentDTO submitPaymentDTO
     )
     {
-        await _paymentService.PaymentCallBack(paymentReturnDTO);
-        return HttpContext.Success(paymentReturnDTO);
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _paymentService.SubmitPayment(reqUser, submitPaymentDTO))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
     }
 }

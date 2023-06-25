@@ -7,5 +7,5 @@ public interface IPaymentService
 {
     string CreatePayment(ReqUser reqUser, CreatePaymentDTO createPaymentDTO);
 
-    Task PaymentCallBack(PaymentReturnDTO paymentReturnDTO);
+    Task<bool> SubmitPayment(ReqUser reqUser, SubmitPaymentDTO submitPaymentDTO);
 }

@@ -1,6 +1,6 @@
 namespace PlcBase.Features.Payment.DTOs;
 
-public class PaymentReturnDTO
+public class SubmitPaymentDTO
 {
     public long vnp_Amount { get; set; }
     public string vnp_BankCode { get; set; }
