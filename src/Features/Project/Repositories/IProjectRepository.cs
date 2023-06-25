@@ -6,5 +6,7 @@ namespace PlcBase.Features.Project.Repositories;
 
 public interface IProjectRepository : IBaseRepository<ProjectEntity>
 {
-    Task<ProjectEntity> GetByIdAndOwner(ReqUser reqUser, int projectId);
+    Task<ProjectEntity> GetByIdAndOwner(int creatorId, int projectId);
+
+    Task<int> CountByCreatorId(int creatorId);
 }
