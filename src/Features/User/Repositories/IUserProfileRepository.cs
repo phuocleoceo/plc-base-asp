@@ -3,4 +3,7 @@ using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.User.Repositories;
 
-public interface IUserProfileRepository : IBaseRepository<UserProfileEntity> { }
+public interface IUserProfileRepository : IBaseRepository<UserProfileEntity>
+{
+    Task<UserProfileEntity> GetProfileByAccountId(int accountId);
+}

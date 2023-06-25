@@ -6,6 +6,7 @@ using PlcBase.Features.ProjectStatus.Services;
 using PlcBase.Features.Invitation.Services;
 using PlcBase.Features.Address.Services;
 using PlcBase.Features.Project.Services;
+using PlcBase.Features.Payment.Services;
 using PlcBase.Features.Sprint.Services;
 using PlcBase.Features.Event.Services;
 using PlcBase.Features.Issue.Services;
@@ -35,5 +36,6 @@ public static class ServiceDIExtension
         services.AddScoped<IProjectRoleService, ProjectRoleService>();
         services.AddScoped<IMemberRoleService, MemberRoleService>();
         services.AddScoped<IEventService, EventService>();
+        services.AddScoped<IPaymentService, PaymentService>();
     }
 }

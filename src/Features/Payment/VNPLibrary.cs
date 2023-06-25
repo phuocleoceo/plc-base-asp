@@ -3,14 +3,17 @@ using System.Globalization;
 using System.Text;
 using System.Net;
 
-namespace PlcBase.Shared.Helpers;
+using PlcBase.Features.Payment.DTOs;
+
+namespace PlcBase.Features.Payment;
 
 public class VNPLibrary
 {
-    private readonly SortedList<string, string> _requestData = new SortedList<string, string>(
+    public const string VERSION = "2.1.0";
+    private SortedList<String, String> _requestData = new SortedList<String, String>(
         new VnPayCompare()
     );
-    private readonly SortedList<string, string> _responseData = new SortedList<string, string>(
+    private SortedList<String, String> _responseData = new SortedList<String, String>(
         new VnPayCompare()
     );
 
@@ -45,7 +48,7 @@ public class VNPLibrary
 
     #region Request
 
-    public string CreateRequestUrl(string baseUrl, string vnp_HashSecret)
+    public string CreateRequestUrl(string baseUrl, string vnp_HashSecret, VNPHistory vnpHistory)
     {
         StringBuilder data = new StringBuilder();
         foreach (KeyValuePair<string, string> kv in _requestData)
@@ -65,20 +68,22 @@ public class VNPLibrary
         {
             signData = signData.Remove(data.Length - 1, 1);
         }
-        string vnp_SecureHash = VNPayUtils.HmacSHA512(vnp_HashSecret, signData);
+        string vnp_SecureHash = Utils.HmacSHA512(vnp_HashSecret, signData);
         baseUrl += "vnp_SecureHash=" + vnp_SecureHash;
+
+        vnpHistory.vnp_SecureHash = vnp_SecureHash;
 
         return baseUrl;
     }
 
     #endregion
 
-    #region Response
+    #region Response process
 
     public bool ValidateSignature(string inputHash, string secretKey)
     {
         string rspRaw = GetResponseData();
-        string myChecksum = VNPayUtils.HmacSHA512(secretKey, rspRaw);
+        string myChecksum = Utils.HmacSHA512(secretKey, rspRaw);
         return myChecksum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);
     }
 
@@ -113,7 +118,7 @@ public class VNPLibrary
     #endregion
 }
 
-public class VNPayUtils
+public class Utils
 {
     public static String HmacSHA512(string key, String inputData)
     {
@@ -131,6 +136,23 @@ public class VNPayUtils
 
         return hash.ToString();
     }
+    // public static string GetIpAddress()
+    // {
+    //     string ipAddress;
+    //     try
+    //     {
+    //         ipAddress = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+
+    //         if (string.IsNullOrEmpty(ipAddress) || (ipAddress.ToLower() == "unknown")|| ipAddress.Length>45)
+    //             ipAddress = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         ipAddress = "Invalid IP:" + ex.Message;
+    //     }
+
+    //     return ipAddress;
+    // }
 }
 
 public class VnPayCompare : IComparer<string>
