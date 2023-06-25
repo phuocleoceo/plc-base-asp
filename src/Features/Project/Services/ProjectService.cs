@@ -1,6 +1,7 @@
 using AutoMapper;
 
 using PlcBase.Features.ProjectMember.Entities;
+using PlcBase.Features.ProjectStatus.Entities;
 using PlcBase.Features.Project.Entities;
 using PlcBase.Features.Project.DTOs;
 using PlcBase.Common.Repositories;
@@ -113,6 +114,17 @@ public class ProjectService : IProjectService
             _uow.ProjectMember.Add(
                 new ProjectMemberEntity() { UserId = reqUser.Id, ProjectId = projectEntity.Id, }
             );
+
+            // Project Status
+            _uow.ProjectStatus.Add(
+                new ProjectStatusEntity()
+                {
+                    Name = "To Do",
+                    Index = 0,
+                    ProjectId = projectEntity.Id
+                }
+            );
+
             await _uow.Save();
 
             await _uow.CommitTransaction();
