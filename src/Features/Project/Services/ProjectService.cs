@@ -6,6 +6,7 @@ using PlcBase.Features.Project.DTOs;
 using PlcBase.Common.Repositories;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
+using PlcBase.Shared.Enums;
 using PlcBase.Base.Error;
 using PlcBase.Base.DTO;
 
@@ -81,15 +82,34 @@ public class ProjectService : IProjectService
     {
         try
         {
+            await _uow.CreateTransaction();
+
+            double freeProject = await _uow.ConfigSetting.GetValueByKey(
+                ConfigSettingKey.FREE_PROJECT
+            );
+
+            int projectCount = await _uow.Project.CountByCreatorId(reqUser.Id);
+
+            if (projectCount >= freeProject)
+            {
+                // Payment
+                double projectPrice = await _uow.ConfigSetting.GetValueByKey(
+                    ConfigSettingKey.PROJECT_PRICE
+                );
+
+                if (!await _uow.UserProfile.MakePayment(reqUser.Id, projectPrice))
+                    throw new BaseException(HttpCode.BAD_REQUEST, "not_enough_credit");
+                await _uow.Save();
+            }
+
             ProjectEntity projectEntity = _mapper.Map<ProjectEntity>(createProjectDTO);
             projectEntity.CreatorId = reqUser.Id;
             projectEntity.LeaderId = reqUser.Id;
 
-            await _uow.CreateTransaction();
-
             _uow.Project.Add(projectEntity);
             await _uow.Save();
 
+            // Project member
             _uow.ProjectMember.Add(
                 new ProjectMemberEntity() { UserId = reqUser.Id, ProjectId = projectEntity.Id, }
             );
@@ -111,7 +131,7 @@ public class ProjectService : IProjectService
         UpdateProjectDTO updateProjectDTO
     )
     {
-        ProjectEntity projectDb = await _uow.Project.GetByIdAndOwner(reqUser, projectId);
+        ProjectEntity projectDb = await _uow.Project.GetByIdAndOwner(reqUser.Id, projectId);
 
         if (projectDb == null)
             throw new BaseException(HttpCode.NOT_FOUND, "project_not_found");
@@ -125,7 +145,7 @@ public class ProjectService : IProjectService
     {
         try
         {
-            ProjectEntity projectDb = await _uow.Project.GetByIdAndOwner(reqUser, projectId);
+            ProjectEntity projectDb = await _uow.Project.GetByIdAndOwner(reqUser.Id, projectId);
 
             if (projectDb == null)
                 throw new BaseException(HttpCode.NOT_FOUND, "project_not_found");

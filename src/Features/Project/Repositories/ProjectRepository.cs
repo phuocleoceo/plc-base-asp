@@ -19,16 +19,21 @@ public class ProjectRepository : BaseRepository<ProjectEntity>, IProjectReposito
         _mapper = mapper;
     }
 
-    public async Task<ProjectEntity> GetByIdAndOwner(ReqUser reqUser, int projectId)
+    public async Task<ProjectEntity> GetByIdAndOwner(int creatorId, int projectId)
     {
         return await GetOneAsync<ProjectEntity>(
             new QueryModel<ProjectEntity>()
             {
                 Filters =
                 {
-                    p => p.Id == projectId && p.CreatorId == reqUser.Id && p.DeletedAt == null
+                    p => p.Id == projectId && p.CreatorId == creatorId && p.DeletedAt == null
                 }
             }
         );
+    }
+
+    public async Task<int> CountByCreatorId(int creatorId)
+    {
+        return await CountAsync(p => p.CreatorId == creatorId && p.DeletedAt == null);
     }
 }

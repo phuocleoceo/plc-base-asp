@@ -25,4 +25,9 @@ public class ConfigSettingRepository : BaseRepository<ConfigSettingEntity>, ICon
             new QueryModel<ConfigSettingEntity>() { Filters = { cf => cf.Key == key } }
         );
     }
+
+    public async Task<double> GetValueByKey(string key)
+    {
+        return (await GetByKey(key)).Value;
+    }
 }

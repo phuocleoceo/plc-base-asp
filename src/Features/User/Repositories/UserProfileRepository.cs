@@ -28,4 +28,15 @@ public class UserProfileRepository : BaseRepository<UserProfileEntity>, IUserPro
             }
         );
     }
+
+    public async Task<bool> MakePayment(int userId, double amount)
+    {
+        UserProfileEntity userProfileDb = await GetProfileByAccountId(userId);
+        if (userProfileDb.CurrentCredit < amount)
+            return false;
+
+        userProfileDb.CurrentCredit -= amount;
+        Update(userProfileDb);
+        return true;
+    }
 }
