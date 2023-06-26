@@ -79,7 +79,7 @@ public class EventService : IEventService
 
             // Mặc định creator luôn luôn là người có tham dự
             if (!(createEventDTO.AttendeeIds.Contains(reqUser.Id)))
-                eventAttendees.Append(
+                eventAttendees = eventAttendees.Append(
                     new EventAttendeeEntity() { UserId = reqUser.Id, EventId = eventEntity.Id }
                 );
 
