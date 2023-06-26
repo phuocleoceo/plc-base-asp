@@ -26,22 +26,25 @@ public class PaymentService : IPaymentService
     {
         VNPHistory vnpHistory = new VNPHistory();
         vnpHistory.vnp_TxnRef = DateTime.UtcNow.Ticks;
-        vnpHistory.vnp_OrderInfo = $"{reqUser.Id}|{DateTime.UtcNow.ToString()}";
+        vnpHistory.vnp_OrderInfo = $"{reqUser.Id}|{DateTime.UtcNow.Ticks.ToString()}";
         vnpHistory.vnp_Amount = createPaymentDTO.Amount;
         vnpHistory.vnp_TmnCode = _vnpSettings.TmnCode;
+        // vnpHistory.vnp_BankCode = "VNBANK";
         vnpHistory.vnp_CreateDate = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 
         //Build URL for VNPAY
         VNPLibrary vnpay = new VNPLibrary();
         vnpay.AddRequestData("vnp_Version", VNPLibrary.VERSION);
-        vnpay.AddRequestData("vnp_Command", "pay");
+        vnpay.AddRequestData("vnp_Command", _vnpSettings.Command);
         vnpay.AddRequestData("vnp_TmnCode", vnpHistory.vnp_TmnCode);
         // Must multiply by 100 to send to vnpay system
         vnpay.AddRequestData("vnp_Amount", (vnpHistory.vnp_Amount * 100).ToString());
         vnpay.AddRequestData("vnp_CreateDate", vnpHistory.vnp_CreateDate);
         vnpay.AddRequestData("vnp_CurrCode", "VND");
+        // vnpay.AddRequestData("vnp_BankCode", vnpHistory.vnp_BankCode);
         vnpay.AddRequestData("vnp_Locale", "vn");
         vnpay.AddRequestData("vnp_IpAddr", "8.8.8.8");
+        vnpay.AddRequestData("vnp_OrderType", "other");
         vnpay.AddRequestData("vnp_OrderInfo", vnpHistory.vnp_OrderInfo);
         vnpay.AddRequestData("vnp_ReturnUrl", _vnpSettings.ReturnUrl);
         vnpay.AddRequestData("vnp_TxnRef", vnpHistory.vnp_TxnRef.ToString());
