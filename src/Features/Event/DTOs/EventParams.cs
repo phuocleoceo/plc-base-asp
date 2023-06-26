@@ -2,6 +2,6 @@ namespace PlcBase.Features.Event.DTOs;
 
 public class EventParams
 {
-    public int Month { get; set; }
-    public int Year { get; set; }
+    public DateTime Start { get; set; }
+    public DateTime End { get; set; }
 }

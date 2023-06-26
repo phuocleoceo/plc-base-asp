@@ -35,8 +35,8 @@ public class EventService : IEventService
                 e => e.ProjectId == projectId,
                 e => e.Attendees.Select(a => a.UserId).Contains(reqUser.Id),
                 e =>
-                    (e.StartTime.Month == eventParams.Month && e.StartTime.Year == eventParams.Year)
-                    || (e.EndTime.Month == eventParams.Month && e.EndTime.Year == eventParams.Year)
+                    (eventParams.Start <= e.StartTime && e.StartTime < eventParams.End)
+                    || (eventParams.Start <= e.EndTime && e.EndTime < eventParams.End)
             },
         };
 
