@@ -8,18 +8,18 @@ public class PermissionHelper : IPermissionHelper
     {
         return new List<PermissionContent>()
         {
-            new PermissionContent(UserPermission.GetAll, ""),
-            new PermissionContent(UserPermission.GetOne, ""),
-            new PermissionContent(UserPermission.Update, ""),
-            new PermissionContent(UserPermission.GetPersonal, ""),
-            new PermissionContent(UserPermission.UpdatePersonal, ""),
-            new PermissionContent(UserPermission.GetAnonymous, ""),
+            // new PermissionContent(UserPermission.GetAll, ""),
+            // new PermissionContent(UserPermission.GetOne, ""),
+            // new PermissionContent(UserPermission.Update, ""),
+            // new PermissionContent(UserPermission.GetPersonal, ""),
+            // new PermissionContent(UserPermission.UpdatePersonal, ""),
+            // new PermissionContent(UserPermission.GetAnonymous, ""),
             //
-            new PermissionContent(RolePermission.GetAll, ""),
+            // new PermissionContent(RolePermission.GetAll, ""),
             //
-            new PermissionContent(ConfigSettingPermission.GetAll, ""),
-            new PermissionContent(ConfigSettingPermission.GetOne, ""),
-            new PermissionContent(ConfigSettingPermission.Update, ""),
+            // new PermissionContent(ConfigSettingPermission.GetAll, ""),
+            // new PermissionContent(ConfigSettingPermission.GetOne, ""),
+            // new PermissionContent(ConfigSettingPermission.Update, ""),
             //
             new PermissionContent(EventPermission.GetAll, ""),
             new PermissionContent(EventPermission.GetOne, ""),
@@ -28,11 +28,11 @@ public class PermissionHelper : IPermissionHelper
             new PermissionContent(EventPermission.Delete, ""),
             //
             new PermissionContent(InvitationPermission.GetForProject, ""),
-            new PermissionContent(InvitationPermission.GetForUser, ""),
+            // new PermissionContent(InvitationPermission.GetForUser, ""),
             new PermissionContent(InvitationPermission.Create, ""),
             new PermissionContent(InvitationPermission.Delete, ""),
-            new PermissionContent(InvitationPermission.Accept, ""),
-            new PermissionContent(InvitationPermission.Decline, ""),
+            // new PermissionContent(InvitationPermission.Accept, ""),
+            // new PermissionContent(InvitationPermission.Decline, ""),
             //
             new PermissionContent(IssuePermission.GetForBoard, ""),
             new PermissionContent(IssuePermission.UpdateForBoard, ""),
@@ -45,12 +45,12 @@ public class PermissionHelper : IPermissionHelper
             new PermissionContent(IssuePermission.Update, ""),
             new PermissionContent(IssuePermission.Delete, ""),
             //
-            new PermissionContent(PaymentPermission.Create, ""),
-            new PermissionContent(PaymentPermission.Submit, ""),
+            // new PermissionContent(PaymentPermission.Create, ""),
+            // new PermissionContent(PaymentPermission.Submit, ""),
             //
-            new PermissionContent(ProjectPermission.GetAll, ""),
+            // new PermissionContent(ProjectPermission.GetAll, ""),
             new PermissionContent(ProjectPermission.GetOne, ""),
-            new PermissionContent(ProjectPermission.Create, ""),
+            // new PermissionContent(ProjectPermission.Create, ""),
             new PermissionContent(ProjectPermission.Update, ""),
             new PermissionContent(ProjectPermission.Delete, ""),
             //
@@ -71,12 +71,12 @@ public class PermissionHelper : IPermissionHelper
             new PermissionContent(SprintPermission.Start, ""),
             new PermissionContent(SprintPermission.Complete, ""),
             //
-            new PermissionContent(ProjectRolePermission.GetAll, ""),
-            new PermissionContent(ProjectRolePermission.GetSelect, ""),
-            new PermissionContent(ProjectRolePermission.GetOne, ""),
-            new PermissionContent(ProjectRolePermission.Create, ""),
-            new PermissionContent(ProjectRolePermission.Update, ""),
-            new PermissionContent(ProjectRolePermission.Delete, ""),
+            // new PermissionContent(ProjectRolePermission.GetAll, ""),
+            // new PermissionContent(ProjectRolePermission.GetSelect, ""),
+            // new PermissionContent(ProjectRolePermission.GetOne, ""),
+            // new PermissionContent(ProjectRolePermission.Create, ""),
+            // new PermissionContent(ProjectRolePermission.Update, ""),
+            // new PermissionContent(ProjectRolePermission.Delete, ""),
             //
             new PermissionContent(MemberRolePermission.GetAll, ""),
             new PermissionContent(MemberRolePermission.Create, ""),
