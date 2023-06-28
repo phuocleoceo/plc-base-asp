@@ -73,13 +73,28 @@ public class SprintService : ISprintService
 
     public async Task<bool> DeleteSprint(ReqUser reqUser, int projectId, int sprintId)
     {
-        SprintEntity sprintDb = await _uow.Sprint.GetForUpdateAndDelete(projectId, sprintId);
+        try
+        {
+            await _uow.CreateTransaction();
 
-        if (sprintDb == null)
-            throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
+            SprintEntity sprintDb = await _uow.Sprint.GetForUpdateAndDelete(projectId, sprintId);
 
-        _uow.Sprint.Remove(sprintDb);
-        return await _uow.Save();
+            if (sprintDb == null)
+                throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
+
+            _uow.Sprint.Remove(sprintDb);
+
+            await _uow.Issue.MoveIssueFromSprintToBacklog(sprintId, projectId);
+
+            await _uow.Save();
+            await _uow.CommitTransaction();
+            return true;
+        }
+        catch (BaseException ex)
+        {
+            await _uow.AbortTransaction();
+            throw ex;
+        }
     }
 
     public async Task<bool> StartSprint(ReqUser reqUser, int projectId, int sprintId)
@@ -103,6 +118,8 @@ public class SprintService : ISprintService
     {
         try
         {
+            await _uow.CreateTransaction();
+
             if (
                 completeSprintDTO.MoveType != "backlog"
                 && completeSprintDTO.MoveType != "next_sprint"
@@ -113,8 +130,6 @@ public class SprintService : ISprintService
 
             if (sprintDb == null)
                 throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
-
-            await _uow.CreateTransaction();
 
             sprintDb.CompletedAt = DateTime.UtcNow;
             _uow.Sprint.Update(sprintDb);

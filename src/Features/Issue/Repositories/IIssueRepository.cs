@@ -15,5 +15,7 @@ public interface IIssueRepository : IBaseRepository<IssueEntity>
 
     Task MoveIssueToBacklog(List<int> issueIds, int projectId);
 
+    Task MoveIssueFromSprintToBacklog(int sprintId, int projectId);
+
     Task MoveIssueToSprint(List<int> issueIds, int sprintId);
 }
