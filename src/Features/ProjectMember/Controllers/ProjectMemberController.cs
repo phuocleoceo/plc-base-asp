@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using PlcBase.Features.ProjectMember.Services;
 using PlcBase.Features.ProjectMember.DTOs;
+using PlcBase.Shared.Utilities;
+using PlcBase.Base.DomainModel;
 using PlcBase.Base.Controller;
 using PlcBase.Base.DTO;
 
@@ -38,6 +40,16 @@ public class ProjectMemberController : BaseController
     public async Task<BaseResponse<bool>> DeleteProjectMember(int projectId, int projectMemberId)
     {
         if (await _projectMemberService.DeleteProjectMember(projectId, projectMemberId))
+            return HttpContext.Success(true);
+        return HttpContext.Failure();
+    }
+
+    [HttpPut("/api/project/{projectId}/member/leave")]
+    public async Task<BaseResponse<bool>> LeaveProject(int projectId)
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        if (await _projectMemberService.LeaveProject(reqUser, projectId))
             return HttpContext.Success(true);
         return HttpContext.Failure();
     }

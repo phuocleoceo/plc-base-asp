@@ -3,6 +3,7 @@ using AutoMapper;
 using PlcBase.Features.ProjectAccess.Entities;
 using PlcBase.Features.ProjectMember.Entities;
 using PlcBase.Features.ProjectMember.DTOs;
+using PlcBase.Features.Project.Entities;
 using PlcBase.Common.Repositories;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
@@ -76,6 +77,34 @@ public class ProjectMemberService : IProjectMemberService
 
         if (projectMemberDb.ProjectId != projectId)
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_project_member");
+
+        _uow.ProjectMember.SoftDelete(projectMemberDb);
+        return await _uow.Save();
+    }
+
+    public async Task<bool> LeaveProject(ReqUser reqUser, int projectId)
+    {
+        ProjectEntity projectDb = await _uow.Project.FindByIdAsync(projectId);
+
+        if (projectDb.LeaderId == reqUser.Id)
+            throw new BaseException(HttpCode.BAD_REQUEST, "leader_cannot_leave");
+
+        ProjectMemberEntity projectMemberDb =
+            await _uow.ProjectMember.GetOneAsync<ProjectMemberEntity>(
+                new QueryModel<ProjectMemberEntity>()
+                {
+                    Filters =
+                    {
+                        pm =>
+                            pm.UserId == reqUser.Id
+                            && pm.ProjectId == projectId
+                            && pm.DeletedAt == null
+                    }
+                }
+            );
+
+        if (projectMemberDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "project_member_not_found");
 
         _uow.ProjectMember.SoftDelete(projectMemberDb);
         return await _uow.Save();
