@@ -78,6 +78,32 @@ public class IssueRepository : BaseRepository<IssueEntity>, IIssueRepository
         });
     }
 
+    public async Task MoveIssueFromSprintToBacklog(int sprintId, int projectId)
+    {
+        List<IssueEntity> issues = await GetManyAsync<IssueEntity>(
+            new QueryModel<IssueEntity>()
+            {
+                OrderBy = c => c.OrderBy(i => i.ProjectStatusId).ThenBy(i => i.ProjectStatusIndex),
+                Filters =
+                {
+                    i =>
+                        i.ProjectId == projectId
+                        && i.DeletedAt == null
+                        && i.SprintId == sprintId
+                        && i.BacklogIndex == null
+                }
+            }
+        );
+
+        double backlogIndex = GetBacklogIndexForNewIssue(projectId);
+        issues.ForEach(i =>
+        {
+            i.SprintId = null;
+            i.BacklogIndex = backlogIndex++;
+            Update(i);
+        });
+    }
+
     public async Task MoveIssueToSprint(List<int> issueIds, int sprintId)
     {
         List<IssueEntity> issues = await GetByIds(issueIds);
