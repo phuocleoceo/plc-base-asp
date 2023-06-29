@@ -45,6 +45,7 @@ public class AuthService : IAuthService
             new QueryModel<UserAccountEntity>()
             {
                 Filters = { u => u.Email == userLoginDTO.Email },
+                Includes = { u => u.Role },
             }
         );
 
@@ -78,6 +79,7 @@ public class AuthService : IAuthService
             Id = currentUser.Id,
             Email = currentUser.Email,
             RoleId = currentUser.RoleId,
+            RoleName = currentUser.Role.Name,
             AccessToken = accessToken.Token,
             AccessTokenExpiredAt = accessToken.ExpiredAt,
             RefreshToken = refreshToken.Token,
@@ -87,12 +89,12 @@ public class AuthService : IAuthService
 
     private async Task<List<Claim>> GetUserClaims(UserAccountEntity user)
     {
-        // TODO: Permissions
-
+        // TODO: Permissions or Role
         List<Claim> claims = new List<Claim>();
 
         claims.Add(new Claim(CustomClaimTypes.UserId, user.Id.ToString()));
         claims.Add(new Claim(CustomClaimTypes.Email, user.Email));
+        claims.Add(new Claim(CustomClaimTypes.Role, user.Role.Name));
 
         return await Task.FromResult(claims);
     }

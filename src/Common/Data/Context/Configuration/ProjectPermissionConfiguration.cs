@@ -9,6 +9,6 @@ public class ProjectPermissionConfiguration : IEntityTypeConfiguration<ProjectPe
 {
     public void Configure(EntityTypeBuilder<ProjectPermissionEntity> builder)
     {
-        builder.HasIndex(c => new { c.RoleId });
+        builder.HasIndex(c => new { c.ProjectRoleId });
     }
 }

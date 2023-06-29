@@ -11,11 +11,8 @@ public class ProjectPermissionEntity : BaseEntity
     [Column("key")]
     public string Key { get; set; }
 
-    [Column("description")]
-    public string Description { get; set; }
-
-    [ForeignKey(nameof(Role))]
-    [Column("role_id")]
-    public int RoleId { get; set; }
-    public ProjectRoleEntity Role { get; set; }
+    [ForeignKey(nameof(ProjectRole))]
+    [Column("project_role_id")]
+    public int ProjectRoleId { get; set; }
+    public ProjectRoleEntity ProjectRole { get; set; }
 }

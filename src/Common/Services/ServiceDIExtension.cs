@@ -34,6 +34,7 @@ public static class ServiceDIExtension
         services.AddScoped<IIssueService, IssueService>();
         services.AddScoped<IIssueCommentService, IssueCommentService>();
         services.AddScoped<IProjectRoleService, ProjectRoleService>();
+        services.AddScoped<IProjectPermissionService, ProjectPermissionService>();
         services.AddScoped<IMemberRoleService, MemberRoleService>();
         services.AddScoped<IEventService, EventService>();
         services.AddScoped<IPaymentService, PaymentService>();
