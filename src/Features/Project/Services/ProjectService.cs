@@ -185,6 +185,6 @@ public class ProjectService : IProjectService
         int projectId
     )
     {
-        return await Task.FromResult(new List<string>() { "abc", "drf" });
+        return await _uow.ProjectMember.GetPermissionsInProjectForUser(reqUser.Id, projectId);
     }
 }
