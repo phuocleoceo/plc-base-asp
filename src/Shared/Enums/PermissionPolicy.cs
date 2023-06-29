@@ -75,7 +75,6 @@ public static class PermissionPolicy
     public static class ProjectMemberPermission
     {
         public const string GetAll = "ProjectMember.GetAll";
-        public const string GetSelect = "ProjectMember.GetSelect";
         public const string Delete = "ProjectMember.Delete";
     }
 
