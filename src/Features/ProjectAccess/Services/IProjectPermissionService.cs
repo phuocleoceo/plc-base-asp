@@ -11,5 +11,5 @@ public interface IProjectPermissionService
         CreateProjectPermissionDTO createProjectPermissionDTO
     );
 
-    Task<bool> DeleteProjectPermission(int projectRoleId, int projectPermissionId);
+    Task<bool> DeleteProjectPermission(int projectRoleId, string projectPermissionKey);
 }

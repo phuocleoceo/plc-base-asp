@@ -3,7 +3,9 @@ using AutoMapper;
 using PlcBase.Features.ProjectAccess.Entities;
 using PlcBase.Features.ProjectAccess.DTOs;
 using PlcBase.Common.Repositories;
+using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
+using PlcBase.Base.Error;
 
 namespace PlcBase.Features.ProjectAccess.Services;
 
@@ -28,16 +30,37 @@ public class ProjectPermissionService : IProjectPermissionService
         );
     }
 
-    public Task<bool> CreateProjectPermission(
+    public async Task<bool> CreateProjectPermission(
         int projectRoleId,
         CreateProjectPermissionDTO createProjectPermissionDTO
     )
     {
-        throw new NotImplementedException();
+        ProjectPermissionEntity projectPermissionEntity = _mapper.Map<ProjectPermissionEntity>(
+            createProjectPermissionDTO
+        );
+        projectPermissionEntity.ProjectRoleId = projectRoleId;
+
+        _uow.ProjectPermission.Add(projectPermissionEntity);
+        return await _uow.Save();
     }
 
-    public Task<bool> DeleteProjectPermission(int projectRoleId, int projectPermissionId)
+    public async Task<bool> DeleteProjectPermission(int projectRoleId, string projectPermissionKey)
     {
-        throw new NotImplementedException();
+        ProjectPermissionEntity projectPermissionDb =
+            await _uow.ProjectPermission.GetOneAsync<ProjectPermissionEntity>(
+                new QueryModel<ProjectPermissionEntity>()
+                {
+                    Filters =
+                    {
+                        pm => pm.Key == projectPermissionKey && pm.ProjectRoleId == projectRoleId
+                    }
+                }
+            );
+
+        if (projectPermissionDb == null)
+            throw new BaseException(HttpCode.NOT_FOUND, "project_permission_not_found");
+
+        _uow.ProjectPermission.Remove(projectPermissionDb);
+        return await _uow.Save();
     }
 }

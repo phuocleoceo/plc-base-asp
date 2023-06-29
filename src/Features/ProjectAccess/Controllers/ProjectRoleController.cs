@@ -8,6 +8,7 @@ using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.ProjectAccess.Controllers;
 
+[Route("/api/project-role")]
 public class ProjectRoleController : BaseController
 {
     private readonly IProjectRoleService _projectRoleService;
@@ -17,7 +18,7 @@ public class ProjectRoleController : BaseController
         _projectRoleService = projectRoleService;
     }
 
-    [HttpGet("/api/project-role")]
+    [HttpGet("")]
     public async Task<BaseResponse<PagedList<ProjectRoleDTO>>> GetProjectRoles(
         [FromQuery] ProjectRoleParams roleParams
     )
@@ -25,19 +26,19 @@ public class ProjectRoleController : BaseController
         return HttpContext.Success(await _projectRoleService.GetProjectRoles(roleParams));
     }
 
-    [HttpGet("/api/project-role/all")]
+    [HttpGet("all")]
     public async Task<BaseResponse<List<ProjectRoleDTO>>> GetAllProjectRoles()
     {
         return HttpContext.Success(await _projectRoleService.GetAllProjectRoles());
     }
 
-    [HttpGet("/api/project-role/{projectRoleId}")]
+    [HttpGet("{projectRoleId}")]
     public async Task<BaseResponse<ProjectRoleDTO>> GetProjectRoleById(int projectRoleId)
     {
         return HttpContext.Success(await _projectRoleService.GetProjectRoleById(projectRoleId));
     }
 
-    [HttpPost("/api/project-role")]
+    [HttpPost("")]
     public async Task<BaseResponse<bool>> CreateProjectRole(
         [FromBody] CreateProjectRoleDTO createProjectRoleDTO
     )
@@ -47,7 +48,7 @@ public class ProjectRoleController : BaseController
         return HttpContext.Failure();
     }
 
-    [HttpPut("/api/project-role/{projectRoleId}")]
+    [HttpPut("{projectRoleId}")]
     public async Task<BaseResponse<bool>> UpdateProjectRole(
         int projectRoleId,
         [FromBody] UpdateProjectRoleDTO updateProjectRoleDTO
@@ -58,7 +59,7 @@ public class ProjectRoleController : BaseController
         return HttpContext.Failure();
     }
 
-    [HttpDelete("/api/project-role/{projectRoleId}")]
+    [HttpDelete("{projectRoleId}")]
     public async Task<BaseResponse<bool>> DeleteProjectRole(int projectRoleId)
     {
         if (await _projectRoleService.DeleteProjectRole(projectRoleId))
