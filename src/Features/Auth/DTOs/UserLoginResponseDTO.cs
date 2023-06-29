@@ -8,6 +8,8 @@ public class UserLoginResponseDTO
 
     public int RoleId { get; set; }
 
+    public string RoleName { get; set; }
+
     public string AccessToken { get; set; }
 
     public DateTime AccessTokenExpiredAt { get; set; }

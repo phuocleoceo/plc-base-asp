@@ -10,4 +10,6 @@ public class CustomClaimTypes
 
     // public const string Permission = "permission";
     public const string Permission = ClaimTypes.Role;
+
+    public const string Role = ClaimTypes.Role;
 }
