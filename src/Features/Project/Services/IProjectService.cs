@@ -15,4 +15,6 @@ public interface IProjectService
     Task<bool> UpdateProject(ReqUser reqUser, int projectId, UpdateProjectDTO updateProjectDTO);
 
     Task<bool> DeleteProject(ReqUser reqUser, int projectId);
+
+    Task<IEnumerable<string>> GetPermissionsInProjectForUser(ReqUser reqUser, int projectId);
 }
