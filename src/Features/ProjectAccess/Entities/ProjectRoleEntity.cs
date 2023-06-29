@@ -13,4 +13,11 @@ public class ProjectRoleEntity : BaseEntity
 
     [Column("description")]
     public string Description { get; set; }
+
+    public ICollection<ProjectPermissionEntity> ProjectPermissions { get; set; }
+
+    public ProjectRoleEntity()
+    {
+        ProjectPermissions = new List<ProjectPermissionEntity>();
+    }
 }

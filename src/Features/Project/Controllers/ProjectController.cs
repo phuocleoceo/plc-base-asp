@@ -39,6 +39,18 @@ public class ProjectController : BaseController
         return HttpContext.Success(await _projectService.GetProjectById(reqUser, projectId));
     }
 
+    [HttpGet("{projectId}/permission")]
+    public async Task<BaseResponse<IEnumerable<string>>> GetPermissionsInProjectForUser(
+        int projectId
+    )
+    {
+        ReqUser reqUser = HttpContext.GetRequestUser();
+
+        return HttpContext.Success(
+            await _projectService.GetPermissionsInProjectForUser(reqUser, projectId)
+        );
+    }
+
     [HttpPost]
     public async Task<BaseResponse<bool>> CreateProject(
         [FromBody] CreateProjectDTO createProjectDTO

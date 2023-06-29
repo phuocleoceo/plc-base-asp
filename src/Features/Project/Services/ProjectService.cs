@@ -179,4 +179,12 @@ public class ProjectService : IProjectService
             throw ex;
         }
     }
+
+    public async Task<IEnumerable<string>> GetPermissionsInProjectForUser(
+        ReqUser reqUser,
+        int projectId
+    )
+    {
+        return await _uow.ProjectMember.GetPermissionsInProjectForUser(reqUser.Id, projectId);
+    }
 }

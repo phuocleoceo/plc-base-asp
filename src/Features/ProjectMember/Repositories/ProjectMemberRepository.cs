@@ -33,4 +33,21 @@ public class ProjectMemberRepository : BaseRepository<ProjectMemberEntity>, IPro
             .Where(m => m.ProjectId == projectId && m.DeletedAt == null)
             .ForEachAsync(m => SoftDelete(m));
     }
+
+    public async Task<IEnumerable<string>> GetPermissionsInProjectForUser(int userId, int projectId)
+    {
+        List<ProjectMemberEntity> projectMembers = await _dbSet
+            .Where(pm => pm.UserId == userId && pm.ProjectId == projectId)
+            .Include(pm => pm.MemberRoles)
+            .ThenInclude(mr => mr.ProjectRole)
+            .ThenInclude(pr => pr.ProjectPermissions)
+            .ToListAsync();
+
+        return projectMembers
+            .SelectMany(pm => pm.MemberRoles)
+            .Select(pm => pm.ProjectRole)
+            .SelectMany(pr => pr.ProjectPermissions)
+            .Select(pp => pp.Key)
+            .ToHashSet();
+    }
 }
