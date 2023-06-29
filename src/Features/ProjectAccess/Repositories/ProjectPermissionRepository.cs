@@ -3,6 +3,7 @@ using AutoMapper;
 using PlcBase.Features.ProjectAccess.Entities;
 using PlcBase.Common.Data.Context;
 using PlcBase.Base.Repository;
+using PlcBase.Base.DomainModel;
 
 namespace PlcBase.Features.ProjectAccess.Repositories;
 
@@ -18,5 +19,15 @@ public class ProjectPermissionRepository
     {
         _db = db;
         _mapper = mapper;
+    }
+
+    public async Task<List<ProjectPermissionEntity>> GetForProjectRole(int projectRoleId)
+    {
+        return await GetManyAsync<ProjectPermissionEntity>(
+            new QueryModel<ProjectPermissionEntity>()
+            {
+                Filters = { pm => pm.ProjectRoleId == projectRoleId }
+            }
+        );
     }
 }

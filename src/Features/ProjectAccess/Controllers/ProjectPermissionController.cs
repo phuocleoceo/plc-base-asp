@@ -19,7 +19,9 @@ public class ProjectPermissionController : BaseController
     }
 
     [HttpGet("")]
-    public async Task<BaseResponse<List<ProjectPermissionDTO>>> GetForProjectRole(int projectRoleId)
+    public async Task<BaseResponse<IEnumerable<ProjectPermissionGroupDTO>>> GetForProjectRole(
+        int projectRoleId
+    )
     {
         return HttpContext.Success(
             await _projectPermissionService.GetForProjectRole(projectRoleId)

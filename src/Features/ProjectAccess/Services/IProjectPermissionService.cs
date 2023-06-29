@@ -4,7 +4,7 @@ namespace PlcBase.Features.ProjectAccess.Services;
 
 public interface IProjectPermissionService
 {
-    Task<List<ProjectPermissionDTO>> GetForProjectRole(int projectRoleId);
+    Task<IEnumerable<ProjectPermissionGroupDTO>> GetForProjectRole(int projectRoleId);
 
     Task<bool> CreateProjectPermission(
         int projectRoleId,
