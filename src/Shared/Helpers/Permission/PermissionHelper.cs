@@ -63,13 +63,17 @@ public class PermissionHelper : IPermissionHelper
             new PermissionContent(ProjectMemberPermission.GetAll, "Can view all project member"),
             new PermissionContent(ProjectMemberPermission.Delete, "Can delete project member"),
             //
-            new PermissionContent(ProjectStatusPermission.GetAll, "Can view all project status"),
+            // new PermissionContent(ProjectStatusPermission.GetAll, "Can view all project status"),
             new PermissionContent(ProjectStatusPermission.Create, "Can create project status"),
             new PermissionContent(ProjectStatusPermission.Update, "Can update project status"),
             new PermissionContent(ProjectStatusPermission.Delete, "Can delete project status"),
+            new PermissionContent(
+                ProjectStatusPermission.UpdateForBoard,
+                "Can update project status in board"
+            ),
             //
-            new PermissionContent(SprintPermission.GetAvailable, "Can view available sprint"),
-            new PermissionContent(SprintPermission.GetOne, "Can view sprint detail"),
+            // new PermissionContent(SprintPermission.GetAvailable, "Can view available sprint"),
+            // new PermissionContent(SprintPermission.GetOne, "Can view sprint detail"),
             new PermissionContent(SprintPermission.Create, "Can create sprint"),
             new PermissionContent(SprintPermission.Update, "Can update sprint"),
             new PermissionContent(SprintPermission.Delete, "Can delete sprint"),

@@ -84,6 +84,7 @@ public static class PermissionPolicy
         public const string Create = "ProjectStatus.Create";
         public const string Update = "ProjectStatus.Update";
         public const string Delete = "ProjectStatus.Delete";
+        public const string UpdateForBoard = "ProjectStatus.UpdateForBoard";
     }
 
     public static class SprintPermission
