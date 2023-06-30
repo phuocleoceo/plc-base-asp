@@ -7,6 +7,7 @@ using PlcBase.Features.Project.DTOs;
 using PlcBase.Common.Repositories;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
+using PlcBase.Shared.Helpers;
 using PlcBase.Shared.Enums;
 using PlcBase.Base.Error;
 using PlcBase.Base.DTO;
@@ -17,11 +18,13 @@ public class ProjectService : IProjectService
 {
     private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;
+    private readonly IPermissionHelper _permissionHelper;
 
-    public ProjectService(IUnitOfWork uow, IMapper mapper)
+    public ProjectService(IUnitOfWork uow, IMapper mapper, IPermissionHelper permissionHelper)
     {
         _uow = uow;
         _mapper = mapper;
+        _permissionHelper = permissionHelper;
     }
 
     public async Task<PagedList<ProjectDTO>> GetProjectsForUser(
@@ -185,6 +188,11 @@ public class ProjectService : IProjectService
         int projectId
     )
     {
+        ProjectEntity projectEntity = await _uow.Project.FindByIdAsync(projectId);
+
+        if (projectEntity.LeaderId == reqUser.Id)
+            return _permissionHelper.GetAllPermissions().Select(p => p.Key);
+
         return await _uow.ProjectMember.GetPermissionsInProjectForUser(reqUser.Id, projectId);
     }
 }
