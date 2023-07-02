@@ -85,11 +85,7 @@ public class PaymentService : IPaymentService
         {
             await _uow.CreateTransaction();
 
-            int userIdFromPayment = Convert.ToInt32(submitPaymentDTO.vnp_OrderInfo.Split("|")[0]);
-
-            if (userIdFromPayment != reqUser.Id)
-                throw new BaseException(HttpCode.BAD_REQUEST, "invalid_user_payment");
-
+            // Check payment status
             if (
                 submitPaymentDTO.vnp_ResponseCode != PaymentStatus.VNP_TRANSACTION_STATUS_SUCCESS
                 || submitPaymentDTO.vnp_TransactionStatus
@@ -97,6 +93,24 @@ public class PaymentService : IPaymentService
             )
                 throw new BaseException(HttpCode.BAD_REQUEST, "payment_fail");
 
+            // Check signature and update payment metadata
+            PaymentEntity paymentEntity = await _uow.Payment.GetByTxnRef(
+                reqUser.Id,
+                submitPaymentDTO.vnp_TxnRef
+            );
+
+            if (paymentEntity.vnp_SecureHash != submitPaymentDTO.vnp_SecureHash)
+                throw new BaseException(HttpCode.BAD_REQUEST, "invalid_payment_secure_hash");
+
+            if (paymentEntity.vnp_TransactionStatus == PaymentStatus.VNP_TRANSACTION_STATUS_SUCCESS)
+                throw new BaseException(HttpCode.BAD_REQUEST, "payment_already_handled");
+
+            _mapper.Map(submitPaymentDTO, paymentEntity);
+            paymentEntity.vnp_TransactionStatus = PaymentStatus.VNP_TRANSACTION_STATUS_SUCCESS;
+            _uow.Payment.Update(paymentEntity);
+            await _uow.Save();
+
+            // Update user credit
             UserProfileEntity userProfileDb = await _uow.UserProfile.GetProfileByAccountId(
                 reqUser.Id
             );
@@ -105,11 +119,8 @@ public class PaymentService : IPaymentService
                 throw new BaseException(HttpCode.NOT_FOUND, "user_not_found");
 
             userProfileDb.CurrentCredit += submitPaymentDTO.vnp_Amount / 100;
-
             _uow.UserProfile.Update(userProfileDb);
             await _uow.Save();
-
-            // PaymentEntity paymentEntity = _mapper.Map<PaymentEntity>(submitPaymentDTO);
 
             await _uow.CommitTransaction();
             return true;

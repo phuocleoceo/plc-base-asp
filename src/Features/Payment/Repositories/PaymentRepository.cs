@@ -18,4 +18,14 @@ public class PaymentRepository : BaseRepository<PaymentEntity>, IPaymentReposito
         _db = db;
         _mapper = mapper;
     }
+
+    public async Task<PaymentEntity> GetByTxnRef(int userId, long txnRef)
+    {
+        return await GetOneAsync<PaymentEntity>(
+            new QueryModel<PaymentEntity>()
+            {
+                Filters = { p => p.UserId == userId && p.vnp_TxnRef == txnRef }
+            }
+        );
+    }
 }

@@ -9,5 +9,7 @@ public class PaymentMapping : Profile
     public PaymentMapping()
     {
         CreateMap<VNPHistory, PaymentEntity>();
+
+        CreateMap<SubmitPaymentDTO, PaymentEntity>();
     }
 }
