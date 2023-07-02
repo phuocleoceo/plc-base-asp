@@ -34,10 +34,10 @@ public class PaymentService : IPaymentService
 
             VNPHistory vnpHistory = new VNPHistory();
             vnpHistory.vnp_TxnRef = DateTime.UtcNow.Ticks;
-            vnpHistory.vnp_OrderInfo = $"{reqUser.Id}|{DateTime.UtcNow.Ticks.ToString()}";
-            vnpHistory.vnp_Amount = createPaymentDTO.Amount;
+            vnpHistory.vnp_OrderInfo = $"{reqUser.Id}|{vnpHistory.vnp_TxnRef}";
+            // Must multiply by 100 to send to vnpay system
+            vnpHistory.vnp_Amount = createPaymentDTO.Amount * 100;
             vnpHistory.vnp_TmnCode = _vnpSettings.TmnCode;
-            // vnpHistory.vnp_BankCode = "VNBANK";
             vnpHistory.vnp_CreateDate = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 
             //Build URL for VNPAY
@@ -45,11 +45,9 @@ public class PaymentService : IPaymentService
             vnpay.AddRequestData("vnp_Version", VNPLibrary.VERSION);
             vnpay.AddRequestData("vnp_Command", _vnpSettings.Command);
             vnpay.AddRequestData("vnp_TmnCode", vnpHistory.vnp_TmnCode);
-            // Must multiply by 100 to send to vnpay system
-            vnpay.AddRequestData("vnp_Amount", (vnpHistory.vnp_Amount * 100).ToString());
+            vnpay.AddRequestData("vnp_Amount", vnpHistory.vnp_Amount.ToString());
             vnpay.AddRequestData("vnp_CreateDate", vnpHistory.vnp_CreateDate);
             vnpay.AddRequestData("vnp_CurrCode", "VND");
-            // vnpay.AddRequestData("vnp_BankCode", vnpHistory.vnp_BankCode);
             vnpay.AddRequestData("vnp_Locale", "vn");
             vnpay.AddRequestData("vnp_IpAddr", "8.8.8.8");
             vnpay.AddRequestData("vnp_OrderType", "other");
@@ -94,19 +92,23 @@ public class PaymentService : IPaymentService
                 throw new BaseException(HttpCode.BAD_REQUEST, "payment_fail");
 
             // Check signature and update payment metadata
-            PaymentEntity paymentEntity = await _uow.Payment.GetByTxnRef(
-                reqUser.Id,
-                submitPaymentDTO.vnp_TxnRef
-            );
+            // PaymentEntity paymentEntity = await _uow.Payment.GetByTxnRef(
+            //     reqUser.Id,
+            //     submitPaymentDTO.vnp_TxnRef
+            // );
 
-            if (paymentEntity.vnp_SecureHash != submitPaymentDTO.vnp_SecureHash)
-                throw new BaseException(HttpCode.BAD_REQUEST, "invalid_payment_secure_hash");
+            // if (paymentEntity.vnp_SecureHash != submitPaymentDTO.vnp_SecureHash)
+            //     throw new BaseException(HttpCode.BAD_REQUEST, "invalid_payment_secure_hash");
+
+            long txnRef = Convert.ToInt64(submitPaymentDTO.vnp_OrderInfo.Split("|")[1]);
+            PaymentEntity paymentEntity = await _uow.Payment.GetByTxnRef(reqUser.Id, txnRef);
 
             if (paymentEntity.vnp_TransactionStatus == PaymentStatus.VNP_TRANSACTION_STATUS_SUCCESS)
                 throw new BaseException(HttpCode.BAD_REQUEST, "payment_already_handled");
 
             _mapper.Map(submitPaymentDTO, paymentEntity);
             paymentEntity.vnp_TransactionStatus = PaymentStatus.VNP_TRANSACTION_STATUS_SUCCESS;
+            paymentEntity.vnp_TxnRef = txnRef;
             _uow.Payment.Update(paymentEntity);
             await _uow.Save();
 

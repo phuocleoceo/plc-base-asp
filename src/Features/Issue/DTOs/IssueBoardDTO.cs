@@ -8,6 +8,8 @@ public class IssueBoardDTO
     public string Priority { get; set; }
     public string Type { get; set; }
 
+    public int ReporterId { get; set; }
+
     public int? AssigneeId { get; set; }
     public string AssigneeName { get; set; }
     public string AssigneeAvatar { get; set; }
