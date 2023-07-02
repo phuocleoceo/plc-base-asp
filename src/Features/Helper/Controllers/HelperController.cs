@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using PlcBase.Shared.Utilities;
@@ -18,6 +19,7 @@ public class HelperController : BaseController
     }
 
     [HttpPost("upload-file")]
+    [Authorize]
     public async Task<BaseResponse<string>> S3Upload(IFormFile file, string prefix = "")
     {
         string fileUrl = await _s3Helper.UploadFile(file.GetS3FileUpload());

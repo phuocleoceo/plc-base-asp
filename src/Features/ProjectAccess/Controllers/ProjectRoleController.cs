@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlcBase.Features.ProjectAccess.Services;
 using PlcBase.Features.ProjectAccess.DTOs;
 using PlcBase.Base.Controller;
+using PlcBase.Shared.Enums;
 using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.ProjectAccess.Controllers;
@@ -19,6 +20,7 @@ public class ProjectRoleController : BaseController
     }
 
     [HttpGet("")]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<PagedList<ProjectRoleDTO>>> GetProjectRoles(
         [FromQuery] ProjectRoleParams roleParams
     )
@@ -27,18 +29,21 @@ public class ProjectRoleController : BaseController
     }
 
     [HttpGet("all")]
+    [Authorize]
     public async Task<BaseResponse<List<ProjectRoleDTO>>> GetAllProjectRoles()
     {
         return HttpContext.Success(await _projectRoleService.GetAllProjectRoles());
     }
 
     [HttpGet("{projectRoleId}")]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<ProjectRoleDTO>> GetProjectRoleById(int projectRoleId)
     {
         return HttpContext.Success(await _projectRoleService.GetProjectRoleById(projectRoleId));
     }
 
     [HttpPost("")]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<bool>> CreateProjectRole(
         [FromBody] CreateProjectRoleDTO createProjectRoleDTO
     )
@@ -49,6 +54,7 @@ public class ProjectRoleController : BaseController
     }
 
     [HttpPut("{projectRoleId}")]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<bool>> UpdateProjectRole(
         int projectRoleId,
         [FromBody] UpdateProjectRoleDTO updateProjectRoleDTO
@@ -60,6 +66,7 @@ public class ProjectRoleController : BaseController
     }
 
     [HttpDelete("{projectRoleId}")]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<bool>> DeleteProjectRole(int projectRoleId)
     {
         if (await _projectRoleService.DeleteProjectRole(projectRoleId))

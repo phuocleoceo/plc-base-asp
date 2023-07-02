@@ -20,6 +20,7 @@ public class PaymentController : BaseController
     }
 
     [HttpPost]
+    [Authorize]
     public BaseResponse<string> CreatePayment([FromBody] CreatePaymentDTO createPaymentDTO)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
@@ -27,6 +28,7 @@ public class PaymentController : BaseController
     }
 
     [HttpPut]
+    [Authorize]
     public async Task<BaseResponse<bool>> SubmitPayment(
         [FromBody] SubmitPaymentDTO submitPaymentDTO
     )

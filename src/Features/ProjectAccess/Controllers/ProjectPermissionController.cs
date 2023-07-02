@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlcBase.Features.ProjectAccess.Services;
 using PlcBase.Features.ProjectAccess.DTOs;
 using PlcBase.Base.Controller;
+using PlcBase.Shared.Enums;
 using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.ProjectAccess.Controllers;
@@ -19,6 +20,7 @@ public class ProjectPermissionController : BaseController
     }
 
     [HttpGet("")]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<IEnumerable<ProjectPermissionGroupDTO>>> GetForProjectRole(
         int projectRoleId
     )
@@ -29,6 +31,7 @@ public class ProjectPermissionController : BaseController
     }
 
     [HttpPost("")]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<bool>> CreateProjectPermission(
         int projectRoleId,
         [FromBody] CreateProjectPermissionDTO createProjectPermissionDTO
@@ -45,6 +48,7 @@ public class ProjectPermissionController : BaseController
     }
 
     [HttpDelete("{projectPermissionKey}")]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<bool>> DeleteProjectPermission(
         int projectRoleId,
         string projectPermissionKey

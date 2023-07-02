@@ -20,6 +20,7 @@ public class ProjectMemberController : BaseController
     }
 
     [HttpGet("/api/project/{projectId}/member")]
+    [Authorize]
     public async Task<BaseResponse<PagedList<ProjectMemberDTO>>> GetMemberForProject(
         int projectId,
         [FromQuery] ProjectMemberParams projectMemberParams
@@ -31,12 +32,14 @@ public class ProjectMemberController : BaseController
     }
 
     [HttpGet("/api/project/{projectId}/member/select")]
+    [Authorize]
     public async Task<BaseResponse<List<ProjectMemberSelectDTO>>> GetMemberForSelect(int projectId)
     {
         return HttpContext.Success(await _projectMemberService.GetMembersForSelect(projectId));
     }
 
     [HttpDelete("/api/project/{projectId}/member/{projectMemberId}")]
+    [Authorize]
     public async Task<BaseResponse<bool>> DeleteProjectMember(int projectId, int projectMemberId)
     {
         if (await _projectMemberService.DeleteProjectMember(projectId, projectMemberId))
@@ -45,6 +48,7 @@ public class ProjectMemberController : BaseController
     }
 
     [HttpPut("/api/project/{projectId}/member/leave")]
+    [Authorize]
     public async Task<BaseResponse<bool>> LeaveProject(int projectId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();

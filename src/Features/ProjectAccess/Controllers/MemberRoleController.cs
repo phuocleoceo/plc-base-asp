@@ -19,6 +19,7 @@ public class MemberRoleController : BaseController
     }
 
     [HttpGet("{projectMemberId}")]
+    [Authorize]
     public async Task<BaseResponse<List<MemberRoleDTO>>> GetProjectRoleForMember(
         int projectMemberId
     )
@@ -29,6 +30,7 @@ public class MemberRoleController : BaseController
     }
 
     [HttpPost("")]
+    [Authorize]
     public async Task<BaseResponse<bool>> CreateMemberRole(
         [FromBody] CreateMemberRoleDTO createMemberRoleDTO
     )
@@ -39,6 +41,7 @@ public class MemberRoleController : BaseController
     }
 
     [HttpDelete("")]
+    [Authorize]
     public async Task<BaseResponse<bool>> DeleteMemberRole(int projectMemberId, int projectRoleId)
     {
         if (await _memberRoleService.DeleteMemberRole(projectMemberId, projectRoleId))

@@ -20,6 +20,7 @@ public class EventController : BaseController
     }
 
     [HttpGet("/api/project/{projectId}/event")]
+    [Authorize]
     public async Task<BaseResponse<List<EventDTO>>> GetEvents(
         int projectId,
         [FromQuery] EventParams eventParams
@@ -30,6 +31,7 @@ public class EventController : BaseController
     }
 
     [HttpGet("/api/project/{projectId}/event/{eventId}")]
+    [Authorize]
     public async Task<BaseResponse<EventDetailDTO>> GetEventDetail(int projectId, int eventId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
@@ -37,6 +39,7 @@ public class EventController : BaseController
     }
 
     [HttpPost("/api/project/{projectId}/event")]
+    [Authorize]
     public async Task<BaseResponse<bool>> CreateEvent(
         int projectId,
         [FromBody] CreateEventDTO createEventDTO
@@ -50,6 +53,7 @@ public class EventController : BaseController
     }
 
     [HttpPut("/api/project/{projectId}/event/{eventId}")]
+    [Authorize]
     public async Task<BaseResponse<bool>> UpdateEvent(
         int projectId,
         int eventId,
@@ -64,6 +68,7 @@ public class EventController : BaseController
     }
 
     [HttpDelete("/api/project/{projectId}/event/{eventId}")]
+    [Authorize]
     public async Task<BaseResponse<bool>> DeleteEvent(int projectId, int eventId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();

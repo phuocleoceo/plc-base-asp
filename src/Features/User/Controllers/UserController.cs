@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using PlcBase.Features.User.Services;
@@ -5,6 +6,7 @@ using PlcBase.Features.User.DTOs;
 using PlcBase.Shared.Utilities;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Controller;
+using PlcBase.Shared.Enums;
 using PlcBase.Base.DTO;
 
 namespace PlcBase.Features.User.Controllers;
@@ -19,6 +21,7 @@ public class UserController : BaseController
     }
 
     [HttpGet]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<PagedList<UserDTO>>> GetAllUsers(
         [FromQuery] UserParams userParams
     )
@@ -27,6 +30,7 @@ public class UserController : BaseController
     }
 
     [HttpGet("Personal")]
+    [Authorize]
     public async Task<BaseResponse<UserProfilePersonalDTO>> GetUserProfilePersonal()
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
@@ -34,6 +38,7 @@ public class UserController : BaseController
     }
 
     [HttpPut("Personal")]
+    [Authorize]
     public async Task<BaseResponse<bool>> UpdateUserProfilePersonal(
         [FromBody] UserProfileUpdateDTO userProfileUpdateDTO
     )
@@ -46,18 +51,21 @@ public class UserController : BaseController
     }
 
     [HttpGet("Anonymous/{userId}")]
+    [Authorize]
     public async Task<BaseResponse<UserProfileAnonymousDTO>> GetUserProfileAnonymous(int userId)
     {
         return HttpContext.Success(await _userService.GetUserProfileAnonymous(userId));
     }
 
     [HttpGet("Account/{userId}")]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<UserAccountDTO>> GetUserAccountById(int userId)
     {
         return HttpContext.Success(await _userService.GetUserAccountById(userId));
     }
 
     [HttpPut("Account/{userId}")]
+    [Authorize(Roles = AppRole.ADMIN)]
     public async Task<BaseResponse<bool>> UpdateUserAccount(
         int userId,
         [FromBody] UserAccountUpdateDTO userAccountUpdateDTO
