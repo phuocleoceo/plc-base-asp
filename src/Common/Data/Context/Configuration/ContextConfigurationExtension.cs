@@ -27,5 +27,6 @@ public static class ContextConfigurationExtension
         modelBuilder.ApplyConfiguration(new MemberRoleConfiguration());
         modelBuilder.ApplyConfiguration(new EventConfiguration());
         modelBuilder.ApplyConfiguration(new EventAttendeeConfiguration());
+        modelBuilder.ApplyConfiguration(new PaymentConfiguration());
     }
 }
