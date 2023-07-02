@@ -15,5 +15,4 @@ public class VNPHistory
     public string vnp_TransactionStatus { get; set; }
     public string vnp_SecureHash { get; set; }
     public string vnp_CreateDate { get; set; }
-    public int UserId { get; set; }
 }
