@@ -45,6 +45,9 @@ public class PaymentEntity : BaseEntity
     [Column("vnp_secure_hash")]
     public string vnp_SecureHash { get; set; }
 
+    [Column("vnp_create_date")]
+    public string vnp_CreateDate { get; set; }
+
     [ForeignKey(nameof(UserAccount))]
     [Column("user_id")]
     public int UserId { get; set; }
