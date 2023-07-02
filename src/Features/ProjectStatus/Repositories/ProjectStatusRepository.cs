@@ -44,4 +44,20 @@ public class ProjectStatusRepository : BaseRepository<ProjectStatusEntity>, IPro
 
         return projectStatus?.Id;
     }
+
+    public async Task<int?> GetNewStatusIdForIssueWhenDeletingStatus(
+        int projectId,
+        int deletingStatusId
+    )
+    {
+        ProjectStatusEntity projectStatus = await GetOneAsync<ProjectStatusEntity>(
+            new QueryModel<ProjectStatusEntity>()
+            {
+                OrderBy = c => c.OrderBy(s => s.Index),
+                Filters = { s => s.ProjectId == projectId && s.Id != deletingStatusId },
+            }
+        );
+
+        return projectStatus?.Id;
+    }
 }

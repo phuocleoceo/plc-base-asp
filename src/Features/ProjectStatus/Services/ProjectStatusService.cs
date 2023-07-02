@@ -2,6 +2,7 @@ using AutoMapper;
 
 using PlcBase.Features.ProjectStatus.Entities;
 using PlcBase.Features.ProjectStatus.DTOs;
+using PlcBase.Features.Issue.Entities;
 using PlcBase.Common.Repositories;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
@@ -70,12 +71,60 @@ public class ProjectStatusService : IProjectStatusService
 
     public async Task<bool> DeleteProjectStatus(int projectId, int projectStatusId)
     {
-        ProjectStatusEntity currentStatus = await _uow.ProjectStatus.FindByIdAsync(projectStatusId);
+        try
+        {
+            await _uow.CreateTransaction();
 
-        if (currentStatus == null)
-            throw new BaseException(HttpCode.NOT_FOUND, "project_status_not_found");
+            int countStatus = await _uow.ProjectStatus.CountAsync(ps => ps.ProjectId == projectId);
+            if (countStatus <= 1)
+                throw new BaseException(HttpCode.BAD_REQUEST, "must_have_at_least_one_status");
 
-        _uow.ProjectStatus.Remove(currentStatus);
-        return await _uow.Save();
+            ProjectStatusEntity currentStatus = await _uow.ProjectStatus.FindByIdAsync(
+                projectStatusId
+            );
+
+            if (currentStatus == null)
+                throw new BaseException(HttpCode.NOT_FOUND, "project_status_not_found");
+
+            // Update new status for issues
+            int? newStatusId = await _uow.ProjectStatus.GetNewStatusIdForIssueWhenDeletingStatus(
+                projectId,
+                currentStatus.Id
+            );
+
+            List<IssueEntity> issues = await _uow.Issue.GetManyAsync<IssueEntity>(
+                new QueryModel<IssueEntity>()
+                {
+                    Filters =
+                    {
+                        i =>
+                            i.ProjectId == projectId
+                            && i.ProjectStatusId == projectStatusId
+                            && i.DeletedAt == null
+                    }
+                }
+            );
+
+            double statusIndex = _uow.Issue.GetStatusIndexForNewIssue(projectId, newStatusId.Value);
+            foreach (IssueEntity issue in issues)
+            {
+                issue.ProjectStatusId = newStatusId;
+                issue.ProjectStatusIndex = statusIndex++;
+                _uow.Issue.Update(issue);
+            }
+            await _uow.Save();
+
+            // Remove status
+            _uow.ProjectStatus.Remove(currentStatus);
+            await _uow.Save();
+
+            await _uow.CommitTransaction();
+            return true;
+        }
+        catch (BaseException ex)
+        {
+            await _uow.AbortTransaction();
+            throw ex;
+        }
     }
 }

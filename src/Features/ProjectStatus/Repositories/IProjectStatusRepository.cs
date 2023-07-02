@@ -8,4 +8,6 @@ public interface IProjectStatusRepository : IBaseRepository<ProjectStatusEntity>
     Task<double> GetIndexForNewStatus(int projectId);
 
     Task<int?> GetStatusIdForNewIssue(int projectId);
+
+    Task<int?> GetNewStatusIdForIssueWhenDeletingStatus(int projectId, int deletingStatusId);
 }
