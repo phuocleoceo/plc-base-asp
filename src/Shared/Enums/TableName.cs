@@ -23,4 +23,5 @@ public static class TableName
     public const string MEMBER_ROLE = "member_role";
     public const string EVENT = "event";
     public const string EVENT_ATTENDEE = "event_attendee";
+    public const string PAYMENT_METADATA = "payment_metadata";
 }

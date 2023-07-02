@@ -9,6 +9,7 @@ using PlcBase.Features.ProjectMember.Entities;
 using PlcBase.Features.ProjectStatus.Entities;
 using PlcBase.Features.Invitation.Entities;
 using PlcBase.Features.Address.Entities;
+using PlcBase.Features.Payment.Entities;
 using PlcBase.Features.Project.Entities;
 using PlcBase.Features.Sprint.Entities;
 using PlcBase.Features.Event.Entities;
@@ -68,4 +69,5 @@ public class DataContext : DbContext
     public DbSet<MemberRoleEntity> MemberRoles { get; set; }
     public DbSet<EventEntity> Events { get; set; }
     public DbSet<EventAttendeeEntity> EventAttendees { get; set; }
+    public DbSet<PaymentEntity> Payments { get; set; }
 }

@@ -160,12 +160,12 @@ public class ProjectService : IProjectService
     {
         try
         {
+            await _uow.CreateTransaction();
+
             ProjectEntity projectDb = await _uow.Project.GetByIdAndOwner(reqUser.Id, projectId);
 
             if (projectDb == null)
                 throw new BaseException(HttpCode.NOT_FOUND, "project_not_found");
-
-            await _uow.CreateTransaction();
 
             _uow.Project.SoftDelete(projectDb);
             await _uow.Save();

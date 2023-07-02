@@ -5,6 +5,7 @@ using PlcBase.Features.ProjectMember.DTOs;
 using PlcBase.Features.ProjectStatus.DTOs;
 using PlcBase.Features.Invitation.DTOs;
 using PlcBase.Features.Address.DTOs;
+using PlcBase.Features.Payment.DTOs;
 using PlcBase.Features.Project.DTOs;
 using PlcBase.Features.Sprint.DTOs;
 using PlcBase.Features.Event.DTOs;
@@ -36,7 +37,8 @@ public static class MapperExtension
             typeof(ProjectRoleMapping),
             typeof(ProjectPermissionMapping),
             typeof(MemberRoleMapping),
-            typeof(EventMapping)
+            typeof(EventMapping),
+            typeof(PaymentMapping)
         );
     }
 }

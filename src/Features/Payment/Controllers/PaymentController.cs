@@ -21,10 +21,12 @@ public class PaymentController : BaseController
 
     [HttpPost]
     [Authorize]
-    public BaseResponse<string> CreatePayment([FromBody] CreatePaymentDTO createPaymentDTO)
+    public async Task<BaseResponse<string>> CreatePayment(
+        [FromBody] CreatePaymentDTO createPaymentDTO
+    )
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
-        return HttpContext.Success(_paymentService.CreatePayment(reqUser, createPaymentDTO));
+        return HttpContext.Success(await _paymentService.CreatePayment(reqUser, createPaymentDTO));
     }
 
     [HttpPut]
