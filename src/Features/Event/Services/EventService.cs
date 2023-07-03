@@ -48,10 +48,7 @@ public class EventService : IEventService
         return await _uow.Event.GetOneAsync<EventDetailDTO>(
             new QueryModel<EventEntity>()
             {
-                Filters =
-                {
-                    e => e.Id == eventId && e.ProjectId == projectId && e.CreatorId == reqUser.Id
-                }
+                Filters = { e => e.Id == eventId && e.ProjectId == projectId }
             }
         );
     }
