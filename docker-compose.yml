@@ -8,20 +8,20 @@ services:
       MYSQL_ROOT_PASSWORD: "@dmin1234"
     ports:
       - "3306:3306"
-    restart: always
+    volumes:
+      - plc-db-data:/var/lib/mysql
 
   plcbase:
-    image: plc-base 
+    image: plc-base
     container_name: plcbase
     build: ./
-    restart: always
     environment:
-      - "ConnectionStrings:Local=server=plcdb; port=3306; database=PLCdb; user=root; password=@dmin1234; Persist Security Info=False; Connect Timeout=300"
+      - "SelectedDatabase=Local"
+      - "ConnectionStrings:Local=server=plcdb; port=3306; database=plcCapstone; user=root; password=@dmin1234; Persist Security Info=False; Connect Timeout=300"
     depends_on:
       - plcdb
     ports:
       - 7133:80
-    networks:
-      - plc-base
-networks:
-  plc-base:
+
+volumes:
+  plc-db-data:

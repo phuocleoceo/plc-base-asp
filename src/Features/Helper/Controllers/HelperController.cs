@@ -22,7 +22,7 @@ public class HelperController : BaseController
     [Authorize]
     public async Task<BaseResponse<string>> S3Upload(IFormFile file, string prefix = "")
     {
-        string fileUrl = await _s3Helper.UploadFile(file.GetS3FileUpload());
+        string fileUrl = await _s3Helper.UploadFile(file.GetS3FileUpload(prefix));
         return HttpContext.Success(fileUrl);
     }
 }
