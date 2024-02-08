@@ -1,9 +1,17 @@
 version: "3.9"
 
 services:
-  plcdb:
+  plc-redis:
+    image: redis
+    container_name: plc-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - plc-redis-data:/data
+  
+  plc-db:
     image: mysql
-    container_name: plcdb
+    container_name: plc-db
     environment:
       MYSQL_ROOT_PASSWORD: "@dmin1234"
     ports:
@@ -11,17 +19,22 @@ services:
     volumes:
       - plc-db-data:/var/lib/mysql
 
-  plcbase:
-    image: plc-base
-    container_name: plcbase
-    build: ./
+  plc-service:
+    image: plc-service
+    container_name: plc-service
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - "SelectedDatabase=Local"
-      - "ConnectionStrings:Local=server=plcdb; port=3306; database=plcCapstone; user=root; password=@dmin1234; Persist Security Info=False; Connect Timeout=300"
+      - "ConnectionStrings:Local=server=plc-db; port=3306; database=plcCapstone; user=root; password=@dmin1234; Persist Security Info=False; Connect Timeout=300"
+      - "CacheSettings:ConnectionString=plc-redis:6379"
     depends_on:
-      - plcdb
+      - plc-redis
+      - plc-db
     ports:
-      - 7133:80
+      - "7133:80"
 
 volumes:
+  plc-redis-data:
   plc-db-data:

@@ -34,9 +34,7 @@ public class RedisHelper : IRedisHelper
     public async Task<T> Get<T>(string key)
     {
         string obj = await _redisCache.GetStringAsync(key);
-        if (String.IsNullOrEmpty(obj))
-            return default(T);
-        return JsonConvert.DeserializeObject<T>(obj);
+        return string.IsNullOrEmpty(obj) ? default(T) : JsonConvert.DeserializeObject<T>(obj);
     }
 
     public async Task Clear(string key)
