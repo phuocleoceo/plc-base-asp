@@ -8,6 +8,7 @@ using PlcBase.Features.User.Entities;
 using PlcBase.Common.Repositories;
 using PlcBase.Features.Auth.DTOs;
 using PlcBase.Shared.Constants;
+using PlcBase.Shared.Utilities;
 using PlcBase.Base.DomainModel;
 using PlcBase.Shared.Helpers;
 using PlcBase.Base.Error;
@@ -58,11 +59,7 @@ public class AuthService : IAuthService
         if (!currentUser.IsActived)
             throw new BaseException(HttpCode.BAD_REQUEST, "account_inactived");
 
-        PasswordHash passwordHash = new PasswordHash(
-            currentUser.PasswordHashed,
-            currentUser.PasswordSalt
-        );
-        if (!PasswordSecure.IsValidPasswod(userLoginDTO.Password, passwordHash))
+        if (!PasswordUtility.IsValidPassword(userLoginDTO.Password, currentUser.Password))
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_password");
 
         List<Claim> userClaims = await GetUserClaims(currentUser);
@@ -90,11 +87,12 @@ public class AuthService : IAuthService
     private async Task<List<Claim>> GetUserClaims(UserAccountEntity user)
     {
         // TODO: Permissions or Role
-        List<Claim> claims = new List<Claim>();
-
-        claims.Add(new Claim(CustomClaimTypes.UserId, user.Id.ToString()));
-        claims.Add(new Claim(CustomClaimTypes.Email, user.Email));
-        claims.Add(new Claim(CustomClaimTypes.Role, user.Role.Name));
+        List<Claim> claims = new List<Claim>
+        {
+            new(CustomClaimTypes.UserId, user.Id.ToString()),
+            new(CustomClaimTypes.Email, user.Email),
+            new(CustomClaimTypes.Role, user.Role.Name)
+        };
 
         return await Task.FromResult(claims);
     }
@@ -179,9 +177,7 @@ public class AuthService : IAuthService
                 );
 
             // Create user account
-            PasswordHash passwordHash = PasswordSecure.GetPasswordHash(userRegisterDTO.Password);
-            newUserAccount.PasswordSalt = passwordHash.PasswordSalt;
-            newUserAccount.PasswordHashed = passwordHash.PasswordHashed;
+            newUserAccount.Password = PasswordUtility.GetPasswordHash(userRegisterDTO.Password);
             newUserAccount.IsVerified = false;
             newUserAccount.IsActived = true;
             newUserAccount.SecurityCode = CodeSecure.CreateRandomCode();
@@ -194,7 +190,7 @@ public class AuthService : IAuthService
             newUserProfile.UserAccountId = newUserAccount.Id;
             _uow.UserProfile.Add(newUserProfile);
 
-            await SendMailConfirm(newUserAccount);
+            // await SendMailConfirm(newUserAccount);
 
             await _uow.Save();
             await _uow.CommitTransaction();
@@ -221,7 +217,7 @@ public class AuthService : IAuthService
 
         query["userId"] = newUserAccount.Id.ToString();
         query["code"] = newUserAccount.SecurityCode;
-        uriBuilder.Query = query.ToString();
+        uriBuilder.Query = query.ToString() ?? string.Empty;
 
         await _sendMailHelper.SendEmailAsync(
             new MailContent()
@@ -273,18 +269,15 @@ public class AuthService : IAuthService
         if (!currentUser.IsVerified)
             throw new BaseException(HttpCode.BAD_REQUEST, "account_unverified");
 
-        PasswordHash passwordHashDB = new PasswordHash(
-            currentUser.PasswordHashed,
-            currentUser.PasswordSalt
-        );
-        if (!PasswordSecure.IsValidPasswod(userChangePasswordDTO.OldPassword, passwordHashDB))
+        if (
+            !PasswordUtility.IsValidPassword(
+                userChangePasswordDTO.OldPassword,
+                currentUser.Password
+            )
+        )
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_old_password");
 
-        PasswordHash newPasswordHash = PasswordSecure.GetPasswordHash(
-            userChangePasswordDTO.NewPassword
-        );
-        currentUser.PasswordHashed = newPasswordHash.PasswordHashed;
-        currentUser.PasswordSalt = newPasswordHash.PasswordSalt;
+        currentUser.Password = PasswordUtility.GetPasswordHash(userChangePasswordDTO.NewPassword);
 
         _uow.UserAccount.Update(currentUser);
         return await _uow.Save();
@@ -359,11 +352,7 @@ public class AuthService : IAuthService
         if (currentUser.SecurityCode != userRecoverPasswordDTO.Code)
             throw new BaseException(HttpCode.BAD_REQUEST, "security_code_invalid");
 
-        PasswordHash newPasswordHash = PasswordSecure.GetPasswordHash(
-            userRecoverPasswordDTO.NewPassword
-        );
-        currentUser.PasswordHashed = newPasswordHash.PasswordHashed;
-        currentUser.PasswordSalt = newPasswordHash.PasswordSalt;
+        currentUser.Password = PasswordUtility.GetPasswordHash(userRecoverPasswordDTO.NewPassword);
         currentUser.SecurityCode = "";
 
         _uow.UserAccount.Update(currentUser);
