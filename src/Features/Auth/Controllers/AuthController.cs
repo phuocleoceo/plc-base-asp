@@ -20,7 +20,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("Login")]
-    public async Task<BaseResponse<UserLoginResponseDTO>> Login(
+    public async Task<SuccessResponse<UserLoginResponseDTO>> Login(
         [FromBody] UserLoginDTO userLoginDTO
     )
     {
@@ -28,7 +28,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("Register")]
-    public async Task<BaseResponse<UserRegisterResponseDTO>> Register(
+    public async Task<SuccessResponse<UserRegisterResponseDTO>> Register(
         [FromBody] UserRegisterDTO userRegisterDTO
     )
     {
@@ -36,7 +36,7 @@ public class AuthController : BaseController
     }
 
     [HttpPut("Confirm-Email")]
-    public async Task<BaseResponse<bool>> ConfirmEmail(
+    public async Task<SuccessResponse<bool>> ConfirmEmail(
         [FromBody] UserConfirmEmailDTO userConfirmEmailDTO
     )
     {
@@ -47,7 +47,7 @@ public class AuthController : BaseController
 
     [HttpPut("Change-Password")]
     [Authorize]
-    public async Task<BaseResponse<bool>> ChangePassword(
+    public async Task<SuccessResponse<bool>> ChangePassword(
         [FromBody] UserChangePasswordDTO userChangePasswordDTO
     )
     {
@@ -59,7 +59,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("Forgot-Password")]
-    public async Task<BaseResponse<bool>> ForgotPassword(
+    public async Task<SuccessResponse<bool>> ForgotPassword(
         [FromBody] UserForgotPasswordDTO userForgotPasswordDTO
     )
     {
@@ -68,7 +68,7 @@ public class AuthController : BaseController
     }
 
     [HttpPut("Recover-Password")]
-    public async Task<BaseResponse<bool>> RecoverPassword(
+    public async Task<SuccessResponse<bool>> RecoverPassword(
         UserRecoverPasswordDTO userRecoverPasswordDTO
     )
     {
@@ -78,7 +78,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("Refresh-Token")]
-    public async Task<BaseResponse<UserRefreshTokenResponseDTO>> RefreshToken(
+    public async Task<SuccessResponse<UserRefreshTokenResponseDTO>> RefreshToken(
         [FromBody] UserRefreshTokenDTO userRefreshTokenDTO
     )
     {
@@ -87,7 +87,7 @@ public class AuthController : BaseController
 
     [HttpPost("Revoke-Refresh-Token")]
     [Authorize]
-    public async Task<BaseResponse<bool>> RevokeRefreshToken()
+    public async Task<SuccessResponse<bool>> RevokeRefreshToken()
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 

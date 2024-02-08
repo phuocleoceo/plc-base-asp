@@ -21,21 +21,21 @@ public class SprintController : BaseController
 
     [HttpGet("/api/project/{projectId}/sprint")]
     [Authorize]
-    public async Task<BaseResponse<SprintDTO>> GetAvailableSprint(int projectId)
+    public async Task<SuccessResponse<SprintDTO>> GetAvailableSprint(int projectId)
     {
         return HttpContext.Success(await _sprintService.GetAvailableSprint(projectId));
     }
 
     [HttpGet("/api/project/{projectId}/sprint/{sprintId}")]
     [Authorize]
-    public async Task<BaseResponse<SprintDTO>> GetSprintById(int projectId, int sprintId)
+    public async Task<SuccessResponse<SprintDTO>> GetSprintById(int projectId, int sprintId)
     {
         return HttpContext.Success(await _sprintService.GetSprintById(projectId, sprintId));
     }
 
     [HttpPost("/api/project/{projectId}/sprint")]
     [Authorize]
-    public async Task<BaseResponse<bool>> CreateSprint(
+    public async Task<SuccessResponse<bool>> CreateSprint(
         int projectId,
         [FromBody] CreateSprintDTO createSprintDTO
     )
@@ -49,7 +49,7 @@ public class SprintController : BaseController
 
     [HttpPut("/api/project/{projectId}/sprint/{sprintId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> UpdateSprint(
+    public async Task<SuccessResponse<bool>> UpdateSprint(
         int projectId,
         int sprintId,
         [FromBody] UpdateSprintDTO updateSprintDTO
@@ -64,7 +64,7 @@ public class SprintController : BaseController
 
     [HttpDelete("/api/project/{projectId}/sprint/{sprintId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> DeleteSprint(int projectId, int sprintId)
+    public async Task<SuccessResponse<bool>> DeleteSprint(int projectId, int sprintId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 
@@ -75,7 +75,7 @@ public class SprintController : BaseController
 
     [HttpPut("/api/project/{projectId}/sprint/{sprintId}/start")]
     [Authorize]
-    public async Task<BaseResponse<bool>> StartSprint(int projectId, int sprintId)
+    public async Task<SuccessResponse<bool>> StartSprint(int projectId, int sprintId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 
@@ -86,7 +86,7 @@ public class SprintController : BaseController
 
     [HttpPut("/api/project/{projectId}/sprint/{sprintId}/complete")]
     [Authorize]
-    public async Task<BaseResponse<bool>> CompleteSprint(
+    public async Task<SuccessResponse<bool>> CompleteSprint(
         int projectId,
         int sprintId,
         [FromBody] CompleteSprintDTO completeSprintDTO

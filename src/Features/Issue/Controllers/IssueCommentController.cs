@@ -21,7 +21,7 @@ public class IssueCommentController : BaseController
 
     [HttpGet("/api/issue/{issueId}/comment")]
     [Authorize]
-    public async Task<BaseResponse<PagedList<IssueCommentDTO>>> GetCommentsForIssue(
+    public async Task<SuccessResponse<PagedList<IssueCommentDTO>>> GetCommentsForIssue(
         int issueId,
         [FromQuery] IssueCommentParams issueCommentParams
     )
@@ -33,7 +33,7 @@ public class IssueCommentController : BaseController
 
     [HttpPost("/api/issue/{issueId}/comment")]
     [Authorize]
-    public async Task<BaseResponse<bool>> CreateIssueComment(
+    public async Task<SuccessResponse<bool>> CreateIssueComment(
         int issueId,
         [FromBody] CreateIssueCommentDTO createIssueCommentDTO
     )
@@ -47,7 +47,7 @@ public class IssueCommentController : BaseController
 
     [HttpPut("/api/issue/{issueId}/comment/{commentId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> UpdateIssueComment(
+    public async Task<SuccessResponse<bool>> UpdateIssueComment(
         int issueId,
         int commentId,
         [FromBody] UpdateIssueCommentDTO updateIssueCommentDTO
@@ -69,7 +69,7 @@ public class IssueCommentController : BaseController
 
     [HttpDelete("/api/issue/{issueId}/comment/{commentId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> DeleteIssueComment(int issueId, int commentId)
+    public async Task<SuccessResponse<bool>> DeleteIssueComment(int issueId, int commentId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 

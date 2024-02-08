@@ -20,7 +20,7 @@ public class AccessControlController : BaseController
 
     [HttpGet("/api/roles")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<List<RoleDTO>>> GetProvinces()
+    public async Task<SuccessResponse<List<RoleDTO>>> GetProvinces()
     {
         return HttpContext.Success(await _accessControlService.GetRoles());
     }

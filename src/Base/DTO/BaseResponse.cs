@@ -1,29 +1,18 @@
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
-
 using PlcBase.Shared.Constants;
 
 namespace PlcBase.Base.DTO;
 
-public class BaseResponse<T>
+public class BaseResponse
 {
-    public T Data { get; set; } = default(T);
+    public bool Success { get; set; }
 
-    public int StatusCode { get; set; } = HttpCode.OK;
+    public int StatusCode { get; set; }
 
-    public string Message { get; set; } = null;
+    protected BaseResponse() { }
 
-    public Dictionary<string, string[]> Errors { get; set; } = null;
-
-    public override string ToString()
+    protected BaseResponse(bool success = true, int statusCode = HttpCode.OK)
     {
-        return JsonConvert.SerializeObject(
-            this,
-            Formatting.Indented,
-            new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            }
-        );
+        Success = success;
+        StatusCode = statusCode;
     }
 }

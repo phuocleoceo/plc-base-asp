@@ -21,21 +21,21 @@ public class ConfigSettingController : BaseController
 
     [HttpGet("")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<List<ConfigSettingDTO>>> GetAllConfigSettings()
+    public async Task<SuccessResponse<List<ConfigSettingDTO>>> GetAllConfigSettings()
     {
         return HttpContext.Success(await _configSettingService.GetAllConfigSettings());
     }
 
     [HttpGet("{key}")]
     [Authorize]
-    public async Task<BaseResponse<ConfigSettingDTO>> GetConfigSettingByKey(string key)
+    public async Task<SuccessResponse<ConfigSettingDTO>> GetConfigSettingByKey(string key)
     {
         return HttpContext.Success(await _configSettingService.GetByKey(key));
     }
 
     [HttpPut("{key}")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<bool>> UpdateConfigSetting(
+    public async Task<SuccessResponse<bool>> UpdateConfigSetting(
         string key,
         ConfigSettingUpdateDTO configSettingUpdateDTO
     )

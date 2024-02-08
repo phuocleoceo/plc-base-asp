@@ -6,30 +6,22 @@ namespace PlcBase.Base.Controller;
 
 public static class ContextResponse
 {
-    public static BaseResponse<T> Success<T>(
+    public static SuccessResponse<T> Success<T>(
         this HttpContext context,
-        T Data = default(T),
-        int StatusCode = HttpCode.OK,
-        string Message = null
+        T data = default,
+        int statusCode = HttpCode.OK
     )
     {
-        context.Response.StatusCode = StatusCode;
-        context.Items["responseMessage"] = Message;
-
-        return new BaseResponse<T>()
-        {
-            Data = Data,
-            StatusCode = StatusCode,
-            Message = Message,
-        };
+        context.Response.StatusCode = statusCode;
+        return new SuccessResponse<T>(data, statusCode);
     }
 
     public static dynamic Failure(
         this HttpContext context,
-        int StatusCode = HttpCode.INTERNAL_SERVER_ERROR,
-        string Message = ""
+        int statusCode = HttpCode.INTERNAL_SERVER_ERROR,
+        string message = ""
     )
     {
-        throw new BaseException(StatusCode, Message);
+        throw new BaseException(statusCode, message);
     }
 }

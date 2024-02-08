@@ -21,7 +21,7 @@ public class InvitationController : BaseController
 
     [HttpGet("/api/project/{projectId}/invitation")]
     [Authorize]
-    public async Task<BaseResponse<PagedList<SenderInvitationDTO>>> GetInvitationsForProject(
+    public async Task<SuccessResponse<PagedList<SenderInvitationDTO>>> GetInvitationsForProject(
         int projectId,
         [FromQuery] SenderInvitationParams senderInvitationParams
     )
@@ -33,7 +33,7 @@ public class InvitationController : BaseController
 
     [HttpPost("/api/project/{projectId}/invitation")]
     [Authorize]
-    public async Task<BaseResponse<bool>> CreateInvitation(
+    public async Task<SuccessResponse<bool>> CreateInvitation(
         int projectId,
         [FromBody] CreateInvitationDTO createInvitationDTO
     )
@@ -47,7 +47,7 @@ public class InvitationController : BaseController
 
     [HttpDelete("/api/project/{projectId}/invitation/{invitationId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> DeleteInvitation(int projectId, int invitationId)
+    public async Task<SuccessResponse<bool>> DeleteInvitation(int projectId, int invitationId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 
@@ -58,7 +58,7 @@ public class InvitationController : BaseController
 
     [HttpGet("/api/user/personal/invitation")]
     [Authorize]
-    public async Task<BaseResponse<PagedList<RecipientInvitationDTO>>> GetInvitationsForUser(
+    public async Task<SuccessResponse<PagedList<RecipientInvitationDTO>>> GetInvitationsForUser(
         [FromQuery] RecipientInvitationParams recipientInvitationParams
     )
     {
@@ -71,7 +71,7 @@ public class InvitationController : BaseController
 
     [HttpPut("/api/user/personal/invitation/{invitationId}/accept")]
     [Authorize]
-    public async Task<BaseResponse<bool>> AcceptInvitation(int invitationId)
+    public async Task<SuccessResponse<bool>> AcceptInvitation(int invitationId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 
@@ -82,7 +82,7 @@ public class InvitationController : BaseController
 
     [HttpPut("/api/user/personal/invitation/{invitationId}/decline")]
     [Authorize]
-    public async Task<BaseResponse<bool>> DeclineInvitation(int invitationId)
+    public async Task<SuccessResponse<bool>> DeclineInvitation(int invitationId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 

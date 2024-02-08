@@ -70,12 +70,7 @@ public static class ErrorHandler
         context.Items["isError"] = true;
 
         await context.Response.WriteAsync(
-            new BaseResponse<string>()
-            {
-                StatusCode = statusCode,
-                Message = message,
-                Errors = errors,
-            }.ToString()
+            new ErrorResponse(message, statusCode, errors).ToString() ?? string.Empty
         );
     }
 }
