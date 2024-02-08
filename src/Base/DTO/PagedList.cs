@@ -6,8 +6,6 @@ public class PagedList<T>
 
     public int TotalRecords { get; set; }
 
-    public PagedList() { }
-
     public PagedList(List<T> items, int count)
     {
         Records = items;

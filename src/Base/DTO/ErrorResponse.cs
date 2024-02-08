@@ -11,8 +11,6 @@ public class ErrorResponse : BaseResponse
 
     public Dictionary<string, string[]> Errors { get; set; }
 
-    public ErrorResponse() { }
-
     public ErrorResponse(
         string message = "",
         int statusCode = HttpCode.BAD_REQUEST,

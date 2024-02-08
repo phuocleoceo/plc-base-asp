@@ -31,22 +31,20 @@ public class SendMailHelper : ISendMailHelper
 
         if (mailContent.Attachments != null)
         {
-            byte[] fileBytes;
-            foreach (IFormFile file in mailContent.Attachments)
+            foreach (IFormFile file in mailContent.Attachments.Where(file => file.Length > 0))
             {
-                if (file.Length > 0)
+                byte[] fileBytes;
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        file.CopyTo(ms);
-                        fileBytes = ms.ToArray();
-                    }
-                    builder.Attachments.Add(
-                        file.FileName,
-                        fileBytes,
-                        ContentType.Parse(file.ContentType)
-                    );
+                    await file.CopyToAsync(ms);
+                    fileBytes = ms.ToArray();
                 }
+
+                builder.Attachments.Add(
+                    file.FileName,
+                    fileBytes,
+                    ContentType.Parse(file.ContentType)
+                );
             }
         }
 
@@ -57,8 +55,12 @@ public class SendMailHelper : ISendMailHelper
 
         try
         {
-            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
-            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+            await smtp.ConnectAsync(
+                _mailSettings.Host,
+                _mailSettings.Port,
+                SecureSocketOptions.StartTls
+            );
+            await smtp.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
 
             return $"Send mail to {mailContent.ToEmail}";
@@ -72,7 +74,7 @@ public class SendMailHelper : ISendMailHelper
         }
         finally
         {
-            smtp.Disconnect(true);
+            await smtp.DisconnectAsync(true);
         }
     }
 }

@@ -18,20 +18,18 @@ public static class HttpContextUtility
 
         IPAddress remoteIpAddress = context.Connection.RemoteIpAddress;
 
-        if (remoteIpAddress != null)
+        if (remoteIpAddress == null)
+            return "127.0.0.1";
+
+        if (remoteIpAddress.AddressFamily == AddressFamily.InterNetworkV6)
         {
-            if (remoteIpAddress.AddressFamily == AddressFamily.InterNetworkV6)
-            {
-                remoteIpAddress = Dns.GetHostEntry(remoteIpAddress)
-                    .AddressList.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
-            }
-
-            if (remoteIpAddress != null)
-                ipAddress = remoteIpAddress.ToString();
-
-            return ipAddress;
+            remoteIpAddress = Dns.GetHostEntry(remoteIpAddress)
+                .AddressList.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
         }
 
-        return "127.0.0.1";
+        if (remoteIpAddress != null)
+            ipAddress = remoteIpAddress.ToString();
+
+        return ipAddress;
     }
 }

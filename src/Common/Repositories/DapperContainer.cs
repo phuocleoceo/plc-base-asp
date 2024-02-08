@@ -42,8 +42,7 @@ public class DapperContainer : IDapperContainer
 
     public async Task<Tuple<IEnumerable<T1>, IEnumerable<T2>>> List<T1, T2>(DapperQuery dapperQuery)
     {
-        SqlMapper.GridReader result = await SqlMapper.QueryMultipleAsync(
-            _connection,
+        SqlMapper.GridReader result = await _connection.QueryMultipleAsync(
             dapperQuery.Query,
             dapperQuery.Params,
             commandType: dapperQuery.CommandType

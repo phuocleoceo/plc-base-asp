@@ -6,6 +6,6 @@ public class RoleAuthorizeAttribute : AuthorizeAttribute
 {
     public RoleAuthorizeAttribute(params string[] roles)
     {
-        Roles = String.Join(",", roles);
+        Roles = string.Join(",", roles);
     }
 }

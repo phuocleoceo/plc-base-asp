@@ -15,14 +15,11 @@ public static class LoggingExtension
     {
         LogSettings logSettings = configuration.GetSection("LogSettings").Get<LogSettings>();
 
-        if (logSettings.Enable)
-        {
-            Logger log = new LoggerConfiguration().ReadFrom
-                .Configuration(configuration)
-                .CreateLogger();
+        if (!logSettings.Enable)
+            return;
 
-            loggingBuilder.AddSerilog(log);
-        }
+        Logger log = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
+        loggingBuilder.AddSerilog(log);
     }
 
     public static string GetLogContent(

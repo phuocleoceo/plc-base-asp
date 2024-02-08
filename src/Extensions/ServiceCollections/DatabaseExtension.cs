@@ -12,7 +12,12 @@ public static class DatabaseExtension
     )
     {
         string selectedDatabase = configuration.GetSection("SelectedDatabase").Value;
+        if (selectedDatabase == null)
+            return;
+
         string connectionString = configuration.GetConnectionString(selectedDatabase);
+        if (connectionString == null)
+            return;
 
         services.AddDbContext<DataContext>(options =>
         {

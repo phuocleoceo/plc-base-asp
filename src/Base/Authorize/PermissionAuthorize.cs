@@ -4,8 +4,8 @@ namespace PlcBase.Base.Authorize;
 
 public class PermissionAuthorizeAttribute : AuthorizeAttribute
 {
-    public PermissionAuthorizeAttribute(int Permission)
+    public PermissionAuthorizeAttribute(int permission)
     {
-        Roles = Permission.ToString();
+        Roles = permission.ToString();
     }
 }

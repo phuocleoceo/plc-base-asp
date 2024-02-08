@@ -13,6 +13,7 @@ public static class ContextResponse
     )
     {
         context.Response.StatusCode = statusCode;
+        context.Items["responseMessage"] = "";
         return new SuccessResponse<T>(data, statusCode);
     }
 

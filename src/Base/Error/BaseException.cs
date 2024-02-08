@@ -4,20 +4,18 @@ namespace PlcBase.Base.Error;
 
 public class BaseException : Exception
 {
-    public int StatusCode { get; set; } = HttpCode.INTERNAL_SERVER_ERROR;
+    public int StatusCode { get; set; }
 
-    public Dictionary<string, string[]> Errors { get; set; } = null;
-
-    public BaseException() { }
+    public Dictionary<string, string[]> Errors { get; set; }
 
     public BaseException(
-        int StatusCode = HttpCode.INTERNAL_SERVER_ERROR,
-        string Message = "",
-        Dictionary<string, string[]> Errors = null
+        int statusCode = HttpCode.INTERNAL_SERVER_ERROR,
+        string message = "",
+        Dictionary<string, string[]> errors = null
     )
-        : base(Message)
+        : base(message)
     {
-        this.StatusCode = StatusCode;
-        this.Errors = Errors;
+        StatusCode = statusCode;
+        Errors = errors;
     }
 }

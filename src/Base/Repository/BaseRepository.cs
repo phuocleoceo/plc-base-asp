@@ -17,7 +17,7 @@ public class BaseRepository<T> : IBaseRepository<T>
     private readonly IMapper _mapper;
     internal DbSet<T> _dbSet;
 
-    public BaseRepository(DataContext db, IMapper mapper)
+    protected BaseRepository(DataContext db, IMapper mapper)
     {
         _db = db;
         _mapper = mapper;
@@ -27,7 +27,7 @@ public class BaseRepository<T> : IBaseRepository<T>
     public async Task<List<U>> GetManyAsync<U>(QueryModel<T> queryModel = null)
         where U : class
     {
-        IQueryable<T> query = GetQuery(queryModel);
+        IQueryable<T> query = GetQueryable(queryModel);
 
         return typeof(U) != typeof(T)
             ? await query.ProjectTo<U>(_mapper.ConfigurationProvider).ToListAsync()
@@ -37,7 +37,7 @@ public class BaseRepository<T> : IBaseRepository<T>
     public async Task<PagedList<U>> GetPagedAsync<U>(QueryModel<T> queryModel = null)
         where U : class
     {
-        IQueryable<T> query = GetQuery(queryModel);
+        IQueryable<T> query = GetQueryable(queryModel);
 
         int count = query.Count();
 
@@ -56,14 +56,14 @@ public class BaseRepository<T> : IBaseRepository<T>
     public async Task<U> GetOneAsync<U>(QueryModel<T> queryModel = null)
         where U : class
     {
-        IQueryable<T> query = GetQuery(queryModel);
+        IQueryable<T> query = GetQueryable(queryModel);
 
         return typeof(U) != typeof(T)
             ? await query.ProjectTo<U>(_mapper.ConfigurationProvider).FirstOrDefaultAsync()
             : await query.FirstOrDefaultAsync() as U;
     }
 
-    protected IQueryable<T> GetQuery(QueryModel<T> queryModel)
+    private IQueryable<T> GetQueryable(QueryModel<T> queryModel)
     {
         IQueryable<T> query = _dbSet;
 

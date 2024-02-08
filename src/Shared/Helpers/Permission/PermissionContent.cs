@@ -6,11 +6,9 @@ public class PermissionContent
 
     public string Description { get; set; }
 
-    public PermissionContent() { }
-
-    public PermissionContent(string Key, string Description)
+    public PermissionContent(string key, string description)
     {
-        this.Key = Key;
-        this.Description = Description;
+        Key = key;
+        Description = description;
     }
 }

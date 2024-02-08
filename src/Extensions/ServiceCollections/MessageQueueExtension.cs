@@ -13,13 +13,13 @@ public static class MessageQueueExtension
     {
         CapSettings capSettings = configuration.GetSection("CapSettings").Get<CapSettings>();
 
-        if (capSettings.Enable)
+        if (!capSettings.Enable)
+            return;
+
+        services.AddCap(capOptions =>
         {
-            services.AddCap(capOptions =>
-            {
-                capOptions.UseInMemoryStorage();
-                capOptions.UseInMemoryMessageQueue();
-            });
-        }
+            capOptions.UseInMemoryStorage();
+            capOptions.UseInMemoryMessageQueue();
+        });
     }
 }
