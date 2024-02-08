@@ -13,5 +13,6 @@ public static class AppSettingExtension
         services.Configure<VNPSettings>(configuration.GetSection("VNPSettings"));
         services.Configure<S3Settings>(configuration.GetSection("AWSSettings:S3"));
         services.Configure<ClientAppSettings>(configuration.GetSection("ClientAppSettings"));
+        services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
     }
 }
