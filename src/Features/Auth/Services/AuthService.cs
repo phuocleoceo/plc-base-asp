@@ -190,7 +190,7 @@ public class AuthService : IAuthService
             newUserProfile.UserAccountId = newUserAccount.Id;
             _uow.UserProfile.Add(newUserProfile);
 
-            // await SendMailConfirm(newUserAccount);
+            await SendMailConfirm(newUserAccount);
 
             await _uow.Save();
             await _uow.CommitTransaction();
