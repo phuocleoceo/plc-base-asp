@@ -8,7 +8,5 @@ public interface IConfigSettingService
 
     Task<ConfigSettingDTO> GetByKey(string key);
 
-    Task<double> GetValueByKey(string key);
-
     Task<bool> UpdateForKey(string key, ConfigSettingUpdateDTO configSettingUpdateDTO);
 }

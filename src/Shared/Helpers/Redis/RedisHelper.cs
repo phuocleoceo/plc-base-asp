@@ -28,7 +28,7 @@ public class RedisHelper : IRedisHelper
         // Cache auto expire if not access in
         TimeSpan slidingExpires = TimeSpan.FromSeconds(_cacheSettings.Expires / 2);
 
-        DistributedCacheEntryOptions options = new DistributedCacheEntryOptions()
+        DistributedCacheEntryOptions options = new DistributedCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = expires,
             SlidingExpiration = slidingExpires
@@ -51,6 +51,11 @@ public class RedisHelper : IRedisHelper
 
     public async Task<T> GetCachedOr<T>(string key, Func<T> supplier)
     {
+        if (!_cacheSettings.Enable)
+        {
+            return supplier.Invoke();
+        }
+
         T cachedData = await Get<T>(key);
         if (cachedData != null)
         {
@@ -58,6 +63,29 @@ public class RedisHelper : IRedisHelper
         }
 
         T data = supplier.Invoke();
+        if (data == null)
+        {
+            return default;
+        }
+
+        await SetWithTtl(key, data);
+        return data;
+    }
+
+    public async Task<T> GetCachedOr<T>(string key, Func<Task<T>> supplier)
+    {
+        if (!_cacheSettings.Enable)
+        {
+            return await supplier.Invoke();
+        }
+
+        T cachedData = await Get<T>(key);
+        if (cachedData != null)
+        {
+            return cachedData;
+        }
+
+        T data = await supplier.Invoke();
         if (data == null)
         {
             return default;

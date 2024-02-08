@@ -13,12 +13,9 @@ public static class CacheExtension
             .GetSection("CacheSettings")
             .Get<CacheSettings>();
 
-        if (cacheSettings.Enable)
+        services.AddStackExchangeRedisCache(options =>
         {
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = cacheSettings.ConnectionString;
-            });
-        }
+            options.Configuration = cacheSettings.ConnectionString;
+        });
     }
 }
