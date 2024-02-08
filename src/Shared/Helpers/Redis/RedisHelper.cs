@@ -66,9 +66,4 @@ public class RedisHelper : IRedisHelper
         await SetWithTtl(key, data);
         return data;
     }
-
-    public async Task<List<T>> GetListCachedOr<T>(string key, Func<List<T>> supplier)
-    {
-        return await GetCachedOr(key, supplier);
-    }
 }

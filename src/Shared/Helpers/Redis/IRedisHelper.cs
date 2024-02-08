@@ -11,6 +11,4 @@ public interface IRedisHelper
     Task Clear(string key);
 
     Task<T> GetCachedOr<T>(string key, Func<T> supplier);
-
-    Task<List<T>> GetListCachedOr<T>(string key, Func<List<T>> supplier);
 }

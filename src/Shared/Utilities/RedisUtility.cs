@@ -1,11 +1,16 @@
-using BC = BCrypt.Net.BCrypt;
-
 namespace PlcBase.Shared.Utilities;
 
 public static class RedisUtility
 {
-    public static string GetKey<T>()
+    private const string KEY_PATTERN = "plc-base:{0}:{1}";
+
+    public static string GetKey<T>(int? id = null)
     {
-        return typeof(T).ToString();
+        return string.Format(KEY_PATTERN, typeof(T), id?.ToString() ?? "");
+    }
+
+    public static string GetListKey<T>()
+    {
+        return string.Format(KEY_PATTERN, typeof(T), "list");
     }
 }
