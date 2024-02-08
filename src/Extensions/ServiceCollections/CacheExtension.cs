@@ -1,4 +1,5 @@
 using PlcBase.Shared.Helpers;
+using StackExchange.Redis;
 
 namespace PlcBase.Extensions.ServiceCollections;
 
@@ -17,5 +18,9 @@ public static class CacheExtension
         {
             options.Configuration = cacheSettings.ConnectionString;
         });
+
+        services.AddSingleton<IConnectionMultiplexer>(
+            ConnectionMultiplexer.Connect(cacheSettings.ConnectionString)
+        );
     }
 }

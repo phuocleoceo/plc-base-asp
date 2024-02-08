@@ -51,6 +51,8 @@ public class ConfigSettingService : IConfigSettingService
 
         _mapper.Map(configSettingUpdateDTO, configSettingDb);
         _uow.ConfigSetting.Update(configSettingDb);
+
+        await _redisHelper.ClearByPattern(RedisUtility.GetClearKey<ConfigSettingDTO>());
         return await _uow.Save();
     }
 }

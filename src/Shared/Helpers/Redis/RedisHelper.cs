@@ -1,18 +1,26 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
+using StackExchange.Redis;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace PlcBase.Shared.Helpers;
 
 public class RedisHelper : IRedisHelper
 {
+    private readonly IConnectionMultiplexer _connectionMultiplexer;
     private readonly IDistributedCache _redisCache;
     private readonly CacheSettings _cacheSettings;
 
-    public RedisHelper(IDistributedCache redisCache, IOptions<CacheSettings> cacheSettings)
+    public RedisHelper(
+        IDistributedCache redisCache,
+        IOptions<CacheSettings> cacheSettings,
+        IConnectionMultiplexer connectionMultiplexer
+    )
     {
         _redisCache = redisCache;
         _cacheSettings = cacheSettings.Value;
+        _connectionMultiplexer = connectionMultiplexer;
     }
 
     public async Task Set<T>(string key, T obj)
@@ -47,6 +55,26 @@ public class RedisHelper : IRedisHelper
     public async Task Clear(string key)
     {
         await _redisCache.RemoveAsync(key);
+    }
+
+    public async Task ClearByPattern(string pattern)
+    {
+        await foreach (string key in GetKeysMatchPattern(pattern))
+        {
+            await _redisCache.RemoveAsync(key);
+        }
+    }
+
+    private async IAsyncEnumerable<string> GetKeysMatchPattern(string pattern)
+    {
+        foreach (EndPoint endpoint in _connectionMultiplexer.GetEndPoints())
+        {
+            IServer server = _connectionMultiplexer.GetServer(endpoint);
+            await foreach (RedisKey key in server.KeysAsync(pattern: pattern))
+            {
+                yield return key.ToString();
+            }
+        }
     }
 
     public async Task<T> GetCachedOr<T>(string key, Func<T> supplier)
