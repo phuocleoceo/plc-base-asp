@@ -12,11 +12,8 @@ public class UserAccountEntity : BaseEntity
     [Column("email")]
     public string Email { get; set; }
 
-    [Column("password_hashed")]
-    public byte[] PasswordHashed { get; set; }
-
-    [Column("password_salt")]
-    public byte[] PasswordSalt { get; set; }
+    [Column("password")]
+    public string Password { get; set; }
 
     [Column("is_verified")]
     public bool IsVerified { get; set; }
