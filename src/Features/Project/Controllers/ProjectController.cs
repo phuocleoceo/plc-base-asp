@@ -21,7 +21,7 @@ public class ProjectController : BaseController
 
     [HttpGet]
     [Authorize]
-    public async Task<BaseResponse<PagedList<ProjectDTO>>> GetProjectsForUser(
+    public async Task<SuccessResponse<PagedList<ProjectDTO>>> GetProjectsForUser(
         [FromQuery] ProjectParams projectParams
     )
     {
@@ -34,7 +34,7 @@ public class ProjectController : BaseController
 
     [HttpGet("{projectId}")]
     [Authorize]
-    public async Task<BaseResponse<ProjectDTO>> GetProjectById(int projectId)
+    public async Task<SuccessResponse<ProjectDTO>> GetProjectById(int projectId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 
@@ -43,7 +43,7 @@ public class ProjectController : BaseController
 
     [HttpGet("{projectId}/permission")]
     [Authorize]
-    public async Task<BaseResponse<IEnumerable<string>>> GetPermissionsInProjectForUser(
+    public async Task<SuccessResponse<IEnumerable<string>>> GetPermissionsInProjectForUser(
         int projectId
     )
     {
@@ -56,7 +56,7 @@ public class ProjectController : BaseController
 
     [HttpPost]
     [Authorize]
-    public async Task<BaseResponse<bool>> CreateProject(
+    public async Task<SuccessResponse<bool>> CreateProject(
         [FromBody] CreateProjectDTO createProjectDTO
     )
     {
@@ -69,7 +69,7 @@ public class ProjectController : BaseController
 
     [HttpPut("{projectId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> UpdateProject(
+    public async Task<SuccessResponse<bool>> UpdateProject(
         int projectId,
         [FromBody] UpdateProjectDTO updateProjectDTO
     )
@@ -83,7 +83,7 @@ public class ProjectController : BaseController
 
     [HttpDelete("{projectId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> DeleteProject(int projectId)
+    public async Task<SuccessResponse<bool>> DeleteProject(int projectId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 

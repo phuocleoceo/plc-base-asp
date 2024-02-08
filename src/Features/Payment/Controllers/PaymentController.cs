@@ -21,7 +21,7 @@ public class PaymentController : BaseController
 
     [HttpPost]
     [Authorize]
-    public async Task<BaseResponse<string>> CreatePayment(
+    public async Task<SuccessResponse<string>> CreatePayment(
         [FromBody] CreatePaymentDTO createPaymentDTO
     )
     {
@@ -31,7 +31,7 @@ public class PaymentController : BaseController
 
     [HttpPut]
     [Authorize]
-    public async Task<BaseResponse<bool>> SubmitPayment(
+    public async Task<SuccessResponse<bool>> SubmitPayment(
         [FromBody] SubmitPaymentDTO submitPaymentDTO
     )
     {

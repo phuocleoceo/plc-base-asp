@@ -21,7 +21,7 @@ public class ProjectRoleController : BaseController
 
     [HttpGet("")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<PagedList<ProjectRoleDTO>>> GetProjectRoles(
+    public async Task<SuccessResponse<PagedList<ProjectRoleDTO>>> GetProjectRoles(
         [FromQuery] ProjectRoleParams roleParams
     )
     {
@@ -30,21 +30,21 @@ public class ProjectRoleController : BaseController
 
     [HttpGet("all")]
     [Authorize]
-    public async Task<BaseResponse<List<ProjectRoleDTO>>> GetAllProjectRoles()
+    public async Task<SuccessResponse<List<ProjectRoleDTO>>> GetAllProjectRoles()
     {
         return HttpContext.Success(await _projectRoleService.GetAllProjectRoles());
     }
 
     [HttpGet("{projectRoleId}")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<ProjectRoleDTO>> GetProjectRoleById(int projectRoleId)
+    public async Task<SuccessResponse<ProjectRoleDTO>> GetProjectRoleById(int projectRoleId)
     {
         return HttpContext.Success(await _projectRoleService.GetProjectRoleById(projectRoleId));
     }
 
     [HttpPost("")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<bool>> CreateProjectRole(
+    public async Task<SuccessResponse<bool>> CreateProjectRole(
         [FromBody] CreateProjectRoleDTO createProjectRoleDTO
     )
     {
@@ -55,7 +55,7 @@ public class ProjectRoleController : BaseController
 
     [HttpPut("{projectRoleId}")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<bool>> UpdateProjectRole(
+    public async Task<SuccessResponse<bool>> UpdateProjectRole(
         int projectRoleId,
         [FromBody] UpdateProjectRoleDTO updateProjectRoleDTO
     )
@@ -67,7 +67,7 @@ public class ProjectRoleController : BaseController
 
     [HttpDelete("{projectRoleId}")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<bool>> DeleteProjectRole(int projectRoleId)
+    public async Task<SuccessResponse<bool>> DeleteProjectRole(int projectRoleId)
     {
         if (await _projectRoleService.DeleteProjectRole(projectRoleId))
             return HttpContext.Success(true);

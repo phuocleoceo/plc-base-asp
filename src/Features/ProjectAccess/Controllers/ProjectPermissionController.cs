@@ -21,7 +21,7 @@ public class ProjectPermissionController : BaseController
 
     [HttpGet("")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<IEnumerable<ProjectPermissionGroupDTO>>> GetForProjectRole(
+    public async Task<SuccessResponse<IEnumerable<ProjectPermissionGroupDTO>>> GetForProjectRole(
         int projectRoleId
     )
     {
@@ -32,7 +32,7 @@ public class ProjectPermissionController : BaseController
 
     [HttpPost("")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<bool>> CreateProjectPermission(
+    public async Task<SuccessResponse<bool>> CreateProjectPermission(
         int projectRoleId,
         [FromBody] CreateProjectPermissionDTO createProjectPermissionDTO
     )
@@ -49,7 +49,7 @@ public class ProjectPermissionController : BaseController
 
     [HttpDelete("{projectPermissionKey}")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<bool>> DeleteProjectPermission(
+    public async Task<SuccessResponse<bool>> DeleteProjectPermission(
         int projectRoleId,
         string projectPermissionKey
     )

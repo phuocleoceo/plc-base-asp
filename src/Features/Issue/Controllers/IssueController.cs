@@ -22,7 +22,7 @@ public class IssueController : BaseController
     // Board
     [HttpGet("/api/project/{projectId}/board/{sprintId}/issue")]
     [Authorize]
-    public async Task<BaseResponse<IEnumerable<IssueBoardGroupDTO>>> GetIssuesForBoard(
+    public async Task<SuccessResponse<IEnumerable<IssueBoardGroupDTO>>> GetIssuesForBoard(
         int projectId,
         int sprintId,
         [FromQuery] IssueBoardParams issueParams
@@ -35,7 +35,7 @@ public class IssueController : BaseController
 
     [HttpPut("/api/project/{projectId}/board/issue/{issueId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> UpdateBoardIssue(
+    public async Task<SuccessResponse<bool>> UpdateBoardIssue(
         int projectId,
         int issueId,
         [FromBody] UpdateBoardIssueDTO updateBoardIssueDTO
@@ -48,7 +48,7 @@ public class IssueController : BaseController
 
     [HttpPut("/api/project/{projectId}/board/issue/move-to-backlog")]
     [Authorize]
-    public async Task<BaseResponse<bool>> MoveBoardIssueToBacklog(
+    public async Task<SuccessResponse<bool>> MoveBoardIssueToBacklog(
         int projectId,
         [FromBody] MoveIssueDTO moveIssueDTO
     )
@@ -63,7 +63,7 @@ public class IssueController : BaseController
     // Backlog
     [HttpGet("/api/project/{projectId}/backlog/issue")]
     [Authorize]
-    public async Task<BaseResponse<List<IssueBacklogDTO>>> GetIssuesInBacklog(
+    public async Task<SuccessResponse<List<IssueBacklogDTO>>> GetIssuesInBacklog(
         int projectId,
         [FromQuery] IssueBacklogParams issueParams
     )
@@ -73,7 +73,7 @@ public class IssueController : BaseController
 
     [HttpPut("/api/project/{projectId}/backlog/issue/{issueId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> UpdateBacklogIssue(
+    public async Task<SuccessResponse<bool>> UpdateBacklogIssue(
         int projectId,
         int issueId,
         [FromBody] UpdateBacklogIssueDTO updateBacklogIssueDTO
@@ -86,7 +86,7 @@ public class IssueController : BaseController
 
     [HttpPut("/api/project/{projectId}/backlog/issue/move-to-sprint")]
     [Authorize]
-    public async Task<BaseResponse<bool>> MoveBacklogIssueToSprint(
+    public async Task<SuccessResponse<bool>> MoveBacklogIssueToSprint(
         int projectId,
         [FromBody] MoveIssueDTO moveIssueDTO
     )
@@ -101,13 +101,13 @@ public class IssueController : BaseController
     // Detail
     [HttpGet("/api/project/{projectId}/issue/{issueId}")]
     [Authorize]
-    public async Task<BaseResponse<IssueDetailDTO>> GetIssueById(int projectId, int issueId)
+    public async Task<SuccessResponse<IssueDetailDTO>> GetIssueById(int projectId, int issueId)
     {
         return HttpContext.Success(await _issueService.GetIssueById(projectId, issueId));
     }
 
     [HttpPost("/api/project/{projectId}/issue")]
-    public async Task<BaseResponse<bool>> CreateIssue(
+    public async Task<SuccessResponse<bool>> CreateIssue(
         int projectId,
         [FromBody] CreateIssueDTO createIssueDTO
     )
@@ -121,7 +121,7 @@ public class IssueController : BaseController
 
     [HttpPut("/api/project/{projectId}/issue/{issueId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> UpdateIssue(
+    public async Task<SuccessResponse<bool>> UpdateIssue(
         int projectId,
         int issueId,
         [FromBody] UpdateIssueDTO updateIssueDTO
@@ -136,7 +136,7 @@ public class IssueController : BaseController
 
     [HttpDelete("/api/project/{projectId}/issue/{issueId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> DeleteIssue(int projectId, int issueId)
+    public async Task<SuccessResponse<bool>> DeleteIssue(int projectId, int issueId)
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
 

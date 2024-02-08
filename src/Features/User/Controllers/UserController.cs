@@ -22,7 +22,7 @@ public class UserController : BaseController
 
     [HttpGet]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<PagedList<UserDTO>>> GetAllUsers(
+    public async Task<SuccessResponse<PagedList<UserDTO>>> GetAllUsers(
         [FromQuery] UserParams userParams
     )
     {
@@ -31,7 +31,7 @@ public class UserController : BaseController
 
     [HttpGet("Personal")]
     [Authorize]
-    public async Task<BaseResponse<UserProfilePersonalDTO>> GetUserProfilePersonal()
+    public async Task<SuccessResponse<UserProfilePersonalDTO>> GetUserProfilePersonal()
     {
         ReqUser reqUser = HttpContext.GetRequestUser();
         return HttpContext.Success(await _userService.GetUserProfilePersonal(reqUser));
@@ -39,7 +39,7 @@ public class UserController : BaseController
 
     [HttpPut("Personal")]
     [Authorize]
-    public async Task<BaseResponse<bool>> UpdateUserProfilePersonal(
+    public async Task<SuccessResponse<bool>> UpdateUserProfilePersonal(
         [FromBody] UserProfileUpdateDTO userProfileUpdateDTO
     )
     {
@@ -52,21 +52,21 @@ public class UserController : BaseController
 
     [HttpGet("Anonymous/{userId}")]
     [Authorize]
-    public async Task<BaseResponse<UserProfileAnonymousDTO>> GetUserProfileAnonymous(int userId)
+    public async Task<SuccessResponse<UserProfileAnonymousDTO>> GetUserProfileAnonymous(int userId)
     {
         return HttpContext.Success(await _userService.GetUserProfileAnonymous(userId));
     }
 
     [HttpGet("Account/{userId}")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<UserAccountDTO>> GetUserAccountById(int userId)
+    public async Task<SuccessResponse<UserAccountDTO>> GetUserAccountById(int userId)
     {
         return HttpContext.Success(await _userService.GetUserAccountById(userId));
     }
 
     [HttpPut("Account/{userId}")]
     [Authorize(Roles = AppRole.ADMIN)]
-    public async Task<BaseResponse<bool>> UpdateUserAccount(
+    public async Task<SuccessResponse<bool>> UpdateUserAccount(
         int userId,
         [FromBody] UserAccountUpdateDTO userAccountUpdateDTO
     )

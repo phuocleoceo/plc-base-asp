@@ -19,7 +19,7 @@ public class ProjectStatusController : BaseController
 
     [HttpGet("/api/project/{projectId}/status")]
     [Authorize]
-    public async Task<BaseResponse<List<ProjectStatusDTO>>> GetProjectStatusForProject(
+    public async Task<SuccessResponse<List<ProjectStatusDTO>>> GetProjectStatusForProject(
         int projectId
     )
     {
@@ -30,7 +30,7 @@ public class ProjectStatusController : BaseController
 
     [HttpPost("/api/project/{projectId}/status")]
     [Authorize]
-    public async Task<BaseResponse<bool>> CreateProjectStatus(
+    public async Task<SuccessResponse<bool>> CreateProjectStatus(
         int projectId,
         [FromBody] CreateProjectStatusDTO createProjectStatusDTO
     )
@@ -42,7 +42,7 @@ public class ProjectStatusController : BaseController
 
     [HttpPut("/api/project/{projectId}/status/{projectStatusId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> UpdateProjectStatus(
+    public async Task<SuccessResponse<bool>> UpdateProjectStatus(
         int projectId,
         int projectStatusId,
         [FromBody] UpdateProjectStatusDTO updateProjectStatusDTO
@@ -61,7 +61,7 @@ public class ProjectStatusController : BaseController
 
     [HttpDelete("/api/project/{projectId}/status/{projectStatusId}")]
     [Authorize]
-    public async Task<BaseResponse<bool>> DeleteProjectStatus(int projectId, int projectStatusId)
+    public async Task<SuccessResponse<bool>> DeleteProjectStatus(int projectId, int projectStatusId)
     {
         if (await _projectStatusService.DeleteProjectStatus(projectId, projectStatusId))
             return HttpContext.Success(true);
