@@ -21,11 +21,18 @@ public class RedisHelper : IRedisHelper
         await _redisCache.SetStringAsync(key, objStr);
     }
 
-    public async Task SetWithTTL<T>(string key, T obj)
+    public async Task SetWithTtl<T>(string key, T obj)
     {
+        // Cache auto expire after
         TimeSpan expires = TimeSpan.FromSeconds(_cacheSettings.Expires);
-        DistributedCacheEntryOptions options =
-            new DistributedCacheEntryOptions().SetSlidingExpiration(expires);
+        // Cache auto expire if not access in
+        TimeSpan slidingExpires = TimeSpan.FromSeconds(_cacheSettings.Expires / 2);
+
+        DistributedCacheEntryOptions options = new DistributedCacheEntryOptions()
+        {
+            AbsoluteExpirationRelativeToNow = expires,
+            SlidingExpiration = slidingExpires
+        };
 
         string objStr = JsonConvert.SerializeObject(obj);
         await _redisCache.SetStringAsync(key, objStr, options);
@@ -34,11 +41,34 @@ public class RedisHelper : IRedisHelper
     public async Task<T> Get<T>(string key)
     {
         string obj = await _redisCache.GetStringAsync(key);
-        return string.IsNullOrEmpty(obj) ? default(T) : JsonConvert.DeserializeObject<T>(obj);
+        return string.IsNullOrEmpty(obj) ? default : JsonConvert.DeserializeObject<T>(obj);
     }
 
     public async Task Clear(string key)
     {
         await _redisCache.RemoveAsync(key);
+    }
+
+    public async Task<T> GetCachedOr<T>(string key, Func<T> supplier)
+    {
+        T cachedData = await Get<T>(key);
+        if (cachedData != null)
+        {
+            return cachedData;
+        }
+
+        T data = supplier.Invoke();
+        if (data == null)
+        {
+            return default;
+        }
+
+        await SetWithTtl(key, data);
+        return data;
+    }
+
+    public async Task<List<T>> GetListCachedOr<T>(string key, Func<List<T>> supplier)
+    {
+        return await GetCachedOr(key, supplier);
     }
 }
