@@ -1,5 +1,12 @@
 ## PLC - BASE - ASP
 
+## Certificate Command
+```sh
+openssl genpkey -algorithm RSA -out pri.key
+openssl req -new -key pri.key -out pub.csr
+openssl x509 -req -in pub.csr -signkey pri.key -out pub.crt
+```
+
 ## Docker Command
 
 ```sh
