@@ -16,6 +16,7 @@ using PlcBase.Features.Event.Entities;
 using PlcBase.Features.Issue.Entities;
 using PlcBase.Features.Media.Entities;
 using PlcBase.Features.User.Entities;
+using PlcBase.Shared.Utilities;
 using PlcBase.Base.Entity;
 
 namespace PlcBase.Common.Data.Context;
@@ -38,10 +39,10 @@ public class DataContext : DbContext
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                    entry.Entity.CreatedAt = TimeUtility.Now();
                     break;
                 case EntityState.Modified:
-                    entry.Entity.UpdatedAt = DateTime.UtcNow;
+                    entry.Entity.UpdatedAt = TimeUtility.Now();
                     break;
             }
         }

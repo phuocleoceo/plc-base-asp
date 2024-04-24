@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using PlcBase.Features.Helper.DTOs;
 using PlcBase.Shared.Utilities;
 using PlcBase.Base.Controller;
 using PlcBase.Shared.Helpers;
@@ -22,7 +23,15 @@ public class HelperController : BaseController
     [Authorize]
     public async Task<SuccessResponse<string>> S3Upload(IFormFile file, string prefix = "")
     {
-        string fileUrl = await _s3Helper.UploadFile(file.GetS3FileUpload(prefix));
-        return HttpContext.Success(fileUrl);
+        return HttpContext.Success(await _s3Helper.UploadFile(file.GetS3FileUpload(prefix)));
+    }
+
+    [HttpPost("presigned-upload-url")]
+    [Authorize]
+    public async Task<SuccessResponse<string>> GetS3PresignedUploadUrl(
+        S3PresignedUrlRequest request
+    )
+    {
+        return HttpContext.Success(await _s3Helper.GetPresignedUploadUrl(request));
     }
 }

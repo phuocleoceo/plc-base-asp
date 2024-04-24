@@ -3,7 +3,10 @@ using Amazon.S3.Model;
 using Amazon.Runtime;
 using Amazon.S3.Util;
 using Amazon.S3;
+using Amazon;
 
+using PlcBase.Features.Helper.DTOs;
+using PlcBase.Shared.Utilities;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.Error;
 
@@ -24,7 +27,7 @@ public class S3Helper : IS3Helper
     {
         AmazonS3Config s3Config = new AmazonS3Config()
         {
-            RegionEndpoint = Amazon.RegionEndpoint.APSoutheast1
+            RegionEndpoint = RegionEndpoint.GetBySystemName(_s3Settings.Region)
         };
 
         BasicAWSCredentials credentials = new BasicAWSCredentials(
@@ -55,5 +58,24 @@ public class S3Helper : IS3Helper
         await _s3Client.PutObjectAsync(request);
 
         return $"https://{bucket}.s3.{region}.amazonaws.com/{file.FilePath}";
+    }
+
+    public async Task<string> GetPresignedUploadUrl(S3PresignedUrlRequest request)
+    {
+        string bucket = _s3Settings.Bucket;
+        long expiresIn = _s3Settings.PresignedUrlExpires;
+        string objectKey = AWSUtility.GetFilePath(request.FileName, request.Prefix);
+
+        GetPreSignedUrlRequest getPreSignedUrlRequest = new GetPreSignedUrlRequest
+        {
+            BucketName = bucket,
+            Key = objectKey,
+            Verb = HttpVerb.PUT,
+            Expires = TimeUtility.Now().AddSeconds(expiresIn),
+            ContentType = request.ContentType
+        };
+
+        await Task.CompletedTask;
+        return _s3Client.GetPreSignedURL(getPreSignedUrlRequest);
     }
 }
