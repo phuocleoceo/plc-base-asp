@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
 using PlcBase.Shared.Constants;
+using PlcBase.Shared.Utilities;
 using PlcBase.Base.Error;
 
 namespace PlcBase.Shared.Helpers;
@@ -22,7 +23,7 @@ public class JwtHelper : IJwtHelper
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.Expires),
+            Expires = TimeUtility.Now().AddMinutes(_jwtSettings.Expires),
             SigningCredentials = JwtOptions.GetPrivateKey(_jwtSettings),
             Audience = _jwtSettings.ValidateAudience ? _jwtSettings.ValidAudience : null,
             Issuer = _jwtSettings.ValidateIssuer ? _jwtSettings.ValidIssuer : null,
@@ -42,7 +43,7 @@ public class JwtHelper : IJwtHelper
         return new TokenData()
         {
             Token = CodeSecure.CreateRandomCode(32),
-            ExpiredAt = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpires)
+            ExpiredAt = TimeUtility.Now().AddDays(_jwtSettings.RefreshTokenExpires)
         };
     }
 

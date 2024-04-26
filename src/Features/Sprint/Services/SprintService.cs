@@ -4,6 +4,7 @@ using PlcBase.Features.Sprint.Entities;
 using PlcBase.Features.Issue.Entities;
 using PlcBase.Features.Sprint.DTOs;
 using PlcBase.Common.Repositories;
+using PlcBase.Shared.Utilities;
 using PlcBase.Base.DomainModel;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.Error;
@@ -104,7 +105,7 @@ public class SprintService : ISprintService
         if (sprintDb == null)
             throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
 
-        sprintDb.StartedAt = DateTime.UtcNow;
+        sprintDb.StartedAt = TimeUtility.Now();
         _uow.Sprint.Update(sprintDb);
         return await _uow.Save();
     }
@@ -131,7 +132,7 @@ public class SprintService : ISprintService
             if (sprintDb == null)
                 throw new BaseException(HttpCode.NOT_FOUND, "sprint_not_found");
 
-            sprintDb.CompletedAt = DateTime.UtcNow;
+            sprintDb.CompletedAt = TimeUtility.Now();
             _uow.Sprint.Update(sprintDb);
             await _uow.Save();
 

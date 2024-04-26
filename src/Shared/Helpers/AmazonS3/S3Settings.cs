@@ -9,4 +9,6 @@ public class S3Settings
     public string Region { get; set; }
 
     public string Bucket { get; set; }
+
+    public long PresignedUrlExpires { get; set; }
 }

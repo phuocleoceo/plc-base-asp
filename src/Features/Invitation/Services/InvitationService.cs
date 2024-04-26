@@ -5,6 +5,7 @@ using PlcBase.Features.Invitation.Entities;
 using PlcBase.Features.Invitation.DTOs;
 using PlcBase.Features.User.Entities;
 using PlcBase.Common.Repositories;
+using PlcBase.Shared.Utilities;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Error;
@@ -133,7 +134,7 @@ public class InvitationService : IInvitationService
         if (invitationDb.AcceptedAt != null || invitationDb.DeclinedAt != null)
             throw new BaseException(HttpCode.BAD_REQUEST, "completed_invitation");
 
-        invitationDb.AcceptedAt = DateTime.UtcNow;
+        invitationDb.AcceptedAt = TimeUtility.Now();
         invitationDb.DeclinedAt = null;
         _uow.Invitation.Update(invitationDb);
 
@@ -159,7 +160,7 @@ public class InvitationService : IInvitationService
             throw new BaseException(HttpCode.BAD_REQUEST, "completed_invitation");
 
         invitationDb.AcceptedAt = null;
-        invitationDb.DeclinedAt = DateTime.UtcNow;
+        invitationDb.DeclinedAt = TimeUtility.Now();
         _uow.Invitation.Update(invitationDb);
         return await _uow.Save();
     }

@@ -5,6 +5,7 @@ using PlcBase.Features.Payment.Entities;
 using PlcBase.Features.User.Entities;
 using PlcBase.Features.Payment.DTOs;
 using PlcBase.Common.Repositories;
+using PlcBase.Shared.Utilities;
 using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
 using PlcBase.Shared.Helpers;
@@ -33,12 +34,15 @@ public class PaymentService : IPaymentService
             await _uow.CreateTransaction();
 
             VNPHistory vnpHistory = new VNPHistory();
-            vnpHistory.vnp_TxnRef = DateTime.UtcNow.Ticks;
+            vnpHistory.vnp_TxnRef = TimeUtility.Now().Ticks;
             vnpHistory.vnp_OrderInfo = $"{reqUser.Id}|{vnpHistory.vnp_TxnRef}";
             // Must multiply by 100 to send to vnpay system
             vnpHistory.vnp_Amount = createPaymentDTO.Amount * 100;
             vnpHistory.vnp_TmnCode = _vnpSettings.TmnCode;
-            vnpHistory.vnp_CreateDate = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+            vnpHistory.vnp_CreateDate = TimeUtility.GetDateTimeFormatted(
+                TimeUtility.Now(),
+                "yyyyMMddHHmmss"
+            );
 
             //Build URL for VNPAY
             VNPLibrary vnpay = new VNPLibrary();

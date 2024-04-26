@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using AutoMapper;
 
 using PlcBase.Common.Data.Context;
+using PlcBase.Shared.Utilities;
 using PlcBase.Base.DomainModel;
 using PlcBase.Base.Entity;
 using PlcBase.Base.DTO;
@@ -158,7 +159,7 @@ public class BaseRepository<T> : IBaseRepository<T>
     {
         if (entity is ISoftDeletable softDeletableEntity)
         {
-            softDeletableEntity.DeletedAt = DateTime.UtcNow;
+            softDeletableEntity.DeletedAt = TimeUtility.Now();
             Update(softDeletableEntity as T);
         }
     }

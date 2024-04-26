@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using PlcBase.Shared.Utilities;
 
 namespace PlcBase.Shared.Helpers;
 
@@ -14,7 +15,7 @@ public class DateTimeHelper : IDateTimeHelper
     public DateTime Now()
     {
         return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
-            DateTime.UtcNow,
+            TimeUtility.Now(),
             _dateTimeSettings.TimeZone
         );
     }

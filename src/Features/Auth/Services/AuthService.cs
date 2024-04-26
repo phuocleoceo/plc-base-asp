@@ -113,7 +113,7 @@ public class AuthService : IAuthService
 
         if (
             currentUser.RefreshToken != userRefreshTokenDTO.RefreshToken
-            || currentUser.RefreshTokenExpiredAt <= DateTime.UtcNow
+            || currentUser.RefreshTokenExpiredAt <= TimeUtility.Now()
         )
             throw new BaseException(HttpCode.BAD_REQUEST, "refresh_token_invalid_or_expired");
 

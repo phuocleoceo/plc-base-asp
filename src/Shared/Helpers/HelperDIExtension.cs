@@ -10,6 +10,6 @@ public static class HelperDIExtension
         services.AddSingleton<ILoggerManager, LoggerManager>();
         services.AddSingleton<IRedisHelper, RedisHelper>();
         services.AddSingleton<IDateTimeHelper, DateTimeHelper>();
-        services.AddScoped<IS3Helper, S3Helper>();
+        services.AddSingleton<IS3Helper, S3Helper>();
     }
 }
