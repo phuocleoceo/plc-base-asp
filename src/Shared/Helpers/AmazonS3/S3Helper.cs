@@ -25,13 +25,12 @@ public class S3Helper : IS3Helper
 
     private AmazonS3Client SetupS3Client()
     {
+        AWSConfigsS3.UseSignatureVersion4 = true;
+
         AmazonS3Config s3Config = new AmazonS3Config()
         {
-            RegionEndpoint = RegionEndpoint.GetBySystemName(_s3Settings.Region),
-            SignatureVersion = "v4"
+            RegionEndpoint = RegionEndpoint.GetBySystemName(_s3Settings.Region)
         };
-
-        AWSConfigsS3.UseSignatureVersion4 = true;
 
         BasicAWSCredentials credentials = new BasicAWSCredentials(
             _s3Settings.AccessKey,
@@ -68,7 +67,7 @@ public class S3Helper : IS3Helper
         string bucket = _s3Settings.Bucket;
         string region = _s3Settings.Region;
         long expiresIn = _s3Settings.PresignedUrlExpires;
-        string filePath = AWSUtility.GetFilePath(request.FileName, request.Prefix);
+        string filePath = request.FilePath;
 
         GetPreSignedUrlRequest getPreSignedUrlRequest = new GetPreSignedUrlRequest
         {
