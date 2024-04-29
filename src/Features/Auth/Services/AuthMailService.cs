@@ -67,7 +67,7 @@ public class AuthMailService : IAuthMailService
         uriBuilder.Query = query.ToString() ?? string.Empty;
 
         string body;
-        string path = Path.Combine(_mailSettings.Templates, "MailConfirm.html");
+        string path = Path.Combine(_mailSettings.Templates, "MailRecoverPassword.html");
         using (StreamReader reader = new StreamReader(path))
         {
             body = await reader.ReadToEndAsync();
