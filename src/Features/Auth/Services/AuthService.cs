@@ -179,7 +179,7 @@ public class AuthService : IAuthService
             newUserProfile.UserAccountId = newUserAccount.Id;
             _uow.UserProfile.Add(newUserProfile);
 
-            await _authMailService.SendMailConfirm(newUserAccount);
+            await _authMailService.SendMailConfirm(newUserAccount, newUserProfile);
 
             await _uow.Save();
             await _uow.CommitTransaction();
@@ -276,7 +276,7 @@ public class AuthService : IAuthService
         _uow.UserAccount.Update(currentUser);
         await _uow.Save();
 
-        await _authMailService.SendMailRecoverPassword(currentUser);
+        await _authMailService.SendMailRecoverPassword(currentUser, currentUser.UserProfile);
     }
 
     public async Task<bool> RecoverPassword(UserRecoverPasswordDTO userRecoverPasswordDTO)

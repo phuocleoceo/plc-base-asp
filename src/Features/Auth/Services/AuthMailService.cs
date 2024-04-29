@@ -26,7 +26,7 @@ public class AuthMailService : IAuthMailService
         _capPublisher = capPublisher;
     }
 
-    public async Task SendMailConfirm(UserAccountEntity userAccount)
+    public async Task SendMailConfirm(UserAccountEntity userAccount, UserProfileEntity userProfile)
     {
         string webClientPath =
             $"{_clientAppSettings.EndUserAppUrl}/{_clientAppSettings.ConfirmEmailPath}";
@@ -37,12 +37,7 @@ public class AuthMailService : IAuthMailService
         query["code"] = userAccount.SecurityCode;
         uriBuilder.Query = query.ToString() ?? string.Empty;
 
-        string body;
-        string path = Path.Combine(_mailSettings.Templates, "MailConfirm.html");
-        using (StreamReader reader = new StreamReader(path))
-        {
-            body = await reader.ReadToEndAsync();
-        }
+        string body = await GetBodyFromTemplate("MailConfirm.html");
         body = body.Replace("{confirm-link}", uriBuilder.ToString());
 
         await SendMailBackground(
@@ -55,7 +50,10 @@ public class AuthMailService : IAuthMailService
         );
     }
 
-    public async Task SendMailRecoverPassword(UserAccountEntity userAccount)
+    public async Task SendMailRecoverPassword(
+        UserAccountEntity userAccount,
+        UserProfileEntity userProfile
+    )
     {
         string webClientPath =
             $"{_clientAppSettings.EndUserAppUrl}/{_clientAppSettings.RecoverPasswordPath}";
@@ -66,12 +64,7 @@ public class AuthMailService : IAuthMailService
         query["code"] = userAccount.SecurityCode;
         uriBuilder.Query = query.ToString() ?? string.Empty;
 
-        string body;
-        string path = Path.Combine(_mailSettings.Templates, "MailRecoverPassword.html");
-        using (StreamReader reader = new StreamReader(path))
-        {
-            body = await reader.ReadToEndAsync();
-        }
+        string body = await GetBodyFromTemplate("MailRecoverPassword.html");
         body = body.Replace("{recover-link}", uriBuilder.ToString());
 
         await SendMailBackground(
@@ -82,6 +75,13 @@ public class AuthMailService : IAuthMailService
                 Body = body
             }
         );
+    }
+
+    private async Task<string> GetBodyFromTemplate(string template)
+    {
+        string path = Path.Combine(_mailSettings.Templates, template);
+        using StreamReader reader = new StreamReader(path);
+        return await reader.ReadToEndAsync();
     }
 
     private async Task SendMailBackground(MailContent mailContent)
