@@ -12,14 +12,17 @@ namespace PlcBase.Features.Auth.Services;
 public class AuthMailService : IAuthMailService
 {
     private readonly ClientAppSettings _clientAppSettings;
+    private readonly MailSettings _mailSettings;
     private readonly ICapPublisher _capPublisher;
 
     public AuthMailService(
         IOptions<ClientAppSettings> clientAppSettings,
+        IOptions<MailSettings> mailSettings,
         ICapPublisher capPublisher
     )
     {
         _clientAppSettings = clientAppSettings.Value;
+        _mailSettings = mailSettings.Value;
         _capPublisher = capPublisher;
     }
 
@@ -34,13 +37,20 @@ public class AuthMailService : IAuthMailService
         query["code"] = userAccount.SecurityCode;
         uriBuilder.Query = query.ToString() ?? string.Empty;
 
+        string body;
+        string path = Path.Combine(_mailSettings.Templates, "MailConfirm.html");
+        using (StreamReader reader = new StreamReader(path))
+        {
+            body = await reader.ReadToEndAsync();
+        }
+        body = body.Replace("{confirm-link}", uriBuilder.ToString());
+
         await SendMailBackground(
             new MailContent()
             {
                 ToEmail = userAccount.Email,
-                Subject = "Confirm email to use PLC Base",
-                Body =
-                    $"Confirm the registration by clicking on the <a href='{uriBuilder}'>link</a>"
+                Subject = "Confirm email to use Ji PLC",
+                Body = body
             }
         );
     }
@@ -56,12 +66,20 @@ public class AuthMailService : IAuthMailService
         query["code"] = userAccount.SecurityCode;
         uriBuilder.Query = query.ToString() ?? string.Empty;
 
+        string body;
+        string path = Path.Combine(_mailSettings.Templates, "MailConfirm.html");
+        using (StreamReader reader = new StreamReader(path))
+        {
+            body = await reader.ReadToEndAsync();
+        }
+        body = body.Replace("{recover-link}", uriBuilder.ToString());
+
         await SendMailBackground(
             new MailContent()
             {
                 ToEmail = userAccount.Email,
                 Subject = "Password recovery for your PLC Base account",
-                Body = $"Clicking on the <a href='{uriBuilder}'>link</a> to recover your password"
+                Body = body
             }
         );
     }

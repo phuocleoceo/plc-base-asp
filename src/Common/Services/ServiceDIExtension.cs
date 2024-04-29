@@ -22,8 +22,8 @@ public static class ServiceDIExtension
     {
         services.AddScoped<IAccessControlService, AccessControlService>();
         services.AddScoped<IAddressService, AddressService>();
-        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IAuthMailService, AuthMailService>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IConfigSettingService, ConfigSettingService>();
         services.AddScoped<IMediaService, MediaService>();
