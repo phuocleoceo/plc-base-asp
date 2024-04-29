@@ -25,8 +25,6 @@ public class S3Helper : IS3Helper
 
     private AmazonS3Client SetupS3Client()
     {
-        AWSConfigsS3.UseSignatureVersion4 = true;
-
         AmazonS3Config s3Config = new AmazonS3Config()
         {
             RegionEndpoint = RegionEndpoint.GetBySystemName(_s3Settings.Region)
