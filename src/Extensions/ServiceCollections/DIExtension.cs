@@ -14,10 +14,10 @@ public static class DIExtension
     )
     {
         services.ConfigureAutoMapper();
+        services.ConfigureAppSetting(configuration);
+        services.ConfigureHelperDI();
         services.ConfigureFilterDI();
         services.ConfigureRepositoryDI();
         services.ConfigureServiceDI();
-        services.ConfigureAppSetting(configuration);
-        services.ConfigureHelperDI();
     }
 }

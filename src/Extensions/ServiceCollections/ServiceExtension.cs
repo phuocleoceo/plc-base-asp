@@ -9,6 +9,8 @@ public static class ServiceExtension
     {
         // CORS
         services.ConfigureCors(configuration);
+        // CAP message queue
+        services.ConfigureCapQueue();
         // Database
         services.ConfigureDataContext(configuration);
         // Cache
@@ -17,8 +19,6 @@ public static class ServiceExtension
         services.ConfigureDataFactory(configuration);
         // Authentication
         services.ConfigureAuth(configuration);
-        // CAP message queue
-        services.ConfigureCapQueue(configuration);
         // Add Http client
         services.AddHttpClient();
         // Controller mapper

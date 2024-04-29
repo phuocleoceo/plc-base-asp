@@ -1,7 +1,4 @@
-using System.Collections.Specialized;
-using Microsoft.Extensions.Options;
 using System.Security.Claims;
-using System.Web;
 using AutoMapper;
 
 using PlcBase.Features.User.Entities;
@@ -17,28 +14,23 @@ namespace PlcBase.Features.Auth.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IUnitOfWork _uow;
+    private readonly IAuthMailService _authMailService;
     private readonly IJwtHelper _jwtHelper;
+    private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;
-    private readonly ClientAppSettings _clientAppSettings;
-    private readonly ISendMailHelper _sendMailHelper;
 
     public AuthService(
-        IUnitOfWork uow,
+        IAuthMailService authMailService,
         IJwtHelper jwtHelper,
-        IMapper mapper,
-        IOptions<ClientAppSettings> clientAppSettings,
-        ISendMailHelper sendMailHelper
+        IUnitOfWork uow,
+        IMapper mapper
     )
     {
-        _uow = uow;
+        _authMailService = authMailService;
         _jwtHelper = jwtHelper;
         _mapper = mapper;
-        _clientAppSettings = clientAppSettings.Value;
-        _sendMailHelper = sendMailHelper;
+        _uow = uow;
     }
-
-    #region Login
 
     public async Task<UserLoginResponseDTO> Login(UserLoginDTO userLoginDTO)
     {
@@ -94,7 +86,8 @@ public class AuthService : IAuthService
             new(CustomClaimTypes.Role, user.Role.Name)
         };
 
-        return await Task.FromResult(claims);
+        await Task.CompletedTask;
+        return claims;
     }
 
     public async Task<UserRefreshTokenResponseDTO> RefreshToken(
@@ -147,10 +140,6 @@ public class AuthService : IAuthService
         return await _uow.Save();
     }
 
-    #endregion
-
-    #region Register
-
     public async Task<UserRegisterResponseDTO> Register(UserRegisterDTO userRegisterDTO)
     {
         try
@@ -190,7 +179,7 @@ public class AuthService : IAuthService
             newUserProfile.UserAccountId = newUserAccount.Id;
             _uow.UserProfile.Add(newUserProfile);
 
-            await SendMailConfirm(newUserAccount);
+            await _authMailService.SendMailConfirm(newUserAccount);
 
             await _uow.Save();
             await _uow.CommitTransaction();
@@ -201,33 +190,11 @@ public class AuthService : IAuthService
                 Email = newUserAccount.Email,
             };
         }
-        catch (BaseException ex)
+        catch (BaseException)
         {
             await _uow.AbortTransaction();
-            throw ex;
+            throw;
         }
-    }
-
-    private async Task SendMailConfirm(UserAccountEntity newUserAccount)
-    {
-        string webClientPath =
-            $"{_clientAppSettings.EndUserAppUrl}/{_clientAppSettings.ConfirmEmailPath}";
-        UriBuilder uriBuilder = new UriBuilder(webClientPath);
-        NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
-
-        query["userId"] = newUserAccount.Id.ToString();
-        query["code"] = newUserAccount.SecurityCode;
-        uriBuilder.Query = query.ToString() ?? string.Empty;
-
-        await _sendMailHelper.SendEmailAsync(
-            new MailContent()
-            {
-                ToEmail = newUserAccount.Email,
-                Subject = "Confirm email to use PLC Base",
-                Body =
-                    $"Confirm the registration by clicking on the <a href='{uriBuilder}'>link</a>"
-            }
-        );
     }
 
     public async Task<bool> ConfirmEmail(UserConfirmEmailDTO userConfirmEmailDTO)
@@ -251,10 +218,6 @@ public class AuthService : IAuthService
         _uow.UserAccount.Update(currentUser);
         return await _uow.Save();
     }
-
-    #endregion
-
-    #region Other Auth
 
     public async Task<bool> ChangePassword(
         ReqUser reqUser,
@@ -313,28 +276,7 @@ public class AuthService : IAuthService
         _uow.UserAccount.Update(currentUser);
         await _uow.Save();
 
-        await SendMailForgotPassword(currentUser);
-    }
-
-    private async Task SendMailForgotPassword(UserAccountEntity currentUserAccount)
-    {
-        string webClientPath =
-            $"{_clientAppSettings.EndUserAppUrl}/{_clientAppSettings.RecoverPasswordPath}";
-        UriBuilder uriBuilder = new UriBuilder(webClientPath);
-        NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
-
-        query["userId"] = currentUserAccount.Id.ToString();
-        query["code"] = currentUserAccount.SecurityCode;
-        uriBuilder.Query = query.ToString();
-
-        await _sendMailHelper.SendEmailAsync(
-            new MailContent()
-            {
-                ToEmail = currentUserAccount.Email,
-                Subject = "Password recovery for your PLC Base account",
-                Body = $"Clicking on the <a href='{uriBuilder}'>link</a> to recover your password"
-            }
-        );
+        await _authMailService.SendMailRecoverPassword(currentUser);
     }
 
     public async Task<bool> RecoverPassword(UserRecoverPasswordDTO userRecoverPasswordDTO)
@@ -358,6 +300,4 @@ public class AuthService : IAuthService
         _uow.UserAccount.Update(currentUser);
         return await _uow.Save();
     }
-
-    #endregion
 }
