@@ -11,6 +11,7 @@ public class RedisHelper : IRedisHelper
     private readonly IConnectionMultiplexer _connectionMultiplexer;
     private readonly IDistributedCache _redisCache;
     private readonly CacheSettings _cacheSettings;
+    private readonly IDatabase _redisDatabase;
 
     public RedisHelper(
         IDistributedCache redisCache,
@@ -21,6 +22,7 @@ public class RedisHelper : IRedisHelper
         _redisCache = redisCache;
         _cacheSettings = cacheSettings.Value;
         _connectionMultiplexer = connectionMultiplexer;
+        _redisDatabase = connectionMultiplexer.GetDatabase();
     }
 
     public async Task Set<T>(string key, T obj)
@@ -121,5 +123,40 @@ public class RedisHelper : IRedisHelper
 
         await SetWithTtl(key, data);
         return data;
+    }
+
+    public Task SetMapCache<T>(string mapKey, string itemKey, T itemValue, bool clearCurrentMap)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SetMapCache<T>(string mapKey, Dictionary<string, T> items, bool clearCurrentMap)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Dictionary<string, T>> GetMapCache<T>(string mapKey, HashSet<string> itemKeys)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<T> GetMapCache<T>(string mapKey, string itemKey)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task ClearMapCache(string mapKey)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveMapCache(string mapKey, string itemKey)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveMapCache(string mapKey, HashSet<string> itemKeys)
+    {
+        throw new NotImplementedException();
     }
 }
