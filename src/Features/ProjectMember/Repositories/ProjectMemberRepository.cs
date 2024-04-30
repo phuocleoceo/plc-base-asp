@@ -36,15 +36,14 @@ public class ProjectMemberRepository : BaseRepository<ProjectMemberEntity>, IPro
 
     public async Task<IEnumerable<string>> GetPermissionsInProjectForUser(int userId, int projectId)
     {
-        List<ProjectMemberEntity> projectMembers = await _dbSet
+        ProjectMemberEntity projectMembers = await _dbSet
             .Where(pm => pm.UserId == userId && pm.ProjectId == projectId)
             .Include(pm => pm.MemberRoles)
             .ThenInclude(mr => mr.ProjectRole)
             .ThenInclude(pr => pr.ProjectPermissions)
-            .ToListAsync();
+            .FirstAsync();
 
-        return projectMembers
-            .SelectMany(pm => pm.MemberRoles)
+        return projectMembers.MemberRoles
             .Select(pm => pm.ProjectRole)
             .SelectMany(pr => pr.ProjectPermissions)
             .Select(pp => pp.Key)
