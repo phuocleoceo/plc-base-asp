@@ -1,5 +1,4 @@
 using PlcBase.Features.ProjectAccess.DTOs;
-using PlcBase.Base.DomainModel;
 
 namespace PlcBase.Features.ProjectAccess.Services;
 
@@ -13,4 +12,6 @@ public interface IProjectPermissionService
     );
 
     Task<bool> DeleteProjectPermission(int projectRoleId, string projectPermissionKey);
+
+    Task<IEnumerable<string>> GetPermissionKeysOfRole(int projectRoleId);
 }
