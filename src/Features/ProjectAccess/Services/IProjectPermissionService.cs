@@ -13,5 +13,5 @@ public interface IProjectPermissionService
 
     Task<bool> DeleteProjectPermission(int projectRoleId, string projectPermissionKey);
 
-    Task<IEnumerable<string>> GetPermissionKeysOfRole(int projectRoleId);
+    Task<IEnumerable<string>> GetPermissionKeysOfRole(List<int> projectRoleIds);
 }

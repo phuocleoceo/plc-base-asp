@@ -130,7 +130,7 @@ public class RedisHelper : IRedisHelper
         string mapKey,
         string itemKey,
         T itemValue,
-        bool clearCurrentMap
+        bool clearCurrentMap = false
     )
     {
         if (clearCurrentMap)
@@ -144,13 +144,18 @@ public class RedisHelper : IRedisHelper
     public async Task SetMapCache<T>(
         string mapKey,
         Dictionary<string, T> items,
-        bool clearCurrentMap
+        bool clearCurrentMap = false
     )
     {
         if (clearCurrentMap)
         {
             await _redisDatabase.KeyDeleteAsync(mapKey);
         }
+
+        // foreach (KeyValuePair<string, T> item in items)
+        // {
+        //     await _redisDatabase.HashSetAsync(mapKey, item.Key, JsonUtility.Stringify(item.Value));
+        // }
 
         HashEntry[] entries = items
             .Select(item => new HashEntry(item.Key, JsonUtility.Stringify(item.Value)))
@@ -196,7 +201,7 @@ public class RedisHelper : IRedisHelper
         await _redisDatabase.HashDeleteAsync(mapKey, itemKey);
     }
 
-    public async Task RemoveMapCache(string mapKey, HashSet<string> itemKeys)
+    public async Task RemoveMapCache(string mapKey, IEnumerable<string> itemKeys)
     {
         RedisValue[] redisKeys = itemKeys.Select(itemKey => (RedisValue)itemKey).ToArray();
         await _redisDatabase.HashDeleteAsync(mapKey, redisKeys);

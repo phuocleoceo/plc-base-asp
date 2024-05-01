@@ -9,5 +9,5 @@ public interface IProjectMemberRepository : IBaseRepository<ProjectMemberEntity>
 
     Task SoftDeleteMemberForProject(int projectId);
 
-    Task<IEnumerable<string>> GetPermissionsInProjectForUser(int userId, int projectId);
+    Task<List<int>> GetRoleInProjectForUser(int userId, int projectId);
 }

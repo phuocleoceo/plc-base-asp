@@ -72,7 +72,10 @@ public class ProjectPermissionService : IProjectPermissionService
         projectPermissionEntity.ProjectRoleId = projectRoleId;
 
         _uow.ProjectPermission.Add(projectPermissionEntity);
-        await _redisHelper.Clear(GetPermissionKeysOfRoleRedisKey(projectRoleId));
+        await _redisHelper.RemoveMapCache(
+            GetPermissionKeysOfRoleRedisKey(),
+            projectRoleId.ToString()
+        );
         return await _uow.Save();
     }
 
@@ -93,20 +96,64 @@ public class ProjectPermissionService : IProjectPermissionService
             throw new BaseException(HttpCode.NOT_FOUND, "project_permission_not_found");
 
         _uow.ProjectPermission.Remove(projectPermissionDb);
-        await _redisHelper.Clear(GetPermissionKeysOfRoleRedisKey(projectRoleId));
+        await _redisHelper.RemoveMapCache(
+            GetPermissionKeysOfRoleRedisKey(),
+            projectRoleId.ToString()
+        );
         return await _uow.Save();
     }
 
-    public async Task<IEnumerable<string>> GetPermissionKeysOfRole(int projectRoleId)
+    public async Task<IEnumerable<string>> GetPermissionKeysOfRole(List<int> projectRoleIds)
     {
-        return await _redisHelper.GetCachedOr(
-            GetPermissionKeysOfRoleRedisKey(projectRoleId),
-            async () => await _uow.ProjectPermission.GetPermissionKeysOfRole(projectRoleId)
+        if (projectRoleIds.Count == 0)
+        {
+            return Enumerable.Empty<string>();
+        }
+
+        Dictionary<string, List<string>> permissionsOfRole = await _redisHelper.GetMapCache<
+            List<string>
+        >(
+            GetPermissionKeysOfRoleRedisKey(),
+            projectRoleIds.Select(projectRoleId => projectRoleId.ToString()).ToHashSet()
         );
+
+        List<string> permissionKeysInCache = new List<string>();
+        List<int> projectRoleIdsNeedCachePermission = new List<int>();
+
+        foreach (int projectRoleId in projectRoleIds)
+        {
+            permissionsOfRole.TryGetValue(projectRoleId.ToString(), out List<string> permissionKey);
+            if (permissionKey == null)
+            {
+                projectRoleIdsNeedCachePermission.Add(projectRoleId);
+                continue;
+            }
+            permissionKeysInCache.AddRange(permissionKey);
+        }
+
+        if (projectRoleIdsNeedCachePermission.Count == 0)
+        {
+            return permissionKeysInCache;
+        }
+
+        List<ProjectPermissionEntity> projectPermissions =
+            await _uow.ProjectPermission.GetForProjectRoles(projectRoleIdsNeedCachePermission);
+
+        Dictionary<string, List<string>> permissionsNeedCache = projectPermissions
+            .GroupBy(pm => pm.ProjectRoleId.ToString())
+            .ToDictionary(group => group.Key, group => group.Select(pm => pm.Key).ToList());
+
+        permissionKeysInCache.AddRange(
+            projectPermissions.Select(projectPermission => projectPermission.Key)
+        );
+
+        await _redisHelper.SetMapCache(GetPermissionKeysOfRoleRedisKey(), permissionsNeedCache);
+
+        return permissionKeysInCache;
     }
 
-    private string GetPermissionKeysOfRoleRedisKey(int projectRoleId)
+    private string GetPermissionKeysOfRoleRedisKey()
     {
-        return RedisUtility.GetKey<ProjectRoleDTO>($"{projectRoleId}:permissions");
+        return RedisUtility.GetKey<ProjectRoleDTO>("permissions");
     }
 }
