@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using PlcBase.Shared.Utilities;
 
 namespace PlcBase.Shared.Helpers;
 
@@ -16,6 +17,6 @@ public class LogContent
 
     public override string ToString()
     {
-        return JsonConvert.SerializeObject(this);
+        return JsonUtility.Stringify(this);
     }
 }

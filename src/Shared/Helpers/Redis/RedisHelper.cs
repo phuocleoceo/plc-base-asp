@@ -1,8 +1,9 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
-using Newtonsoft.Json;
 using System.Net;
+
+using PlcBase.Shared.Utilities;
 
 namespace PlcBase.Shared.Helpers;
 
@@ -27,7 +28,7 @@ public class RedisHelper : IRedisHelper
 
     public async Task Set<T>(string key, T obj)
     {
-        string objStr = JsonConvert.SerializeObject(obj);
+        string objStr = JsonUtility.Stringify(obj);
         await _redisCache.SetStringAsync(key, objStr);
     }
 
@@ -44,14 +45,14 @@ public class RedisHelper : IRedisHelper
             SlidingExpiration = slidingExpires
         };
 
-        string objStr = JsonConvert.SerializeObject(obj);
+        string objStr = JsonUtility.Stringify(obj);
         await _redisCache.SetStringAsync(key, objStr, options);
     }
 
     public async Task<T> Get<T>(string key)
     {
         string obj = await _redisCache.GetStringAsync(key);
-        return string.IsNullOrEmpty(obj) ? default : JsonConvert.DeserializeObject<T>(obj);
+        return JsonUtility.Parse<T>(obj);
     }
 
     public async Task Clear(string key)
@@ -125,24 +126,57 @@ public class RedisHelper : IRedisHelper
         return data;
     }
 
-    public Task SetMapCache<T>(string mapKey, string itemKey, T itemValue, bool clearCurrentMap)
+    public async Task SetMapCache<T>(
+        string mapKey,
+        string itemKey,
+        T itemValue,
+        bool clearCurrentMap
+    )
     {
-        throw new NotImplementedException();
+        if (clearCurrentMap)
+        {
+            await _redisDatabase.KeyDeleteAsync(mapKey);
+        }
+
+        await _redisDatabase.HashSetAsync(mapKey, itemKey, JsonUtility.Stringify(itemValue));
     }
 
-    public Task SetMapCache<T>(string mapKey, Dictionary<string, T> items, bool clearCurrentMap)
+    public async Task SetMapCache<T>(
+        string mapKey,
+        Dictionary<string, T> items,
+        bool clearCurrentMap
+    )
     {
-        throw new NotImplementedException();
+        if (clearCurrentMap)
+        {
+            await _redisDatabase.KeyDeleteAsync(mapKey);
+        }
+
+        HashEntry[] entries = items
+            .Select(item => new HashEntry(item.Key, JsonUtility.Stringify(item.Value)))
+            .ToArray();
+
+        await _redisDatabase.HashSetAsync(mapKey, entries);
     }
 
-    public Task<Dictionary<string, T>> GetMapCache<T>(string mapKey, HashSet<string> itemKeys)
+    public async Task<Dictionary<string, T>> GetMapCache<T>(string mapKey, HashSet<string> itemKeys)
     {
-        throw new NotImplementedException();
+        var result = new Dictionary<string, T>();
+        foreach (var itemKey in itemKeys)
+        {
+            var value = await _redisDatabase.HashGetAsync(mapKey, itemKey);
+            if (!value.IsNull)
+            {
+                result[itemKey] = JsonUtility.Parse<T>(value);
+            }
+        }
+        return result;
     }
 
-    public Task<T> GetMapCache<T>(string mapKey, string itemKey)
+    public async Task<T> GetMapCache<T>(string mapKey, string itemKey)
     {
-        throw new NotImplementedException();
+        var value = await _redisDatabase.HashGetAsync(mapKey, itemKey);
+        return JsonUtility.Parse<T>(value);
     }
 
     public Task ClearMapCache(string mapKey)

@@ -16,9 +16,9 @@ public interface IRedisHelper
 
     Task<T> GetCachedOr<T>(string key, Func<Task<T>> supplier);
 
-    Task SetMapCache<T>(String mapKey, string itemKey, T itemValue, bool clearCurrentMap);
+    Task SetMapCache<T>(string mapKey, string itemKey, T itemValue, bool clearCurrentMap);
 
-    Task SetMapCache<T>(String mapKey, Dictionary<string, T> items, bool clearCurrentMap);
+    Task SetMapCache<T>(string mapKey, Dictionary<string, T> items, bool clearCurrentMap);
 
     Task<Dictionary<string, T>> GetMapCache<T>(string mapKey, HashSet<string> itemKeys);
 

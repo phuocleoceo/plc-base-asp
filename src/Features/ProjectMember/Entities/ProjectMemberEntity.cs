@@ -21,10 +21,5 @@ public class ProjectMemberEntity : BaseSoftDeletableEntity
     public int ProjectId { get; set; }
     public ProjectEntity Project { get; set; }
 
-    public ICollection<MemberRoleEntity> MemberRoles { get; set; }
-
-    public ProjectMemberEntity()
-    {
-        MemberRoles = new List<MemberRoleEntity>();
-    }
+    public ICollection<MemberRoleEntity> MemberRoles { get; set; } = new List<MemberRoleEntity>();
 }
