@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using PlcBase.Shared.Utilities;
 
 namespace PlcBase.Base.DomainModel;
 
@@ -10,6 +10,6 @@ public class ReqUser
 
     public override string ToString()
     {
-        return JsonConvert.SerializeObject(this);
+        return JsonUtility.Stringify(this);
     }
 }

@@ -2,6 +2,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 
 using PlcBase.Shared.Constants;
+using PlcBase.Shared.Utilities;
 
 namespace PlcBase.Base.DTO;
 
@@ -22,7 +23,7 @@ public class SuccessResponse<T> : BaseResponse
 
     public override string ToString()
     {
-        return JsonConvert.SerializeObject(
+        return JsonUtility.Stringify(
             this,
             Formatting.Indented,
             new JsonSerializerSettings

@@ -4,6 +4,7 @@ using PlcBase.Features.ProjectAccess.Entities;
 using PlcBase.Features.ProjectAccess.DTOs;
 using PlcBase.Common.Repositories;
 using PlcBase.Shared.Constants;
+using PlcBase.Shared.Utilities;
 using PlcBase.Base.DomainModel;
 using PlcBase.Shared.Helpers;
 using PlcBase.Base.Error;
@@ -13,17 +14,20 @@ namespace PlcBase.Features.ProjectAccess.Services;
 public class ProjectPermissionService : IProjectPermissionService
 {
     private readonly IPermissionHelper _permissionHelper;
+    private readonly IRedisHelper _redisHelper;
     private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;
 
     public ProjectPermissionService(
         IPermissionHelper permissionHelper,
+        IRedisHelper redisHelper,
         IUnitOfWork uow,
         IMapper mapper
     )
     {
         _uow = uow;
         _mapper = mapper;
+        _redisHelper = redisHelper;
         _permissionHelper = permissionHelper;
     }
 
@@ -68,6 +72,7 @@ public class ProjectPermissionService : IProjectPermissionService
         projectPermissionEntity.ProjectRoleId = projectRoleId;
 
         _uow.ProjectPermission.Add(projectPermissionEntity);
+        await _redisHelper.Clear(GetPermissionKeysOfRoleRedisKey(projectRoleId));
         return await _uow.Save();
     }
 
@@ -88,6 +93,20 @@ public class ProjectPermissionService : IProjectPermissionService
             throw new BaseException(HttpCode.NOT_FOUND, "project_permission_not_found");
 
         _uow.ProjectPermission.Remove(projectPermissionDb);
+        await _redisHelper.Clear(GetPermissionKeysOfRoleRedisKey(projectRoleId));
         return await _uow.Save();
+    }
+
+    public async Task<IEnumerable<string>> GetPermissionKeysOfRole(int projectRoleId)
+    {
+        return await _redisHelper.GetCachedOr(
+            GetPermissionKeysOfRoleRedisKey(projectRoleId),
+            async () => await _uow.ProjectPermission.GetPermissionKeysOfRole(projectRoleId)
+        );
+    }
+
+    private string GetPermissionKeysOfRoleRedisKey(int projectRoleId)
+    {
+        return RedisUtility.GetKey<ProjectRoleDTO>($"{projectRoleId}:permissions");
     }
 }

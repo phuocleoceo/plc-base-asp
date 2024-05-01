@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 
 using PlcBase.Features.ProjectAccess.Entities;
@@ -29,5 +30,13 @@ public class ProjectPermissionRepository
                 Filters = { pm => pm.ProjectRoleId == projectRoleId }
             }
         );
+    }
+
+    public async Task<IEnumerable<string>> GetPermissionKeysOfRole(int projectRoleId)
+    {
+        return await _db.ProjectPermissions
+            .Where(pm => pm.ProjectRoleId == projectRoleId)
+            .Select(pm => pm.Key)
+            .ToListAsync();
     }
 }
