@@ -161,36 +161,44 @@ public class RedisHelper : IRedisHelper
 
     public async Task<Dictionary<string, T>> GetMapCache<T>(string mapKey, HashSet<string> itemKeys)
     {
-        var result = new Dictionary<string, T>();
-        foreach (var itemKey in itemKeys)
+        RedisValue[] redisKeys = itemKeys.Select(itemKey => (RedisValue)itemKey).ToArray();
+        RedisValue[] hashEntries = await _redisDatabase.HashGetAsync(mapKey, redisKeys);
+
+        Dictionary<string, T> result = new Dictionary<string, T>();
+
+        for (int i = 0; i < hashEntries.Length; i++)
         {
-            var value = await _redisDatabase.HashGetAsync(mapKey, itemKey);
-            if (!value.IsNull)
+            RedisValue value = hashEntries[i];
+            if (value.IsNull)
             {
-                result[itemKey] = JsonUtility.Parse<T>(value);
+                continue;
             }
+
+            result.Add(itemKeys.ElementAt(i), JsonUtility.Parse<T>(value));
         }
+
         return result;
     }
 
     public async Task<T> GetMapCache<T>(string mapKey, string itemKey)
     {
-        var value = await _redisDatabase.HashGetAsync(mapKey, itemKey);
-        return JsonUtility.Parse<T>(value);
+        RedisValue value = await _redisDatabase.HashGetAsync(mapKey, itemKey);
+        return !value.IsNull ? JsonUtility.Parse<T>(value) : default;
     }
 
-    public Task ClearMapCache(string mapKey)
+    public async Task ClearMapCache(string mapKey)
     {
-        throw new NotImplementedException();
+        await _redisDatabase.KeyDeleteAsync(mapKey);
     }
 
-    public Task RemoveMapCache(string mapKey, string itemKey)
+    public async Task RemoveMapCache(string mapKey, string itemKey)
     {
-        throw new NotImplementedException();
+        await _redisDatabase.HashDeleteAsync(mapKey, itemKey);
     }
 
-    public Task RemoveMapCache(string mapKey, HashSet<string> itemKeys)
+    public async Task RemoveMapCache(string mapKey, HashSet<string> itemKeys)
     {
-        throw new NotImplementedException();
+        RedisValue[] redisKeys = itemKeys.Select(itemKey => (RedisValue)itemKey).ToArray();
+        await _redisDatabase.HashDeleteAsync(mapKey, redisKeys);
     }
 }
