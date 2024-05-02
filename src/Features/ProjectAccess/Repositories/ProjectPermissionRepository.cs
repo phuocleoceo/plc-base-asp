@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 
 using PlcBase.Features.ProjectAccess.Entities;
@@ -32,11 +31,13 @@ public class ProjectPermissionRepository
         );
     }
 
-    public async Task<IEnumerable<string>> GetPermissionKeysOfRole(int projectRoleId)
+    public async Task<List<ProjectPermissionEntity>> GetForProjectRoles(List<int> projectRoleIds)
     {
-        return await _db.ProjectPermissions
-            .Where(pm => pm.ProjectRoleId == projectRoleId)
-            .Select(pm => pm.Key)
-            .ToListAsync();
+        return await GetManyAsync<ProjectPermissionEntity>(
+            new QueryModel<ProjectPermissionEntity>()
+            {
+                Filters = { pm => projectRoleIds.Contains(pm.ProjectRoleId) }
+            }
+        );
     }
 }

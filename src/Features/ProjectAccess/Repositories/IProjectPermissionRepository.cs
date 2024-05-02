@@ -7,5 +7,5 @@ public interface IProjectPermissionRepository : IBaseRepository<ProjectPermissio
 {
     Task<List<ProjectPermissionEntity>> GetForProjectRole(int projectRoleId);
 
-    Task<IEnumerable<string>> GetPermissionKeysOfRole(int projectRoleId);
+    Task<List<ProjectPermissionEntity>> GetForProjectRoles(List<int> projectRoleIds);
 }

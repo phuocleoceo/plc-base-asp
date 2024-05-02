@@ -2,6 +2,8 @@ using AutoMapper;
 
 using PlcBase.Features.ProjectMember.Entities;
 using PlcBase.Features.ProjectStatus.Entities;
+using PlcBase.Features.ProjectAccess.Services;
+using PlcBase.Features.ProjectMember.Services;
 using PlcBase.Features.Project.Entities;
 using PlcBase.Features.Project.DTOs;
 using PlcBase.Common.Repositories;
@@ -19,12 +21,22 @@ public class ProjectService : IProjectService
     private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;
     private readonly IPermissionHelper _permissionHelper;
+    private readonly IProjectMemberService _projectMemberService;
+    private readonly IProjectPermissionService _projectPermissionService;
 
-    public ProjectService(IUnitOfWork uow, IMapper mapper, IPermissionHelper permissionHelper)
+    public ProjectService(
+        IUnitOfWork uow,
+        IMapper mapper,
+        IPermissionHelper permissionHelper,
+        IProjectMemberService projectMemberService,
+        IProjectPermissionService projectPermissionService
+    )
     {
         _uow = uow;
         _mapper = mapper;
         _permissionHelper = permissionHelper;
+        _projectMemberService = projectMemberService;
+        _projectPermissionService = projectPermissionService;
     }
 
     public async Task<PagedList<ProjectDTO>> GetProjectsForUser(
@@ -133,10 +145,10 @@ public class ProjectService : IProjectService
             await _uow.CommitTransaction();
             return true;
         }
-        catch (BaseException ex)
+        catch (BaseException)
         {
             await _uow.AbortTransaction();
-            throw ex;
+            throw;
         }
     }
 
@@ -176,10 +188,10 @@ public class ProjectService : IProjectService
             await _uow.CommitTransaction();
             return true;
         }
-        catch (BaseException ex)
+        catch (BaseException)
         {
             await _uow.AbortTransaction();
-            throw ex;
+            throw;
         }
     }
 
@@ -190,9 +202,18 @@ public class ProjectService : IProjectService
     {
         ProjectEntity projectEntity = await _uow.Project.FindByIdAsync(projectId);
 
-        if (projectEntity.LeaderId == reqUser.Id)
-            return _permissionHelper.GetAllPermissions().Select(p => p.Key);
+        if (projectEntity == null)
+        {
+            throw new BaseException(HttpCode.NOT_FOUND, "project_not_found");
+        }
 
-        return await _uow.ProjectMember.GetPermissionsInProjectForUser(reqUser.Id, projectId);
+        if (projectEntity.LeaderId == reqUser.Id)
+        {
+            return _permissionHelper.GetAllPermissions().Select(p => p.Key);
+        }
+
+        return await _projectPermissionService.GetPermissionKeysOfRole(
+            await _uow.ProjectMember.GetRoleInProjectForUser(reqUser.Id, projectId)
+        );
     }
 }

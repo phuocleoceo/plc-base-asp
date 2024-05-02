@@ -34,19 +34,14 @@ public class ProjectMemberRepository : BaseRepository<ProjectMemberEntity>, IPro
             .ForEachAsync(m => SoftDelete(m));
     }
 
-    public async Task<IEnumerable<string>> GetPermissionsInProjectForUser(int userId, int projectId)
+    public async Task<List<int>> GetRoleInProjectForUser(int userId, int projectId)
     {
-        ProjectMemberEntity projectMembers = await _dbSet
+        return await _dbSet
             .Where(pm => pm.UserId == userId && pm.ProjectId == projectId)
             .Include(pm => pm.MemberRoles)
             .ThenInclude(mr => mr.ProjectRole)
-            .ThenInclude(pr => pr.ProjectPermissions)
-            .FirstAsync();
-
-        return projectMembers.MemberRoles
-            .Select(pm => pm.ProjectRole)
-            .SelectMany(pr => pr.ProjectPermissions)
-            .Select(pp => pp.Key)
-            .ToHashSet();
+            .SelectMany(pm => pm.MemberRoles)
+            .Select(mr => mr.ProjectRoleId)
+            .ToListAsync();
     }
 }
