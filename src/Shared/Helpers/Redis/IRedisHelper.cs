@@ -16,6 +16,23 @@ public interface IRedisHelper
 
     Task<T> GetCachedOr<T>(string key, Func<Task<T>> supplier);
 
+    Task<List<T>> GetListCache<T>(string key);
+
+    Task SetListCache<T>(
+        string key,
+        List<T> items,
+        bool hasExpireTime = true,
+        bool clearCurrentList = false
+    );
+
+    Task<List<T>> GetElementAtListCache<T>(string key, long index);
+
+    Task SetElementAtListCache<T>(string key, long index, T item, bool hasExpireTime = true);
+
+    Task ClearListCache(string key);
+
+    Task RemoveElementAtListCache(string key, long index);
+
     Task SetMapCache<T>(
         string mapKey,
         string itemKey,

@@ -45,7 +45,9 @@ public class S3Helper : IS3Helper
 
         bool bucketExists = await AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucket);
         if (!bucketExists)
+        {
             throw new BaseException(HttpCode.NOT_FOUND, $"bucket_{bucket}_not_exists");
+        }
 
         PutObjectRequest request = new PutObjectRequest()
         {
