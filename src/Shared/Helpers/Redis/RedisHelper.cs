@@ -130,6 +130,7 @@ public class RedisHelper : IRedisHelper
         string mapKey,
         string itemKey,
         T itemValue,
+        bool hasExpireTime = true,
         bool clearCurrentMap = false
     )
     {
@@ -139,11 +140,20 @@ public class RedisHelper : IRedisHelper
         }
 
         await _redisDatabase.HashSetAsync(mapKey, itemKey, JsonUtility.Stringify(itemValue));
+
+        if (hasExpireTime)
+        {
+            await _redisDatabase.KeyExpireAsync(
+                mapKey,
+                TimeSpan.FromSeconds(_cacheSettings.Expires)
+            );
+        }
     }
 
     public async Task SetMapCache<T>(
         string mapKey,
         Dictionary<string, T> items,
+        bool hasExpireTime = true,
         bool clearCurrentMap = false
     )
     {
@@ -162,6 +172,14 @@ public class RedisHelper : IRedisHelper
             .ToArray();
 
         await _redisDatabase.HashSetAsync(mapKey, entries);
+
+        if (hasExpireTime)
+        {
+            await _redisDatabase.KeyExpireAsync(
+                mapKey,
+                TimeSpan.FromSeconds(_cacheSettings.Expires)
+            );
+        }
     }
 
     public async Task<Dictionary<string, T>> GetMapCache<T>(string mapKey, HashSet<string> itemKeys)
