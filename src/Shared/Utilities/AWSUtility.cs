@@ -21,8 +21,10 @@ public static class AWSUtility
             : $"{prefix.TrimEnd('/')}/{fileName.Replace(" ", "-").Trim()}";
     }
 
-    public static string GetObjectKey(string bucket, string region, string filePath)
+    public static string GetObjectKey(string filePath, AWSSettings awsSettings)
     {
-        return $"https://{bucket}.s3.{region}.amazonaws.com/{filePath}";
+        return awsSettings.CloudFront.Enable
+            ? $"{awsSettings.CloudFront.Domain}/{filePath}"
+            : $"https://{awsSettings.S3.Bucket}.s3.{awsSettings.Region}.amazonaws.com/{filePath}";
     }
 }
