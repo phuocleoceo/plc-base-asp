@@ -15,11 +15,11 @@ public static class AWSExtension
 
     private static void ConfigureS3(this IServiceCollection services, IConfiguration configuration)
     {
-        S3Settings s3Settings = configuration.GetSection("AWSSettings:S3").Get<S3Settings>();
+        AWSSettings awsSettings = configuration.GetSection("AWSSettings").Get<AWSSettings>();
 
         AWSOptions awsOptions = new AWSOptions
         {
-            Credentials = new BasicAWSCredentials(s3Settings.AccessKey, s3Settings.SecretKey)
+            Credentials = new BasicAWSCredentials(awsSettings.AccessKey, awsSettings.SecretKey)
         };
 
         services.AddDefaultAWSOptions(awsOptions);

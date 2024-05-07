@@ -15,11 +15,11 @@ namespace PlcBase.Shared.Helpers;
 public class S3Helper : IS3Helper
 {
     private readonly IAmazonS3 _s3Client;
-    private readonly S3Settings _s3Settings;
+    private readonly AWSSettings _awsSettings;
 
-    public S3Helper(IOptions<S3Settings> s3Settings)
+    public S3Helper(IOptions<AWSSettings> s3Settings)
     {
-        _s3Settings = s3Settings.Value;
+        _awsSettings = s3Settings.Value;
         _s3Client = SetupS3Client();
     }
 
@@ -27,12 +27,12 @@ public class S3Helper : IS3Helper
     {
         AmazonS3Config s3Config = new AmazonS3Config()
         {
-            RegionEndpoint = RegionEndpoint.GetBySystemName(_s3Settings.Region)
+            RegionEndpoint = RegionEndpoint.GetBySystemName(_awsSettings.Region)
         };
 
         BasicAWSCredentials credentials = new BasicAWSCredentials(
-            _s3Settings.AccessKey,
-            _s3Settings.SecretKey
+            _awsSettings.AccessKey,
+            _awsSettings.SecretKey
         );
 
         return new AmazonS3Client(credentials, s3Config);
@@ -40,8 +40,7 @@ public class S3Helper : IS3Helper
 
     public async Task<string> UploadFile(S3FileUpload file)
     {
-        string bucket = _s3Settings.Bucket;
-        string region = _s3Settings.Region;
+        string bucket = _awsSettings.S3.Bucket;
 
         bool bucketExists = await AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucket);
         if (!bucketExists)
@@ -59,22 +58,17 @@ public class S3Helper : IS3Helper
         request.Metadata.Add("Content-Type", file.FileContentType);
         await _s3Client.PutObjectAsync(request);
 
-        return AWSUtility.GetObjectKey(bucket, region, file.FilePath);
+        return AWSUtility.GetObjectKey(file.FilePath, _awsSettings);
     }
 
     public async Task<S3PresignedUrlResponse> GetPresignedUploadUrl(S3PresignedUrlRequest request)
     {
-        string bucket = _s3Settings.Bucket;
-        string region = _s3Settings.Region;
-        long expiresIn = _s3Settings.PresignedUrlExpires;
-        string filePath = request.FilePath;
-
         GetPreSignedUrlRequest getPreSignedUrlRequest = new GetPreSignedUrlRequest
         {
-            BucketName = bucket,
-            Key = filePath,
+            BucketName = _awsSettings.S3.Bucket,
+            Key = request.FilePath,
             Verb = HttpVerb.PUT,
-            Expires = TimeUtility.Now().AddSeconds(expiresIn),
+            Expires = TimeUtility.Now().AddSeconds(_awsSettings.S3.PresignedUrlExpires),
             ContentType = request.ContentType
         };
 
@@ -82,7 +76,7 @@ public class S3Helper : IS3Helper
         return new S3PresignedUrlResponse()
         {
             PresignedUrl = _s3Client.GetPreSignedURL(getPreSignedUrlRequest),
-            ObjectKey = AWSUtility.GetObjectKey(bucket, region, filePath)
+            ObjectKey = AWSUtility.GetObjectKey(request.FilePath, _awsSettings)
         };
     }
 }
