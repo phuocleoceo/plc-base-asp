@@ -8,5 +8,7 @@ public interface IJwtHelper
 
     TokenData CreateRefreshToken();
 
+    TokenPrincipal ValidateAndGetTokenPrincipal(string token);
+
     ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
 }

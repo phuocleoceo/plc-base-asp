@@ -20,33 +20,28 @@ public static class JwtOptions
             ValidIssuer = jwtSettings.ValidateIssuer ? jwtSettings.ValidIssuer : null,
             ValidateAudience = jwtSettings.ValidateAudience,
             ValidAudience = jwtSettings.ValidateAudience ? jwtSettings.ValidAudience : null,
-            ClockSkew = TimeSpan.FromMinutes(jwtSettings.ClockSkew),
+            ClockSkew = TimeSpan.FromSeconds(jwtSettings.ClockSkew),
         };
     }
 
-    public static SigningCredentials GetPrivateKey(JwtSettings jwtSettings)
+    public static RsaSecurityKey GetPrivateKey(string keyPath)
     {
-        string dirPath = AppDomain.CurrentDomain.BaseDirectory;
-        string fileName = Path.Combine(dirPath, "Certificate", jwtSettings.PrivateKeyPath);
-        string privateKeyPem = File.ReadAllText(fileName);
+        string fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, keyPath);
 
+        string privateKeyPem = File.ReadAllText(fileName);
         privateKeyPem = privateKeyPem.Replace("-----BEGIN PRIVATE KEY-----", "");
         privateKeyPem = privateKeyPem.Replace("-----END PRIVATE KEY-----", "");
-
         byte[] privateKeyRaw = Convert.FromBase64String(privateKeyPem);
 
         RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
         provider.ImportPkcs8PrivateKey(new ReadOnlySpan<byte>(privateKeyRaw), out _);
-        RsaSecurityKey rsaSecurityKey = new RsaSecurityKey(provider);
-        return new SigningCredentials(rsaSecurityKey, SecurityAlgorithms.RsaSha256);
+        return new RsaSecurityKey(provider);
     }
 
-    public static SecurityKey GetPublicKey(JwtSettings jwtSettings)
+    public static RsaSecurityKey GetPublicKey(string keyPath)
     {
-        string dirPath = AppDomain.CurrentDomain.BaseDirectory;
-        string fileName = Path.Combine(dirPath, "Certificate", jwtSettings.PublicKeyPath);
+        string fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, keyPath);
         X509Certificate2 cert = new X509Certificate2(fileName);
-        RsaSecurityKey rsaSecurityKey = new RsaSecurityKey(cert.GetRSAPublicKey());
-        return rsaSecurityKey;
+        return new RsaSecurityKey(cert.GetRSAPublicKey());
     }
 }

@@ -1,23 +1,19 @@
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
-using PlcBase.Shared.Constants;
 using PlcBase.Base.DomainModel;
 using PlcBase.Shared.Helpers;
-using PlcBase.Base.Error;
 
 namespace PlcBase.Middlewares;
 
 public class JwtMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly JwtSettings _jwtSettings;
+    private readonly IJwtHelper _jwtHelper;
 
-    public JwtMiddleware(RequestDelegate next, IOptions<JwtSettings> jwtSettings)
+    public JwtMiddleware(RequestDelegate next, IJwtHelper jwtHelper)
     {
         _next = next;
-        _jwtSettings = jwtSettings.Value;
+        _jwtHelper = jwtHelper;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -34,29 +30,13 @@ public class JwtMiddleware
     {
         try
         {
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            SecurityKey publicKey = JwtOptions.GetPublicKey(_jwtSettings);
+            TokenPrincipal tokenPrincipal = _jwtHelper.ValidateAndGetTokenPrincipal(token);
+            List<Claim> claims = tokenPrincipal.JwtSecurityToken.Claims.ToList();
 
-            TokenValidationParameters tokenValidationParameters = JwtOptions.GetTokenParams(
-                _jwtSettings,
-                publicKey
-            );
-
-            tokenHandler.ValidateToken(
-                token,
-                tokenValidationParameters,
-                out SecurityToken validatedToken
-            );
-
-            JwtSecurityToken jwtToken = (JwtSecurityToken)validatedToken;
-
-            // Get data from payload
             context.Items["reqUser"] = new ReqUser()
             {
-                Id = Convert.ToInt32(
-                    jwtToken.Claims.First(x => x.Type == CustomClaimTypes.UserId).Value
-                ),
-                Email = jwtToken.Claims.First(x => x.Type == CustomClaimTypes.Email).Value,
+                Id = Convert.ToInt32(claims.First(x => x.Type == CustomClaimTypes.UserId).Value),
+                Email = claims.First(x => x.Type == CustomClaimTypes.Email).Value,
             };
         }
         catch
