@@ -23,10 +23,13 @@ public class JwtHelper : IJwtHelper
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = TimeUtility.Now().AddMinutes(_jwtSettings.Expires),
-            SigningCredentials = JwtOptions.GetPrivateKey(_jwtSettings),
+            Expires = TimeUtility.Now().AddSeconds(_jwtSettings.Expires),
             Audience = _jwtSettings.ValidateAudience ? _jwtSettings.ValidAudience : null,
             Issuer = _jwtSettings.ValidateIssuer ? _jwtSettings.ValidIssuer : null,
+            SigningCredentials = new SigningCredentials(
+                JwtOptions.GetPrivateKey(_jwtSettings.PrivateKeyPath),
+                SecurityAlgorithms.RsaSha256
+            )
         };
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
@@ -43,13 +46,13 @@ public class JwtHelper : IJwtHelper
         return new TokenData()
         {
             Token = CodeSecure.CreateRandomCode(32),
-            ExpiredAt = TimeUtility.Now().AddDays(_jwtSettings.RefreshTokenExpires)
+            ExpiredAt = TimeUtility.Now().AddSeconds(_jwtSettings.RefreshTokenExpires)
         };
     }
 
-    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    public TokenPrincipal ValidateAndGetTokenPrincipal(string token)
     {
-        SecurityKey publicKey = JwtOptions.GetPublicKey(_jwtSettings);
+        SecurityKey publicKey = JwtOptions.GetPublicKey(_jwtSettings.PublicKeyPath);
 
         TokenValidationParameters tokenValidationParameters = JwtOptions.GetTokenParams(
             _jwtSettings,
@@ -58,13 +61,26 @@ public class JwtHelper : IJwtHelper
 
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
-        ClaimsPrincipal principal = tokenHandler.ValidateToken(
+        ClaimsPrincipal claimsPrincipal = tokenHandler.ValidateToken(
             token,
             tokenValidationParameters,
             out SecurityToken securityToken
         );
 
         JwtSecurityToken jwtSecurityToken = securityToken as JwtSecurityToken;
+
+        return new TokenPrincipal()
+        {
+            ClaimsPrincipal = claimsPrincipal,
+            JwtSecurityToken = jwtSecurityToken
+        };
+    }
+
+    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    {
+        TokenPrincipal tokenPrincipal = ValidateAndGetTokenPrincipal(token);
+        JwtSecurityToken jwtSecurityToken = tokenPrincipal.JwtSecurityToken;
+        ClaimsPrincipal claimsPrincipal = tokenPrincipal.ClaimsPrincipal;
 
         if (
             jwtSecurityToken == null
@@ -75,6 +91,6 @@ public class JwtHelper : IJwtHelper
         )
             throw new BaseException(HttpCode.BAD_REQUEST, ErrorMessage.INVALID_TOKEN);
 
-        return principal;
+        return claimsPrincipal;
     }
 }

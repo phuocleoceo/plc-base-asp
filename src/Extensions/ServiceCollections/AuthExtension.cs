@@ -9,9 +9,9 @@ public static class AuthExtension
 {
     public static void ConfigureAuth(this IServiceCollection services, IConfiguration configuration)
     {
-        JwtSettings tokenSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
+        JwtSettings jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
-        SecurityKey publicKey = JwtOptions.GetPublicKey(tokenSettings);
+        SecurityKey publicKey = JwtOptions.GetPublicKey(jwtSettings.PublicKeyPath);
         services
             .AddAuthentication(options =>
             {
@@ -23,7 +23,7 @@ public static class AuthExtension
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
                 options.TokenValidationParameters = JwtOptions.GetTokenParams(
-                    tokenSettings,
+                    jwtSettings,
                     publicKey
                 );
             });
