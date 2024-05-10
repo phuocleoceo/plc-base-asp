@@ -54,10 +54,14 @@ public class JwtHelper : IJwtHelper
     {
         SecurityKey publicKey = JwtOptions.GetPublicKey(_jwtSettings.PublicKeyPath);
 
-        TokenValidationParameters tokenValidationParameters = JwtOptions.GetTokenParams(
-            _jwtSettings,
-            publicKey
-        );
+        TokenValidationParameters tokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = publicKey,
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = false,
+            ValidateAudience = false,
+            ValidateIssuer = false
+        };
 
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
