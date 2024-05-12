@@ -4,9 +4,9 @@ namespace PlcBase.Shared.Helpers;
 
 public interface IJwtHelper
 {
-    TokenData CreateToken(IEnumerable<Claim> claims);
+    TokenData CreateAccessToken(IEnumerable<Claim> claims);
 
-    TokenData CreateRefreshToken();
+    TokenData CreateRefreshToken(IEnumerable<Claim> claims);
 
     TokenPrincipal ValidateAndGetTokenPrincipal(string token);
 

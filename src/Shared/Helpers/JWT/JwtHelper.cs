@@ -5,6 +5,7 @@ using System.Security.Claims;
 
 using PlcBase.Shared.Constants;
 using PlcBase.Shared.Utilities;
+using PlcBase.Shared.Enums;
 using PlcBase.Base.Error;
 
 namespace PlcBase.Shared.Helpers;
@@ -18,12 +19,41 @@ public class JwtHelper : IJwtHelper
         _jwtSettings = jwtSettings.Value;
     }
 
-    public TokenData CreateToken(IEnumerable<Claim> claims)
+    public TokenData CreateAccessToken(IEnumerable<Claim> claims)
     {
-        SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+        List<Claim> claimsIdentity = claims.ToList();
+        claimsIdentity.Add(new Claim(CustomClaimTypes.Type, TokenType.AccessToken));
+
+        return WriteToken(
+            BuildSecurityTokenDescriptor(
+                claimsIdentity,
+                TimeUtility.Now().AddSeconds(_jwtSettings.Expires)
+            )
+        );
+    }
+
+    public TokenData CreateRefreshToken(IEnumerable<Claim> claims)
+    {
+        List<Claim> claimsIdentity = claims.ToList();
+        claimsIdentity.Add(new Claim(CustomClaimTypes.Type, TokenType.RefreshToken));
+
+        return WriteToken(
+            BuildSecurityTokenDescriptor(
+                claimsIdentity,
+                TimeUtility.Now().AddSeconds(_jwtSettings.RefreshTokenExpires)
+            )
+        );
+    }
+
+    private SecurityTokenDescriptor BuildSecurityTokenDescriptor(
+        IEnumerable<Claim> claimsIdentity,
+        DateTime expire
+    )
+    {
+        return new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(claims),
-            Expires = TimeUtility.Now().AddSeconds(_jwtSettings.Expires),
+            Expires = expire,
+            Subject = new ClaimsIdentity(claimsIdentity),
             Audience = _jwtSettings.ValidateAudience ? _jwtSettings.ValidAudience : null,
             Issuer = _jwtSettings.ValidateIssuer ? _jwtSettings.ValidIssuer : null,
             SigningCredentials = new SigningCredentials(
@@ -31,6 +61,10 @@ public class JwtHelper : IJwtHelper
                 SecurityAlgorithms.RsaSha256
             )
         };
+    }
+
+    private TokenData WriteToken(SecurityTokenDescriptor tokenDescriptor)
+    {
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
@@ -38,15 +72,6 @@ public class JwtHelper : IJwtHelper
         {
             Token = tokenHandler.WriteToken(token),
             ExpiredAt = token.ValidTo,
-        };
-    }
-
-    public TokenData CreateRefreshToken()
-    {
-        return new TokenData()
-        {
-            Token = CodeSecure.CreateRandomCode(32),
-            ExpiredAt = TimeUtility.Now().AddSeconds(_jwtSettings.RefreshTokenExpires)
         };
     }
 
