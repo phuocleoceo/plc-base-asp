@@ -9,6 +9,8 @@ public static class ServiceExtension
     {
         // CORS
         services.ConfigureCors(configuration);
+        // Health Check
+        services.ConfigureHealthCheck(configuration);
         // CAP message queue
         services.ConfigureCapQueue();
         // Database

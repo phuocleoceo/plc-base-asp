@@ -9,6 +9,8 @@ public static class PipelineExtension
     {
         ILoggerManager logger = app.Services.GetRequiredService<ILoggerManager>();
 
+        app.UseHealthCheck();
+
         app.UseMigration();
 
         app.UseCorsPipeline();
