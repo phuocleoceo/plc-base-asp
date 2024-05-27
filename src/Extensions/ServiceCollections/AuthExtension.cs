@@ -10,8 +10,8 @@ public static class AuthExtension
     public static void ConfigureAuth(this IServiceCollection services, IConfiguration configuration)
     {
         JwtSettings jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
-
         SecurityKey publicKey = JwtOptions.GetPublicKey(jwtSettings.PublicKeyPath);
+
         services
             .AddAuthentication(options =>
             {

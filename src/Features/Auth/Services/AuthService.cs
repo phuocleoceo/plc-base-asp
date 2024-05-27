@@ -54,9 +54,9 @@ public class AuthService : IAuthService
         if (!PasswordUtility.IsValidPassword(userLoginDTO.Password, currentUser.Password))
             throw new BaseException(HttpCode.BAD_REQUEST, "invalid_password");
 
-        List<Claim> userClaims = await GetUserClaims(currentUser);
-        TokenData accessToken = _jwtHelper.CreateToken(userClaims);
-        TokenData refreshToken = _jwtHelper.CreateRefreshToken();
+        IEnumerable<Claim> userClaims = await GetUserClaims(currentUser);
+        TokenData accessToken = _jwtHelper.CreateAccessToken(userClaims);
+        TokenData refreshToken = _jwtHelper.CreateRefreshToken(userClaims);
 
         currentUser.RefreshToken = refreshToken.Token;
         currentUser.RefreshTokenExpiredAt = refreshToken.ExpiredAt;
@@ -110,8 +110,8 @@ public class AuthService : IAuthService
         )
             throw new BaseException(HttpCode.BAD_REQUEST, "refresh_token_invalid_or_expired");
 
-        TokenData accessToken = _jwtHelper.CreateToken(principal.Claims);
-        TokenData refreshToken = _jwtHelper.CreateRefreshToken();
+        TokenData accessToken = _jwtHelper.CreateAccessToken(principal.Claims);
+        TokenData refreshToken = _jwtHelper.CreateRefreshToken(principal.Claims);
 
         currentUser.RefreshToken = refreshToken.Token;
         _uow.UserAccount.Update(currentUser);
