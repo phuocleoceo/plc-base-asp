@@ -24,12 +24,7 @@ public class JwtHelper : IJwtHelper
         List<Claim> claimsIdentity = claims.ToList();
         claimsIdentity.Add(new Claim(CustomClaimTypes.Type, TokenType.AccessToken));
 
-        return WriteToken(
-            BuildSecurityTokenDescriptor(
-                claimsIdentity,
-                TimeUtility.Now().AddSeconds(_jwtSettings.Expires)
-            )
-        );
+        return WriteToken(BuildTokenDescriptor(claimsIdentity, _jwtSettings.Expires));
     }
 
     public TokenData CreateRefreshToken(IEnumerable<Claim> claims)
@@ -37,23 +32,18 @@ public class JwtHelper : IJwtHelper
         List<Claim> claimsIdentity = claims.ToList();
         claimsIdentity.Add(new Claim(CustomClaimTypes.Type, TokenType.RefreshToken));
 
-        return WriteToken(
-            BuildSecurityTokenDescriptor(
-                claimsIdentity,
-                TimeUtility.Now().AddSeconds(_jwtSettings.RefreshTokenExpires)
-            )
-        );
+        return WriteToken(BuildTokenDescriptor(claimsIdentity, _jwtSettings.RefreshTokenExpires));
     }
 
-    private SecurityTokenDescriptor BuildSecurityTokenDescriptor(
+    private SecurityTokenDescriptor BuildTokenDescriptor(
         IEnumerable<Claim> claimsIdentity,
-        DateTime expire
+        long expireInSeconds
     )
     {
         return new SecurityTokenDescriptor
         {
-            Expires = expire,
             Subject = new ClaimsIdentity(claimsIdentity),
+            Expires = TimeUtility.Now().AddSeconds(expireInSeconds),
             Audience = _jwtSettings.ValidateAudience ? _jwtSettings.ValidAudience : null,
             Issuer = _jwtSettings.ValidateIssuer ? _jwtSettings.ValidIssuer : null,
             SigningCredentials = new SigningCredentials(
