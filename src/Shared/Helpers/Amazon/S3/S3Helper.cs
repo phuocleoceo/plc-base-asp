@@ -63,10 +63,12 @@ public class S3Helper : IS3Helper
 
     public async Task<S3PresignedUrlResponse> GetPresignedUploadUrl(S3PresignedUrlRequest request)
     {
+        string filePath = AWSUtility.GetFilePath(request.FileName, request.Prefix);
+
         GetPreSignedUrlRequest getPreSignedUrlRequest = new GetPreSignedUrlRequest
         {
             BucketName = _awsSettings.S3.Bucket,
-            Key = request.FilePath,
+            Key = filePath,
             Verb = HttpVerb.PUT,
             Expires = TimeUtility.Now().AddSeconds(_awsSettings.S3.PresignedUrlExpires),
             ContentType = request.ContentType
@@ -76,7 +78,7 @@ public class S3Helper : IS3Helper
         return new S3PresignedUrlResponse()
         {
             PresignedUrl = _s3Client.GetPreSignedURL(getPreSignedUrlRequest),
-            ObjectKey = AWSUtility.GetObjectKey(request.FilePath, _awsSettings)
+            ObjectKey = AWSUtility.GetObjectKey(filePath, _awsSettings)
         };
     }
 }

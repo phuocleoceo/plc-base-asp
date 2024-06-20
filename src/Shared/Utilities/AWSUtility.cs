@@ -16,9 +16,11 @@ public static class AWSUtility
 
     public static string GetFilePath(string fileName, string prefix)
     {
+        string fileNameNormalized = fileName.Replace(" ", "-").Trim();
+
         return string.IsNullOrEmpty(prefix)
-            ? fileName
-            : $"{prefix.TrimEnd('/')}/{fileName.Replace(" ", "-").Trim()}";
+            ? fileNameNormalized
+            : $"{prefix.TrimEnd('/')}/{fileNameNormalized}";
     }
 
     public static string GetObjectKey(string filePath, AWSSettings awsSettings)
