@@ -157,11 +157,11 @@ public class BaseRepository<T> : IBaseRepository<T>
 
     public void SoftDelete(T entity)
     {
-        if (entity is ISoftDeletable softDeletableEntity)
-        {
-            softDeletableEntity.DeletedAt = TimeUtility.Now();
-            Update(softDeletableEntity as T);
-        }
+        if (entity is not ISoftDeletable softDeletableEntity)
+            return;
+
+        softDeletableEntity.DeletedAt = TimeUtility.Now();
+        Update(softDeletableEntity as T);
     }
 
     public async Task SoftDeleteById(int id)

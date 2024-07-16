@@ -91,29 +91,29 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task CreateTransaction()
     {
-        if (_transaction == null)
-        {
-            _transaction = await _db.Database.BeginTransactionAsync();
-        }
+        if (_transaction != null)
+            return;
+
+        _transaction = await _db.Database.BeginTransactionAsync();
     }
 
     public async Task CommitTransaction()
     {
-        if (_transaction != null)
-        {
-            await _transaction.CommitAsync();
-            await _transaction.DisposeAsync();
-            _transaction = null;
-        }
+        if (_transaction == null)
+            return;
+
+        await _transaction.CommitAsync();
+        await _transaction.DisposeAsync();
+        _transaction = null;
     }
 
     public async Task AbortTransaction()
     {
-        if (_transaction != null)
-        {
-            await _transaction.RollbackAsync();
-            await _transaction.DisposeAsync();
-            _transaction = null;
-        }
+        if (_transaction == null)
+            return;
+
+        await _transaction.RollbackAsync();
+        await _transaction.DisposeAsync();
+        _transaction = null;
     }
 }
