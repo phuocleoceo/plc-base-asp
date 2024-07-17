@@ -25,8 +25,10 @@ public class DapperContainer : IDapperContainer
     public async Task Execute(DapperQuery dapperQuery)
     {
         await _connection.ExecuteAsync(
-            dapperQuery.Query,
-            dapperQuery.Params,
+            sql: dapperQuery.Query,
+            param: dapperQuery.Params,
+            transaction: dapperQuery.Transaction,
+            commandTimeout: dapperQuery.CommandTimeout,
             commandType: dapperQuery.CommandType
         );
     }
@@ -34,8 +36,10 @@ public class DapperContainer : IDapperContainer
     public async Task<IEnumerable<T>> List<T>(DapperQuery dapperQuery)
     {
         return await _connection.QueryAsync<T>(
-            dapperQuery.Query,
-            dapperQuery.Params,
+            sql: dapperQuery.Query,
+            param: dapperQuery.Params,
+            transaction: dapperQuery.Transaction,
+            commandTimeout: dapperQuery.CommandTimeout,
             commandType: dapperQuery.CommandType
         );
     }
@@ -43,8 +47,10 @@ public class DapperContainer : IDapperContainer
     public async Task<Tuple<IEnumerable<T1>, IEnumerable<T2>>> List<T1, T2>(DapperQuery dapperQuery)
     {
         SqlMapper.GridReader result = await _connection.QueryMultipleAsync(
-            dapperQuery.Query,
-            dapperQuery.Params,
+            sql: dapperQuery.Query,
+            param: dapperQuery.Params,
+            transaction: dapperQuery.Transaction,
+            commandTimeout: dapperQuery.CommandTimeout,
             commandType: dapperQuery.CommandType
         );
 
@@ -62,8 +68,10 @@ public class DapperContainer : IDapperContainer
     public async Task<T> OneRecord<T>(DapperQuery dapperQuery)
     {
         T value = await _connection.QueryFirstAsync<T>(
-            dapperQuery.Query,
-            dapperQuery.Params,
+            sql: dapperQuery.Query,
+            param: dapperQuery.Params,
+            transaction: dapperQuery.Transaction,
+            commandTimeout: dapperQuery.CommandTimeout,
             commandType: dapperQuery.CommandType
         );
         return (T)Convert.ChangeType(value, typeof(T));
@@ -72,8 +80,10 @@ public class DapperContainer : IDapperContainer
     public async Task<T> Single<T>(DapperQuery dapperQuery)
     {
         T value = await _connection.ExecuteScalarAsync<T>(
-            dapperQuery.Query,
-            dapperQuery.Params,
+            sql: dapperQuery.Query,
+            param: dapperQuery.Params,
+            transaction: dapperQuery.Transaction,
+            commandTimeout: dapperQuery.CommandTimeout,
             commandType: dapperQuery.CommandType
         );
         return (T)Convert.ChangeType(value, typeof(T));

@@ -22,5 +22,9 @@ public class DapperQuery
 
     public DynamicParameters Params { get; set; } = null;
 
+    public IDbTransaction Transaction { get; set; } = null;
+
+    public int? CommandTimeout { get; set; } = null;
+
     public CommandType CommandType { get; set; } = CommandType.Text;
 }
