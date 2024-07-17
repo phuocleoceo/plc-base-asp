@@ -25,7 +25,7 @@ public class AddressController : BaseController
     [HttpGet("Provinces/{provinceId}/Districts")]
     public async Task<SuccessResponse<List<DistrictDTO>>> GetDistrictsOfProvince(int provinceId)
     {
-        return HttpContext.Success(await _addressService.GetDistricsOfProvince(provinceId));
+        return HttpContext.Success(await _addressService.GetDistrictsOfProvince(provinceId));
     }
 
     [HttpGet("Districts/{districtId}/Wards")]

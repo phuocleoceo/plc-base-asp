@@ -24,7 +24,7 @@ public interface IUnitOfWork : IDisposable
     IUserAccountRepository UserAccount { get; }
     IUserProfileRepository UserProfile { get; }
     IRoleRepository Role { get; }
-    IPermisisonRepository Permisison { get; }
+    IPermissionRepository Permission { get; }
     IConfigSettingRepository ConfigSetting { get; }
     IMediaRepository Media { get; }
     IProjectRepository Project { get; }

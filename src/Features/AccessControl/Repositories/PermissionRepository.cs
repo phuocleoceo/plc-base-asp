@@ -6,7 +6,7 @@ using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.AccessControl.Repositories;
 
-public class PermissionRepository : BaseRepository<PermissionEntity>, IPermisisonRepository
+public class PermissionRepository : BaseRepository<PermissionEntity>, IPermissionRepository
 {
     private readonly DataContext _db;
     private readonly IMapper _mapper;

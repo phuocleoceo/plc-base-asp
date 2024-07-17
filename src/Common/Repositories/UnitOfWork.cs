@@ -30,14 +30,14 @@ public class UnitOfWork : IUnitOfWork
         _db = db;
         _mapper = mapper;
 
-        DapperContainer = new DapperContainer(_db);
+        DapperContainer = new DapperContainer(_db, _mapper);
         AddressProvince = new AddressProvinceRepository(_db, _mapper);
         AddressDistrict = new AddressDistrictRepository(_db, _mapper);
         AddressWard = new AddressWardRepository(_db, _mapper);
         UserAccount = new UserAccountRepository(_db, _mapper);
         UserProfile = new UserProfileRepository(_db, _mapper);
         Role = new RoleRepository(_db, _mapper);
-        Permisison = new PermissionRepository(_db, _mapper);
+        Permission = new PermissionRepository(_db, _mapper);
         ConfigSetting = new ConfigSettingRepository(_db, _mapper);
         Media = new MediaRepository(_db, _mapper);
         Project = new ProjectRepository(_db, _mapper);
@@ -55,29 +55,29 @@ public class UnitOfWork : IUnitOfWork
         Payment = new PaymentRepository(_db, _mapper);
     }
 
-    public IDapperContainer DapperContainer { get; private set; }
-    public IAddressProvinceRepository AddressProvince { get; private set; }
-    public IAddressDistrictRepository AddressDistrict { get; private set; }
-    public IAddressWardRepository AddressWard { get; private set; }
-    public IUserAccountRepository UserAccount { get; private set; }
-    public IUserProfileRepository UserProfile { get; private set; }
-    public IRoleRepository Role { get; private set; }
-    public IPermisisonRepository Permisison { get; private set; }
-    public IConfigSettingRepository ConfigSetting { get; private set; }
-    public IMediaRepository Media { get; private set; }
-    public IProjectRepository Project { get; private set; }
-    public IProjectMemberRepository ProjectMember { get; private set; }
-    public IProjectStatusRepository ProjectStatus { get; private set; }
-    public IInvitationRepository Invitation { get; private set; }
-    public ISprintRepository Sprint { get; private set; }
-    public IIssueRepository Issue { get; private set; }
-    public IIssueCommentRepository IssueComment { get; private set; }
-    public IProjectRoleRepository ProjectRole { get; private set; }
-    public IProjectPermissionRepository ProjectPermission { get; private set; }
-    public IMemberRoleRepository MemberRole { get; private set; }
-    public IEventRepository Event { get; private set; }
-    public IEventAttendeeRepository EventAttendee { get; private set; }
-    public IPaymentRepository Payment { get; private set; }
+    public IDapperContainer DapperContainer { get; }
+    public IAddressProvinceRepository AddressProvince { get; }
+    public IAddressDistrictRepository AddressDistrict { get; }
+    public IAddressWardRepository AddressWard { get; }
+    public IUserAccountRepository UserAccount { get; }
+    public IUserProfileRepository UserProfile { get; }
+    public IRoleRepository Role { get; }
+    public IPermissionRepository Permission { get; }
+    public IConfigSettingRepository ConfigSetting { get; }
+    public IMediaRepository Media { get; }
+    public IProjectRepository Project { get; }
+    public IProjectMemberRepository ProjectMember { get; }
+    public IProjectStatusRepository ProjectStatus { get; }
+    public IInvitationRepository Invitation { get; }
+    public ISprintRepository Sprint { get; }
+    public IIssueRepository Issue { get; }
+    public IIssueCommentRepository IssueComment { get; }
+    public IProjectRoleRepository ProjectRole { get; }
+    public IProjectPermissionRepository ProjectPermission { get; }
+    public IMemberRoleRepository MemberRole { get; }
+    public IEventRepository Event { get; }
+    public IEventAttendeeRepository EventAttendee { get; }
+    public IPaymentRepository Payment { get; }
 
     public void Dispose()
     {

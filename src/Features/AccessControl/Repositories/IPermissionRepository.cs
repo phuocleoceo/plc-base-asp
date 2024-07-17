@@ -3,4 +3,4 @@ using PlcBase.Base.Repository;
 
 namespace PlcBase.Features.AccessControl.Repositories;
 
-public interface IPermisisonRepository : IBaseRepository<PermissionEntity> { }
+public interface IPermissionRepository : IBaseRepository<PermissionEntity> { }

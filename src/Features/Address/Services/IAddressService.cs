@@ -6,7 +6,7 @@ public interface IAddressService
 {
     Task<List<ProvinceDTO>> GetProvinces();
 
-    Task<List<DistrictDTO>> GetDistricsOfProvince(int provinceId);
+    Task<List<DistrictDTO>> GetDistrictsOfProvince(int provinceId);
 
     Task<List<WardDTO>> GetWardsOfDistrict(int districtId);
 

@@ -5,7 +5,7 @@ using PlcBase.Features.AccessControl.Entities;
 
 namespace PlcBase.Common.Data.Context.Configuration;
 
-public class PermisisonConfiguration : IEntityTypeConfiguration<PermissionEntity>
+public class PermissionConfiguration : IEntityTypeConfiguration<PermissionEntity>
 {
     public void Configure(EntityTypeBuilder<PermissionEntity> builder)
     {
