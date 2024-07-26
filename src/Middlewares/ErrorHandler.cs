@@ -16,34 +16,32 @@ public static class ErrorHandler
         {
             appError.Run(async context =>
             {
-                IExceptionHandlerPathFeature exceptionHandlerPathFeature =
-                    context.Features.Get<IExceptionHandlerPathFeature>();
-                Exception exception = exceptionHandlerPathFeature.Error;
+                IExceptionHandlerFeature exceptionHandlerFeature =
+                    context.Features.Get<IExceptionHandlerFeature>();
+
+                if (exceptionHandlerFeature == null)
+                    return;
+
+                Exception exception = exceptionHandlerFeature.Error;
 
                 context.Response.StatusCode = HttpCode.INTERNAL_SERVER_ERROR;
                 context.Response.ContentType = "application/json";
 
-                IExceptionHandlerFeature contextFeature =
-                    context.Features.Get<IExceptionHandlerFeature>();
+                string message = exception.Message;
 
-                if (contextFeature != null)
-                {
-                    string message = exception.Message;
+                int statusCode =
+                    exception.GetType() == typeof(BaseException)
+                        ? ((BaseException)exception).StatusCode
+                        : HttpCode.INTERNAL_SERVER_ERROR;
 
-                    int statusCode =
-                        exception.GetType() == typeof(BaseException)
-                            ? ((BaseException)exception).StatusCode
-                            : HttpCode.INTERNAL_SERVER_ERROR;
+                Dictionary<string, string[]> errors =
+                    exception.GetType() == typeof(BaseException)
+                        ? ((BaseException)exception).Errors
+                        : null;
 
-                    Dictionary<string, string[]> errors =
-                        exception.GetType() == typeof(BaseException)
-                            ? ((BaseException)exception).Errors
-                            : null;
+                logger.LogErrorResponse(context, message, statusCode);
 
-                    logger.LogErrorResponse(context, message, statusCode);
-
-                    await context.WriteErrorResponse(message, statusCode, errors);
-                }
+                await context.WriteErrorResponse(message, statusCode, errors);
             });
         });
     }
