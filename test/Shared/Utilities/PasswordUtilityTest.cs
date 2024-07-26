@@ -10,9 +10,14 @@ public class PasswordUtilityTest
     [ClassData(typeof(TestData))]
     public void GetPasswordHash_ReturnsHash(string password)
     {
+        // Arrange
         string hash = PasswordUtility.GetPasswordHash(password);
 
-        Assert.False(string.IsNullOrEmpty(hash), "Hash should not be empty");
+        // Act
+        bool isNullOrEmptyHash = string.IsNullOrEmpty(hash);
+
+        // Assert
+        Assert.False(isNullOrEmptyHash, "Hash should not be empty");
         Assert.NotEqual(password, hash);
     }
 
@@ -20,10 +25,13 @@ public class PasswordUtilityTest
     [ClassData(typeof(TestData))]
     public void IsValidPassword_CorrectPassword_ReturnsTrue(string password)
     {
+        // Arrange
         string hash = PasswordUtility.GetPasswordHash(password);
 
+        // Act
         bool isValid = PasswordUtility.IsValidPassword(password, hash);
 
+        // Assert
         Assert.True(isValid, "Password should be valid for the hash");
     }
 
@@ -31,22 +39,15 @@ public class PasswordUtilityTest
     [ClassData(typeof(TestData))]
     public void IsValidPassword_IncorrectPassword_ReturnsFalse(string password)
     {
+        // Arrange
         const string incorrectPassword = "WrongPassword";
         string hash = PasswordUtility.GetPasswordHash(password);
 
+        // Act
         bool isValid = PasswordUtility.IsValidPassword(incorrectPassword, hash);
 
+        // Assert
         Assert.False(isValid, "Incorrect password should not be valid for the hash");
-    }
-
-    [Theory]
-    [ClassData(typeof(TestData))]
-    public void GetPasswordHash_And_IsValidPassword_WorkTogether(string password)
-    {
-        string hash = PasswordUtility.GetPasswordHash(password);
-        bool isValid = PasswordUtility.IsValidPassword(password, hash);
-
-        Assert.True(isValid, "Password hashed and then validated should be valid");
     }
 }
 
